@@ -4,60 +4,81 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Static single-page marketing website for Re/START (restart.cl). No build system based on Node.js — uses CodeKit 2.x (macOS GUI app) for SCSS compilation and JS minification. Deployed via GitHub Pages from the `master` branch.
+Single-page marketing website for Re/START (restart.cl). Built with Vue 3 + Vite + Tailwind CSS 4 with Server-Side Rendering (SSR) via Express.
 
 ## Tech Stack
 
-- **HTML5** single-page site (`index.html`)
-- **SCSS/Sass** compiled to CSS via CodeKit
-- **Bootstrap 4 Alpha 6** (CDN)
-- **jQuery 3.2.1** + Skrollr 0.6.30 for parallax (CDN)
+- **Vue 3** (Composition API, `<script setup>`)
+- **Vite 6** (dev server + build)
+- **Tailwind CSS 4** (utility-first, `@theme` config in `src/style.css`)
+- **Express 5** (SSR server)
+- **Yarn 4** (package manager, `nodeLinker: node-modules`)
+- **Node.js 22** (see `.nvmrc`)
 - **Google Analytics** (UA legacy)
 - **Cal.com** embed for booking
+- **Ionicons 2.0.1** + **Font Awesome 4.7.0** (CDN in `index.html`)
 
 ## Build & Development
 
-There is no `package.json` or npm workflow. CodeKit 2.x handles:
-- `assets/scss/main.scss` → `assets/dist/css/main.css` (compressed, with source map)
-- `assets/dist/js/main.js` → `assets/dist/js/main.min.js` (minified, with source map)
+```bash
+yarn install              # Install dependencies
+yarn dev                  # Vite dev server (client only, HMR)
+yarn dev:server           # SSR dev server with Express + nodemon (http://localhost:3000)
+yarn build                # Build client + SSR bundles
+yarn serve                # Production SSR server
+```
 
-To develop locally, open `index.html` in a browser. CodeKit watches for file changes and recompiles automatically. Built output in `assets/dist/` is committed to the repo.
-
-**Deployment:** push to `master` — GitHub Pages serves the site at `restart.cl` (configured via `CNAME`).
+**Deployment:** Node.js server running `yarn serve` (SSR with Express).
 
 ## Architecture
 
-### SCSS Structure (`assets/scss/`)
-- `main.scss` — entry point, imports all partials
-- `variables.scss` — font stacks and easing variables
-- `bootstrap/_overrides.scss` — Bootstrap 4 customizations
-- `custom/_layout.scss` — navbar variants (light/dark/transparent), footer, off-canvas
-- `custom/modules/` — mixins for vendor prefixes, CSS animation keyframes
-- `custom/components/` — button styles (most component partials are commented out)
-- `custom/pages/` — per-section styles: hero, home (features), contact, footer
+### Directory Structure
+```
+index.html                 # Vite entry point (<!--app-html--> placeholder for SSR)
+server.js                  # Express SSR server
+vite.config.js             # Vite + Vue + Tailwind config
+src/
+  main.client.js           # Client entry: createApp + mount
+  main.server.js           # Server entry: createSSRApp + renderToString
+  App.vue                  # Root component, imports all sections
+  style.css                # Tailwind imports + @theme (colors, fonts)
+  components/
+    Nav.vue                # Navbar (transparent, absolute positioned)
+    Hero.vue               # Full-height hero with parallax
+    About.vue              # "Sobre nosotros" section
+    Features.vue           # 4 services in 2x2 grid
+    Contact.vue            # Cal.com embed + social links
+    Footer.vue             # 4-column footer with go-top button
+  composables/
+    useParallax.js         # Scroll-based parallax (SSR-safe, desktop only)
+public/
+  img/                     # hero.jpg, contact.jpg, office.jpg
+  favicon.png
+  logo.png
+```
 
-Vendor prefixes are handled via custom mixins (not Autoprefixer).
+### Key Sections
+Nav → Hero → About → Features → Contact (Cal.com embed) → Footer
 
-### JavaScript (`assets/dist/js/main.js`)
-- jQuery IIFE pattern with `$(document).ready()`
-- `window.utils` namespace: browser detection, debounce, parallax helpers
-- `retina` object for hi-DPI image swapping via `data-2x` attributes
-- Skrollr parallax initialized only on desktop (>1024px width)
-
-### Key Sections in `index.html`
-Header (navbar) → Hero → About → Features → Contact (Cal.com embed) → Footer
+### Tailwind Theme (`src/style.css`)
+Custom colors and fonts defined via `@theme`:
+- **Primary (turquesa):** `#41BECF` (primary), `#25A1B4` (dark), `#228398` (deep), `#11303B` (ocean), `#7DD8E3` (sky)
+- **Oscuros:** `#141218` (dark/footer), `#1E1E1E` (soft), `#36343B` (graphite/contact)
+- **Acentos:** violeta `#563CF8`, magenta `#E60A62`, naranja `#FF6B00`, dorado `#FAA92B`, verde `#47AE89`
+- **Fuentes:** Libre Franklin, Lato (sans) / Merriweather (serif)
 
 ## Conventions
 
 - **Indentation:** tabs (per `.editorconfig`)
 - **Line endings:** LF
 - **Charset:** UTF-8
-- **Breakpoints:** 767px (mobile), 991px (tablet), 1200px (desktop)
-- **Color palette:** dark navy `#353d4d`/`#343746` (footer), accent blue `#31b3ed` (hero)
+- **Vue style:** Composition API with `<script setup>`, no Options API
+- **Styling:** Tailwind utility classes (no custom CSS unless necessary)
+- **Breakpoints:** Tailwind defaults + `max-md` / `max-lg` variants
 
-## Infrastructure (from README)
+## Infrastructure
 
-- Main site: `https://restart.cl` (this repo, GitHub Pages)
-- Help center: `https://help.restart.cl` (ticket system on compute instance)
+- Main site: `https://restart.cl` (this repo, Node.js SSR)
+- Help center: `https://help.restart.cl`
 - Hosting panel: `http://hosting.restart.cl`
 - Campaigns: `http://campaign.restart.cl`

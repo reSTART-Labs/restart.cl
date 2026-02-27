@@ -1,0 +1,57 @@
+export const services = [
+	{
+		slug: 'staffing',
+		title: 'Staffing',
+		icon: 'ion-ios-people',
+		headline: 'Optimizamos el desarrollo de tu empresa',
+		description: 'Contamos con un equipo multidisciplinario de profesionales calificados, listos para integrarse a tus proyectos y potenciar la capacidad de tu equipo. Nos especializamos en encontrar el talento adecuado para cada desafío, asegurando una integración rápida y efectiva que maximice la productividad desde el primer día.',
+		items: [
+			'Equipos dedicados',
+			'Profesionales especializados',
+			'Aumento de equipo',
+		],
+		cta: 'Potencia tu equipo',
+	},
+	{
+		slug: 'desarrollo-de-software',
+		title: 'Desarrollo de software',
+		icon: 'ion-code',
+		headline: 'Creamos mejores experiencias digitales',
+		description: 'Diseñamos y desarrollamos soluciones de software innovadoras, adaptadas a las necesidades específicas de tu negocio. Desde aplicaciones web y móviles hasta sistemas a medida e integraciones complejas, nuestro equipo transforma tus ideas en productos digitales robustos y escalables.',
+		items: [
+			'Aplicaciones Web',
+			'Apps Móviles',
+			'Sistemas a Medida',
+			'Integraciones',
+		],
+		cta: 'Construyamos juntos',
+	},
+	{
+		slug: 'diseno-de-producto',
+		title: 'Diseño de producto',
+		icon: 'ion-ios-lightbulb-outline',
+		headline: 'Transformamos ideas en productos funcionales',
+		description: 'Combinamos investigación de usuarios, diseño de interfaces y prototipado para crear productos digitales intuitivos y atractivos. Nuestro proceso centrado en el usuario garantiza experiencias que conectan con tu audiencia y generan resultados medibles para tu negocio.',
+		items: [
+			'UX/UI',
+			'Prototipado',
+			'Investigación de usuarios',
+			'Diseño de interfaces',
+		],
+		cta: 'Diseñemos tu producto',
+	},
+	{
+		slug: 'tecnologias-cloud',
+		title: 'Tecnologías cloud',
+		icon: 'ion-ios-cloud-outline',
+		headline: 'Mejoramos la eficiencia de tu empresa',
+		description: 'Te ayudamos a aprovechar el poder de la nube para optimizar tus operaciones. Desde la migración de infraestructura hasta la gestión inteligente de datos y la optimización de costos, diseñamos arquitecturas cloud que escalan con tu negocio y mantienen el control total de tu información.',
+		items: [
+			'Infraestructura cloud',
+			'Migración de servicios',
+			'Optimización de costos',
+			'Gestión de datos',
+		],
+		cta: 'Migra a la nube',
+	},
+]

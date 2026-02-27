@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@theme {
+	/* Azules / Celestes - marca */
+	--color-primary: #41BECF;
+	--color-primary-dark: #25A1B4;
+	--color-primary-deep: #228398;
+	--color-primary-ocean: #11303B;
+	--color-primary-sky: #7DD8E3;
+	--color-primary-pastel: #D6F4F7;
+	--color-primary-light: #EBFFFE;
+
+	/* Oscuros / Fondos */
+	--color-dark: #141218;
+	--color-dark-soft: #1E1E1E;
+	--color-dark-slate: #3D3D3D;
+	--color-dark-graphite: #36343B;
+	--color-dark-smoke: #494651;
+
+	/* Texto */
+	--color-text: #585858;
+	--color-text-light: #707070;
+	--color-text-muted: #999999;
+
+	/* Bordes y grises */
+	--color-border: #E0E0E0;
+	--color-gray-light: #DBDBDB;
+	--color-gray-soft: #BDBDBD;
+
+	/* Fondos claros */
+	--color-features-bg: #F7F7F7;
+	--color-contact-bg: #36343B;
+	--color-footer-bg: #141218;
+	--color-footer-text: #BDBDBD;
+
+	/* Acentos */
+	--color-accent-violet: #563CF8;
+	--color-accent-magenta: #E60A62;
+	--color-accent-orange: #FF6B00;
+	--color-accent-gold: #FAA92B;
+	--color-accent-green: #47AE89;
+
+	/* Fuentes */
+	--font-sans: "Libre Franklin", "Lato", "Helvetica Neue", Arial, sans-serif;
+	--font-serif: "Merriweather", Georgia, serif;
+}
+
+html {
+	scroll-behavior: smooth;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	font-family: var(--font-sans);
+	color: var(--color-text);
+}
+
+/* Hero background image */
+.hero-bg {
+	background-image: url('/img/hero.jpg');
+	background-size: cover;
+	background-position: center 50%;
+	background-attachment: fixed;
+}
+
+@media (max-width: 1024px) {
+	.hero-bg {
+		background-attachment: scroll;
+	}
+}
+
+/* Hero overlay */
+.hero-overlay {
+	background: linear-gradient(135deg, rgba(17, 48, 59, 0.85), rgba(20, 18, 24, 0.8));
+}
+
+/* Hero entrance animations */
+@keyframes customFadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-fade-in-up {
+	animation: customFadeInUp 0.6s ease-out both;
+}
+
+.animation-delay-100 {
+	animation-delay: 0.1s;
+}
+
+.animation-delay-400 {
+	animation-delay: 0.4s;
+}
+
+/* Cal.com embed container */
+#my-cal-inline {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+/* Social link hover scale */
+.social-link {
+	transition: transform 0.2s ease-out;
+}
+
+.social-link:hover {
+	transform: scale3d(1.6, 1.6, 1.6);
+}
