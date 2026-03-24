@@ -86,6 +86,88 @@
 					></button>
 				</div>
 			</div>
+
+			<!-- Detailed service showcase -->
+			<div class="mt-24 space-y-32 px-6 md:px-0">
+				<div
+					v-for="(service, index) in services"
+					:key="service.slug + '-detail'"
+					class="service-detail"
+					:class="index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'"
+				>
+					<!-- Image side -->
+					<div class="service-detail-image">
+						<div class="relative overflow-hidden rounded-2xl">
+							<img
+								:src="service.image"
+								:alt="service.title"
+								class="w-full h-[320px] lg:h-[440px] object-cover"
+								loading="lazy"
+							>
+							<div
+								class="absolute inset-0"
+								:style="`background: linear-gradient(135deg, ${service.bg}cc 0%, transparent 60%)`"
+							></div>
+							<div class="absolute bottom-6 left-6 z-[2]">
+								<i :class="[service.icon, 'text-primary-sky text-4xl']"></i>
+							</div>
+						</div>
+					</div>
+
+					<!-- Content side -->
+					<div class="service-detail-content">
+						<span
+							class="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4"
+							:style="`background: ${service.bg}22; color: ${service.bg === '#1E1E1E' ? '#41BECF' : service.bg}`"
+						>
+							{{ service.title }}
+						</span>
+						<h3 class="text-2xl lg:text-3xl font-light text-dark leading-tight">
+							{{ service.headline }}
+						</h3>
+						<p class="text-text-light text-base leading-relaxed mt-4">
+							{{ service.description }}
+						</p>
+
+						<!-- Feature grid -->
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8">
+							<div
+								v-for="feat in service.features"
+								:key="feat.title"
+								class="feature-card"
+							>
+								<div class="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-2"></div>
+								<div>
+									<h4 class="text-sm font-semibold text-dark">{{ feat.title }}</h4>
+									<p class="text-xs text-text-light leading-relaxed mt-1">{{ feat.desc }}</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Benefits -->
+						<div class="mt-8 pt-6 border-t border-border">
+							<p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-3">Beneficios clave</p>
+							<div class="flex flex-wrap gap-2">
+								<span
+									v-for="benefit in service.benefits"
+									:key="benefit"
+									class="text-xs text-text-light bg-features-bg border border-border px-3 py-1.5 rounded-full"
+								>
+									{{ benefit }}
+								</span>
+							</div>
+						</div>
+
+						<RouterLink
+							:to="`/servicios/${service.slug}`"
+							class="inline-flex items-center gap-2 bg-primary text-white font-bold text-sm uppercase tracking-wide px-7 py-3.5 rounded-full no-underline transition-all duration-200 hover:bg-primary-dark mt-8"
+						>
+							{{ service.cta }}
+							<i class="fa fa-arrow-right text-xs"></i>
+						</RouterLink>
+					</div>
+				</div>
+			</div>
 		</div>
 	</section>
 </template>
@@ -233,5 +315,44 @@ onUnmounted(() => {
 	padding: 28px;
 	position: relative;
 	overflow: hidden;
+}
+
+/* ── Service detail showcase ── */
+.service-detail {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+	align-items: center;
+}
+
+@media (min-width: 1024px) {
+	.service-detail {
+		flex-direction: row;
+		gap: 64px;
+	}
+}
+
+.service-detail-image {
+	flex: 1;
+	min-width: 0;
+	width: 100%;
+}
+
+.service-detail-content {
+	flex: 1;
+	min-width: 0;
+	width: 100%;
+}
+
+.feature-card {
+	display: flex;
+	gap: 12px;
+	padding: 12px;
+	border-radius: 12px;
+	transition: background 0.2s;
+}
+
+.feature-card:hover {
+	background: var(--color-features-bg);
 }
 </style>
