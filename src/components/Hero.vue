@@ -1,24 +1,37 @@
 <template>
-	<section class="hero-bg relative min-h-screen" ref="heroRef">
+	<section class="hero-bg relative min-h-screen flex items-center" ref="heroRef">
 		<div class="hero-overlay absolute inset-0"></div>
-		<div class="relative z-10 h-screen container mx-auto px-4">
-			<div
-				class="absolute left-0 right-0 text-center"
-				:style="heroTextStyle"
-				ref="heroTextRef"
-			>
-				<h1 class="text-white text-xs font-semibold uppercase tracking-wide animate-fade-in-up animation-delay-100">
-					Creatividad, Experiencia y Tecnolog&iacute;a
-				</h1>
-				<p class="text-white text-4xl font-light leading-tight mt-7 mx-auto w-4/5 animate-fade-in-up animation-delay-400 max-md:text-[28px] max-md:leading-[38px] max-md:w-full max-lg:text-3xl max-lg:w-[90%]">
-					Nos especializamos en el dise&ntilde;o de experiencias y desarrollo de productos digitales
-				</p>
-				<a
-					href="#about"
-					class="inline-block mt-7 text-white uppercase font-bold text-[11px] tracking-wide border border-primary-sky rounded-full px-6 py-3 no-underline transition-all duration-200 hover:bg-primary hover:border-primary hover:text-white animate-fade-in-up animation-delay-400"
+
+		<div
+			class="relative z-10 container mx-auto px-6 md:px-12"
+			:style="heroContentStyle"
+		>
+			<p class="text-primary-sky text-sm font-semibold uppercase tracking-widest mb-6 animate-fade-in-up animation-delay-100">
+				Creatividad, Experiencia y Tecnolog&iacute;a
+			</p>
+
+			<h1 class="text-white text-5xl md:text-6xl lg:text-7xl font-light leading-[1.1] max-w-3xl animate-fade-in-up animation-delay-200">
+				Dise&ntilde;amos experiencias y productos digitales
+			</h1>
+
+			<p class="text-white/70 text-lg md:text-xl leading-relaxed mt-8 max-w-xl animate-fade-in-up animation-delay-400">
+				Impulsamos el crecimiento de tu empresa con soluciones tecnol&oacute;gicas a medida.
+			</p>
+
+			<div class="flex flex-wrap items-center gap-4 mt-10 animate-fade-in-up animation-delay-400">
+				<RouterLink
+					to="/#contact"
+					class="inline-flex items-center gap-2 bg-primary text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-full no-underline transition-all duration-200 hover:bg-primary-dark"
 				>
-					Con&oacute;cenos
-				</a>
+					Conversemos
+				</RouterLink>
+				<RouterLink
+					to="/#features"
+					class="inline-flex items-center gap-2 text-white font-medium text-sm border border-white/30 px-8 py-4 rounded-full no-underline transition-all duration-200 hover:bg-white/10 hover:border-white/60"
+				>
+					Nuestros servicios
+					<i class="fa fa-arrow-right text-xs"></i>
+				</RouterLink>
 			</div>
 		</div>
 	</section>
@@ -29,28 +42,17 @@ import { ref, computed } from 'vue'
 import { useParallax } from '@/composables/useParallax'
 
 const heroRef = ref(null)
-const heroTextRef = ref(null)
-
 const { scrollY } = useParallax()
 
-const heroTextStyle = computed(() => {
-	if (typeof window === 'undefined') {
-		return { top: 'calc(50% - 110px)' }
-	}
-	const isMobile = window.innerWidth <= 1024
-	const baseTop = window.innerWidth <= 767 ? 'calc(50% - 190px)' : 'calc(50% - 110px)'
-
-	if (isMobile) {
-		return { top: baseTop }
-	}
+const heroContentStyle = computed(() => {
+	if (typeof window === 'undefined') return {}
+	if (window.innerWidth <= 1024) return {}
 
 	const scroll = scrollY.value
-	const slowScroll = scroll / 1.4
-	const opacity = scroll > 0 ? Math.max(0, (1000 - scroll * 2.7) / 1000) : 1
+	const opacity = scroll > 0 ? Math.max(0, (800 - scroll * 2) / 800) : 1
 
 	return {
-		top: baseTop,
-		transform: `translateY(${slowScroll}px)`,
+		transform: `translateY(${scroll / 2.5}px)`,
 		opacity,
 	}
 })

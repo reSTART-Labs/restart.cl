@@ -6,9 +6,9 @@ import express from 'express'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const isProduction = process.env.NODE_ENV === 'production'
-const port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 
-async function createServer() {
+async function start() {
 	const app = express()
 
 	let vite
@@ -49,9 +49,9 @@ async function createServer() {
 		}
 	})
 
-	app.listen(port, () => {
-		console.log(`Server running at http://localhost:${port}`)
+	app.listen(PORT, () => {
+		console.log(`SSR server corriendo en http://localhost:${PORT} en modo ${process.env.NODE_ENV}`)
 	})
 }
 
-createServer()
+start()

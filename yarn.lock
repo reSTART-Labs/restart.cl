@@ -2374,6 +2374,7 @@ __metadata:
     dotenv: ^16.5.0
     express: ^5.1.0
     nodemon: ^3.1.10
+    swiper: ^12.1.2
     tailwindcss: ^4.1.4
     vite: ^6.3.0
     vue: ^3.5.13
@@ -2689,6 +2690,13 @@ __metadata:
   dependencies:
     has-flag: "npm:^3.0.0"
   checksum: 95f6f4ba5afdf92f495b5a912d4abee8dcba766ae719b975c56c084f5004845f6f5a5f7769f52d53f40e21952a6d87411bafe34af4a01e65f9926002e38e1dac
+  languageName: node
+  linkType: hard
+
+"swiper@npm:^12.1.2":
+  version: 12.1.2
+  resolution: "swiper@npm:12.1.2"
+  checksum: 1b7fcc647573f7c58cb67a48265ad7a1667e991b66a9859295bf9ab8696c7427f39b34ba2b5e043bf828389b0f363bca1cba0bfbf10d5f459d26a7329352675a
   languageName: node
   linkType: hard
 
