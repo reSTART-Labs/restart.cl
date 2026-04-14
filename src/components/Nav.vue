@@ -91,7 +91,7 @@
 		</nav>
 
 		<!-- Mobile overlay (teleported to body to avoid stacking context issues) -->
-		<Teleport to="body">
+		<Teleport to="body" :disabled="!isMounted">
 			<transition
 				enter-active-class="transition duration-300 ease-out"
 				enter-from-class="translate-x-full"
@@ -211,12 +211,14 @@ const scrolled = ref(false)
 const mobileOpen = ref(false)
 const servicesOpen = ref(false)
 const mobileServicesOpen = ref(false)
+const isMounted = ref(false)
 
 function onScroll() {
 	scrolled.value = window.scrollY > 50
 }
 
 onMounted(() => {
+	isMounted.value = true
 	window.addEventListener('scroll', onScroll, { passive: true })
 	onScroll()
 })

@@ -1,4 +1,4 @@
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 
 export function useCalEmbed(containerRef, options = {}) {
 	const {
@@ -9,23 +9,39 @@ export function useCalEmbed(containerRef, options = {}) {
 
 	const loaded = ref(false)
 
-	function loadScript() {
-		return new Promise((resolve, reject) => {
-			if (window.Cal) {
-				resolve()
-				return
+	function ensureCal() {
+		;(function (C, A, L) {
+			let p = function (a, ar) { a.q.push(ar) }
+			let d = C.document
+			C.Cal = C.Cal || function () {
+				let cal = C.Cal
+				let ar = arguments
+				if (!cal.loaded) {
+					cal.ns = {}
+					cal.q = cal.q || []
+					d.head.appendChild(d.createElement('script')).src = A
+					cal.loaded = true
+				}
+				if (ar[0] === L) {
+					const api = function () { p(api, arguments) }
+					const namespace = ar[1]
+					api.q = api.q || []
+					typeof namespace === 'string'
+						? (cal.ns[namespace] = api) && p(api, ar)
+						: p(cal, ar)
+					return
+				}
+				p(cal, ar)
 			}
-
-			const script = document.createElement('script')
-			script.src = 'https://app.cal.com/embed/embed.js'
-			script.async = true
-			script.onload = resolve
-			script.onerror = reject
-			document.head.appendChild(script)
-		})
+		})(window, 'https://app.cal.com/embed/embed.js', 'init')
 	}
 
-	function initCal(el) {
+	onMounted(() => {
+		const el = containerRef.value
+		if (!el) return
+
+		ensureCal()
+
 		window.Cal('init', { origin: 'https://cal.com' })
 
 		window.Cal('inline', {
@@ -41,24 +57,6 @@ export function useCalEmbed(containerRef, options = {}) {
 		})
 
 		loaded.value = true
-	}
-
-	onMounted(async () => {
-		const el = containerRef.value
-		if (!el) return
-
-		await loadScript()
-
-		if (window.Cal) {
-			initCal(el)
-		} else {
-			const stop = watch(() => window.Cal, (val) => {
-				if (val) {
-					initCal(el)
-					stop()
-				}
-			})
-		}
 	})
 
 	return { loaded }

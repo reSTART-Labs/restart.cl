@@ -38,14 +38,19 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useParallax } from '@/composables/useParallax'
 
 const heroRef = ref(null)
+const mounted = ref(false)
 const { scrollY } = useParallax()
 
+onMounted(() => {
+	mounted.value = true
+})
+
 const heroContentStyle = computed(() => {
-	if (typeof window === 'undefined') return {}
+	if (!mounted.value) return {}
 	if (window.innerWidth <= 1024) return {}
 
 	const scroll = scrollY.value
