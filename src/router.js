@@ -20,6 +20,11 @@ const routes = [
 		name: 'service',
 		component: () => import('./pages/ServicePage.vue'),
 	},
+	{
+		path: '/inteligencia-artificial/:slug',
+		name: 'ai-solution',
+		component: () => import('./pages/AiSolutionPage.vue'),
+	},
 ]
 
 export function createRouter() {

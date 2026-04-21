@@ -158,4 +158,44 @@ export const services = [
 		cta: 'Migra a la nube',
 		bg: '#36343B',
 	},
+	{
+		slug: 'inteligencia-artificial',
+		title: 'Inteligencia Artificial',
+		icon: 'ion-ios-bolt-outline',
+		headline: 'Potenciamos tu negocio con IA',
+		description: 'Integramos inteligencia artificial en tus procesos y productos para automatizar tareas, generar insights y crear experiencias diferenciadoras. Desde asistentes conversacionales y agentes autónomos hasta modelos a medida, te acompañamos desde el descubrimiento hasta la puesta en producción con foco en impacto real y adopción.',
+		items: [
+			'Agentes y asistentes',
+			'Automatización con IA',
+			'Modelos a medida',
+			'Integración con LLMs',
+		],
+		features: [
+			{
+				title: 'Agentes y asistentes',
+				desc: 'Chatbots y agentes autónomos sobre tus datos, con RAG y acceso a herramientas para ejecutar tareas reales.',
+			},
+			{
+				title: 'Automatización con IA',
+				desc: 'Flujos inteligentes que clasifican, extraen y procesan información para liberar horas a tu equipo.',
+			},
+			{
+				title: 'Modelos a medida',
+				desc: 'Fine-tuning y modelos propios cuando tu caso lo requiere, con evaluación continua y métricas de calidad.',
+			},
+			{
+				title: 'Integración con LLMs',
+				desc: 'Conectamos OpenAI, Anthropic y proveedores open-source a tus sistemas con control de costos y seguridad.',
+			},
+		],
+		benefits: [
+			'Reducción de hasta 60% en tareas repetitivas',
+			'Time-to-value en semanas, no meses',
+			'Evaluación con métricas objetivas (accuracy, latencia, costo)',
+			'Arquitectura segura y auditable',
+		],
+		image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80',
+		cta: 'Explora la IA',
+		bg: '#563CF8',
+	},
 ]
