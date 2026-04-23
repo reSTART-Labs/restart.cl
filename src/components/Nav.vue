@@ -60,11 +60,11 @@
 				</li>
 				<li>
 					<RouterLink
-						to="/#contact"
+						to="/labs"
 						class="text-[13px] font-medium no-underline transition-colors duration-200"
 						:class="scrolled ? 'text-text hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
-						Contacto
+						Labs
 					</RouterLink>
 				</li>
 			</ul>
@@ -179,11 +179,11 @@
 						</li>
 						<li>
 							<RouterLink
-								to="/#contact"
+								to="/labs"
 								class="flex items-center justify-between py-5 text-xl font-light text-white/90 hover:text-primary no-underline transition-colors"
 								@click="mobileOpen = false"
 							>
-								Contacto
+								Labs
 								<i class="fa fa-arrow-right text-xs text-white/20"></i>
 							</RouterLink>
 						</li>

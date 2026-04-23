@@ -126,7 +126,7 @@
 					>
 						<div class="relative z-[2]">
 							<span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-sm mb-5">
-								<i :class="[sol.icon, 'text-primary-sky text-xl']"></i>
+								<i :class="[sol.icon, 'text-white text-xl']"></i>
 							</span>
 							<h3 class="text-white text-xl font-semibold leading-tight">
 								{{ sol.title }}

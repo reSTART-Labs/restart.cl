@@ -66,22 +66,38 @@
 
 				<!-- Laboratorio -->
 				<div>
-					<h4 class="text-white text-sm font-semibold uppercase tracking-wide mb-5">Laboratorio</h4>
+					<h4 class="text-white text-sm font-semibold uppercase tracking-wide mb-5">
+						<RouterLink to="/labs" class="text-white no-underline hover:text-primary transition-colors">
+							Laboratorio
+						</RouterLink>
+					</h4>
 					<ul class="list-none m-0 p-0 flex flex-col gap-2.5">
-						<li>
-							<a href="//indicadoresdeldia.cl" target="_blank" class="text-sm text-footer-text hover:text-primary no-underline transition-colors">
-								Indicadores del D&iacute;a
+						<li v-for="lab in labsProjects" :key="lab.slug">
+							<RouterLink
+								v-if="!lab.external"
+								:to="`/labs/${lab.slug}`"
+								class="text-sm text-footer-text hover:text-primary no-underline transition-colors"
+							>
+								{{ lab.name }}
+							</RouterLink>
+							<a
+								v-else
+								:href="lab.url"
+								target="_blank"
+								rel="noopener"
+								class="text-sm text-footer-text hover:text-primary no-underline transition-colors"
+							>
+								{{ lab.name }}
 							</a>
 						</li>
 						<li>
-							<a href="//learningpath.cl" target="_blank" class="text-sm text-footer-text hover:text-primary no-underline transition-colors">
-								LearningPath
-							</a>
-						</li>
-						<li>
-							<a href="//minicatalogo.com" target="_blank" class="text-sm text-footer-text hover:text-primary no-underline transition-colors">
-								Minicatalogo.com
-							</a>
+							<RouterLink
+								to="/labs"
+								class="inline-flex items-center gap-1.5 text-sm text-primary-sky hover:text-primary no-underline transition-colors"
+							>
+								Ver todos
+								<i class="fa fa-arrow-right text-[9px]"></i>
+							</RouterLink>
 						</li>
 					</ul>
 				</div>
@@ -102,6 +118,7 @@
 
 <script setup>
 import { services } from '@/data/services.js'
+import { labsProjects } from '@/data/labsProjects.js'
 
 const year = new Date().getFullYear()
 </script>

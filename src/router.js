@@ -25,6 +25,16 @@ const routes = [
 		name: 'ai-solution',
 		component: () => import('./pages/AiSolutionPage.vue'),
 	},
+	{
+		path: '/labs',
+		name: 'labs',
+		component: () => import('./pages/LabsPage.vue'),
+	},
+	{
+		path: '/labs/:slug',
+		name: 'labs-project',
+		component: () => import('./pages/LabsProjectPage.vue'),
+	},
 ]
 
 export function createRouter() {
