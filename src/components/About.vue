@@ -3,40 +3,33 @@
 		<div class="container mx-auto">
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 				<!-- Content -->
-				<div class="max-w-xl">
-					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
-						Sobre nosotros
-					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						Tecnolog&iacute;a hecha por y para emprendedores
+				<div class="about-text">
+					<div class="eyebrow">Sobre nosotros</div>
+					<h2 class="about-title">
+						Tecnolog&iacute;a hecha por y para <em>emprendedores</em>
 					</h2>
-					<p class="text-base text-text-light leading-[29px] mt-8">
-						<strong class="text-dark">re/START</strong> naci&oacute; para acompa&ntilde;ar a quienes est&aacute;n construyendo algo nuevo.
-						Combinamos dise&ntilde;o, desarrollo y estrategia tecnol&oacute;gica para crear soluciones digitales que se adaptan a la realidad de cada emprendimiento.
+					<p class="about-lede">
+						<strong>re/START</strong> naci&oacute; para acompa&ntilde;ar a quienes est&aacute;n construyendo algo nuevo. Combinamos dise&ntilde;o, desarrollo y estrategia tecnol&oacute;gica para crear soluciones digitales que se adaptan a la realidad de cada emprendimiento.
 					</p>
 
-					<!-- Stats -->
-					<div class="grid grid-cols-3 gap-6 mt-10 pt-10 border-t border-border">
-						<div>
-							<p class="text-3xl md:text-4xl font-light text-primary">+50</p>
-							<p class="text-xs text-text-muted uppercase tracking-wide mt-1">Proyectos</p>
+					<div class="about-stats">
+						<div class="about-stat">
+							<div class="about-stat-num">+50</div>
+							<div class="about-stat-label">Proyectos</div>
 						</div>
-						<div>
-							<p class="text-3xl md:text-4xl font-light text-primary">+30</p>
-							<p class="text-xs text-text-muted uppercase tracking-wide mt-1">Clientes</p>
+						<div class="about-stat">
+							<div class="about-stat-num">+30</div>
+							<div class="about-stat-label">Clientes</div>
 						</div>
-						<div>
-							<p class="text-3xl md:text-4xl font-light text-primary">+8</p>
-							<p class="text-xs text-text-muted uppercase tracking-wide mt-1">A&ntilde;os</p>
+						<div class="about-stat">
+							<div class="about-stat-num">+8</div>
+							<div class="about-stat-label">A&ntilde;os</div>
 						</div>
 					</div>
 
-					<RouterLink
-						to="/nosotros"
-						class="inline-flex items-center gap-2 text-primary text-sm font-medium mt-8 no-underline hover:gap-3 transition-all duration-200"
-					>
+					<RouterLink to="/nosotros" class="about-link">
 						Con&oacute;cenos m&aacute;s
-						<i class="fa fa-arrow-right text-xs"></i>
+						<i class="fa fa-arrow-right text-[10px]"></i>
 					</RouterLink>
 				</div>
 
@@ -68,3 +61,97 @@
 		</div>
 	</section>
 </template>
+
+<style scoped>
+.eyebrow {
+	display: inline-block;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--color-primary);
+	margin-bottom: 18px;
+}
+
+.about-title {
+	font-family: var(--font-display);
+	font-size: clamp(30px, 3.5vw, 48px);
+	font-weight: 300;
+	letter-spacing: -0.025em;
+	line-height: 1.1;
+	color: var(--color-text);
+	max-width: 18ch;
+	margin: 0;
+}
+
+.about-title :deep(em) {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-weight: 400;
+	color: var(--color-primary);
+}
+
+.about-lede {
+	font-family: var(--font-serif);
+	font-weight: 300;
+	font-size: 17px;
+	line-height: 1.8;
+	color: var(--color-text-light);
+	margin-top: 28px;
+	max-width: 56ch;
+}
+
+.about-lede :deep(strong) {
+	font-family: var(--font-sans);
+	font-style: normal;
+	font-weight: 700;
+	color: var(--color-text);
+}
+
+.about-stats {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 24px;
+	margin-top: 40px;
+	padding-top: 40px;
+	border-top: 1px solid var(--color-border);
+}
+
+.about-stat-num {
+	font-family: var(--font-display);
+	font-size: clamp(32px, 3vw, 44px);
+	font-weight: 100;
+	color: var(--color-primary);
+	letter-spacing: -0.03em;
+	line-height: 1;
+}
+
+.about-stat-label {
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+	margin-top: 10px;
+}
+
+.about-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--color-primary);
+	font-size: 14px;
+	font-weight: 500;
+	margin-top: 32px;
+	text-decoration: none;
+	transition: gap 0.2s ease;
+}
+
+.about-link:hover {
+	gap: 12px;
+}
+
+.about-image-grid > div {
+	position: relative;
+}
+</style>

@@ -1,8 +1,8 @@
 <template>
 	<section id="contact" class="bg-contact-bg pt-0">
-		<div class="relative -top-12 bg-white mx-4 md:mx-12 p-6 md:p-10 lg:p-14 shadow-[0_15px_60px_rgba(0,0,0,0.3)] max-md:top-0 max-md:mb-10">
+		<div class="contact-card relative -top-12 bg-surface mx-4 md:mx-12 p-6 md:p-10 lg:p-14 max-md:top-0 max-md:mb-10">
 			<div class="text-center mb-10">
-				<h3 class="text-2xl md:text-3xl font-light uppercase tracking-wide text-dark mt-0">
+				<h3 class="text-2xl md:text-3xl font-light uppercase tracking-wide text-text mt-0">
 					&iexcl;Tom&eacute;monos un caf&eacute;!
 				</h3>
 				<p class="text-text-light text-sm mt-3 max-w-lg mx-auto">
@@ -96,7 +96,7 @@
 					<h4 class="text-sm font-bold uppercase tracking-widest text-text-muted mb-6">
 						O agenda una reuni&oacute;n
 					</h4>
-					<div ref="calContainer" class="min-h-[400px]"></div>
+					<!-- <div ref="calContainer" class="min-h-[400px]"></div> -->
 				</div>
 			</div>
 		</div>
@@ -146,7 +146,7 @@ function handleSubmit() {
 useCalEmbed(calContainer, {
 	calLink: 'restart/asesoria-gratuita',
 	layout: 'month_view',
-	brandColor: '#000000',
+	brandColor: '#0EA5BD',
 })
 </script>
 
@@ -165,7 +165,7 @@ useCalEmbed(calContainer, {
 	width: 100%;
 	padding: 14px 16px;
 	font-size: 14px;
-	color: var(--color-dark);
+	color: var(--color-text);
 	background: var(--color-features-bg);
 	border: 1px solid var(--color-border);
 	border-radius: 12px;
@@ -176,7 +176,7 @@ useCalEmbed(calContainer, {
 
 .contact-input:focus {
 	border-color: var(--color-primary);
-	box-shadow: 0 0 0 3px rgba(65, 190, 207, 0.12);
+	box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 18%, transparent);
 }
 
 .contact-input::placeholder {

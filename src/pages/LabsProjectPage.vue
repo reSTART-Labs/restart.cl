@@ -128,7 +128,7 @@
 						<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 							El problema
 						</p>
-						<p class="text-dark text-lg md:text-xl font-light leading-relaxed">
+						<p class="text-text text-lg md:text-xl font-light leading-relaxed">
 							{{ project.problem }}
 						</p>
 					</div>
@@ -139,7 +139,7 @@
 						>
 							Nuestra soluci&oacute;n
 						</p>
-						<p class="text-dark text-lg md:text-xl font-light leading-relaxed">
+						<p class="text-text text-lg md:text-xl font-light leading-relaxed">
 							{{ project.solution }}
 						</p>
 					</div>
@@ -163,8 +163,8 @@
 					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 						Lo que incluye
 					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						Capacidades principales
+					<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+						Capacidades <em>principales</em>
 					</h2>
 				</div>
 
@@ -180,7 +180,7 @@
 						>
 							<i :class="[feat.icon, 'text-xl']"></i>
 						</span>
-						<h3 class="text-dark text-base font-semibold leading-tight">
+						<h3 class="text-text text-base font-semibold leading-tight">
 							{{ feat.title }}
 						</h3>
 						<p class="text-text-light text-sm leading-relaxed mt-2">
@@ -206,7 +206,7 @@
 						Capturas
 					</p>
 					<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-						Un vistazo a la experiencia
+						Un vistazo a la <em>experiencia</em>
 					</h2>
 				</div>
 
@@ -217,7 +217,7 @@
 						:key="shot.src"
 						class="text-xs font-semibold uppercase tracking-wide px-4 py-2 rounded-full transition-all duration-200 cursor-pointer"
 						:class="activeShot === i
-							? 'text-dark'
+							? 'text-text'
 							: 'text-white/60 bg-white/5 border border-white/10 hover:text-white hover:bg-white/10'"
 						:style="activeShot === i ? `background: ${project.brandColor}` : ''"
 						@click="activeShot = i"
@@ -256,8 +256,8 @@
 				<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 					Stack
 				</p>
-				<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-					Construido con tecnolog&iacute;a moderna
+				<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+					Construido con tecnolog&iacute;a <em>moderna</em>
 				</h2>
 
 				<div class="flex flex-wrap items-center justify-center gap-2 mt-10">
@@ -289,7 +289,7 @@
 							Destacados t&eacute;cnicos
 						</p>
 						<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-							Decisiones que marcan la diferencia
+							Decisiones que marcan la <em>diferencia</em>
 						</h2>
 					</div>
 					<div class="space-y-4">
@@ -324,8 +324,8 @@
 					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 						Otros proyectos del lab
 					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						Explora lo que construimos
+					<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+						Explora lo que <em>construimos</em>
 					</h2>
 				</div>
 
@@ -370,7 +370,7 @@
 		<section class="py-24 px-6 md:px-12 bg-dark">
 			<div class="container mx-auto text-center max-w-2xl">
 				<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-					&iquest;Quieres construir algo similar?
+					&iquest;Quieres construir algo <em>similar</em>?
 				</h2>
 				<p class="text-white/60 text-base leading-relaxed mt-5">
 					Conversemos sobre tu idea y construy&aacute;mosla juntos con el mismo rigor con el que construimos {{ project.name }}.
@@ -400,7 +400,7 @@
 
 	<section v-else class="py-20 px-4 text-center">
 		<div class="container mx-auto">
-			<h3 class="text-2xl font-light uppercase tracking-wide text-dark">Proyecto no encontrado</h3>
+			<h3 class="text-2xl font-light uppercase tracking-wide text-text">Proyecto no encontrado</h3>
 			<p class="text-text-light mt-4">El proyecto que buscas no existe.</p>
 			<RouterLink
 				to="/"

@@ -1,7 +1,7 @@
 <template>
-	<footer class="bg-dark pt-16 pb-8">
+	<footer class="site-footer pt-16 pb-8">
 		<div class="container mx-auto px-6 md:px-12">
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 footer-divider">
 				<!-- Brand -->
 				<div>
 					<RouterLink to="/" class="text-xl font-semibold tracking-wide text-white no-underline">
@@ -122,3 +122,48 @@ import { labsProjects } from '@/data/labsProjects.js'
 
 const year = new Date().getFullYear()
 </script>
+
+<style scoped>
+.site-footer {
+	position: relative;
+	background: var(--color-footer-bg);
+	box-shadow:
+		inset 0 60px 80px -60px rgba(0, 0, 0, 0.4),
+		0 -20px 40px -20px rgba(0, 0, 0, 0.12);
+}
+
+.site-footer::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: min(1200px, 90%);
+	height: 1px;
+	background: linear-gradient(to right,
+		transparent 0%,
+		color-mix(in oklab, var(--color-primary-300) 35%, transparent) 50%,
+		transparent 100%);
+	opacity: 0.4;
+}
+
+/* Soft divider between grid and bottom row — no hard line */
+.footer-divider {
+	position: relative;
+}
+
+.footer-divider::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+	transform: translateX(-50%);
+	width: 80%;
+	height: 1px;
+	background: linear-gradient(to right,
+		transparent 0%,
+		rgba(255, 255, 255, 0.08) 20%,
+		rgba(255, 255, 255, 0.08) 80%,
+		transparent 100%);
+}
+</style>
