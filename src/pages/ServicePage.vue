@@ -8,35 +8,33 @@
 				class="absolute inset-0 w-full h-full object-cover"
 			>
 			<div class="absolute inset-0 service-hero-overlay"></div>
-			<div class="relative z-10 container mx-auto px-6 md:px-12 pb-16 pt-32">
+			<div class="relative z-10 container mx-auto px-6 md:px-12 pb-20 pt-36">
 				<div class="max-w-2xl">
-					<div class="flex items-center gap-3 mb-6">
-						<span class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-							<i :class="[service.icon, 'text-primary-sky text-lg']"></i>
+					<RouterLink to="/#features" class="hero-kicker">
+						<i class="fa fa-arrow-left text-[9px]"></i>
+						Servicios &middot; {{ service.title }}
+					</RouterLink>
+					<div class="flex items-center gap-4 mb-5 mt-6">
+						<span class="hero-icon-chip">
+							<i :class="[service.icon, 'text-primary-sky text-xl']"></i>
 						</span>
-						<span class="text-primary-sky text-sm font-semibold uppercase tracking-widest">
+						<span class="hero-service-tag">
 							{{ service.title }}
 						</span>
 					</div>
-					<h1 class="text-white text-4xl md:text-5xl lg:text-6xl font-light leading-[1.1]">
+					<h1 class="hero-title">
 						{{ service.headline }}
 					</h1>
-					<p class="text-white/60 text-lg leading-relaxed mt-6 max-w-xl">
+					<p class="hero-lede">
 						{{ service.description }}
 					</p>
-					<div class="flex flex-wrap items-center gap-4 mt-10">
-						<RouterLink
-							to="/#contact"
-							class="inline-flex items-center gap-2 bg-primary text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-full no-underline transition-all duration-200 hover:bg-primary-dark"
-						>
+					<div class="flex flex-wrap items-center gap-3 mt-10">
+						<RouterLink to="/#contact" class="btn btn-primary">
 							{{ service.cta }}
 						</RouterLink>
-						<a
-							href="#features-detail"
-							class="inline-flex items-center gap-2 text-white font-medium text-sm border border-white/30 px-8 py-4 rounded-full no-underline transition-all duration-200 hover:bg-white/10 hover:border-white/60"
-						>
+						<a href="#features-detail" class="btn btn-ghost-dark">
 							Conoce m&aacute;s
-							<i class="fa fa-arrow-down text-xs"></i>
+							<i class="fa fa-arrow-down text-[11px]"></i>
 						</a>
 					</div>
 				</div>
@@ -44,16 +42,16 @@
 		</section>
 
 		<!-- Items overview strip -->
-		<section class="bg-primary-ocean">
+		<section class="items-strip">
 			<div class="container mx-auto px-6 md:px-12">
-				<div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+				<div class="grid grid-cols-2 md:grid-cols-4">
 					<div
 						v-for="item in service.items"
 						:key="item"
-						class="py-6 md:py-8 px-4 md:px-8 text-center"
+						class="items-strip-item"
 					>
-						<i class="ion-checkmark-round text-primary text-lg mb-2 block"></i>
-						<span class="text-white/80 text-sm font-medium">{{ item }}</span>
+						<i class="ion-checkmark-round"></i>
+						<span>{{ item }}</span>
 					</div>
 				</div>
 			</div>
@@ -63,32 +61,27 @@
 		<section id="features-detail" class="py-24 px-6 md:px-12">
 			<div class="container mx-auto">
 				<div class="text-center mb-16 max-w-2xl mx-auto">
-					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
-						Lo que hacemos
-					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						Capacidades en {{ service.title.toLowerCase() }}
+					<p class="sp-eyebrow">Lo que hacemos</p>
+					<h2 class="sp-section-title">
+						Capacidades en <em>{{ service.title.toLowerCase() }}</em>
 					</h2>
 				</div>
 
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
 					<div
 						v-for="(feat, i) in service.features"
 						:key="feat.title"
-						class="service-feature-card group"
+						class="sp-feature-card group"
 					>
 						<div class="flex items-start gap-5">
-							<span
-								class="shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-bold transition-all duration-300 group-hover:scale-110"
-								:style="`background: ${service.bg}15; color: ${service.bg === '#1E1E1E' ? 'var(--color-primary)' : service.bg}`"
-							>
+							<span class="sp-feature-num">
 								{{ String(i + 1).padStart(2, '0') }}
 							</span>
 							<div>
-								<h3 class="text-lg font-semibold text-dark group-hover:text-primary transition-colors">
+								<h3 class="sp-feature-title">
 									{{ feat.title }}
 								</h3>
-								<p class="text-text-light text-sm leading-relaxed mt-2">
+								<p class="sp-feature-desc">
 									{{ feat.desc }}
 								</p>
 							</div>
@@ -105,13 +98,11 @@
 		>
 			<div class="container mx-auto">
 				<div class="text-center mb-16 max-w-2xl mx-auto">
-					<p class="text-primary-sky text-sm font-semibold uppercase tracking-widest mb-4">
-						Soluciones de IA
-					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-						Cinco frentes donde la IA genera impacto real
+					<p class="sp-eyebrow" style="color: var(--color-primary-300);">Soluciones de IA</p>
+					<h2 class="sp-section-title-inverse">
+						Cinco frentes donde la <em>IA</em> genera impacto real
 					</h2>
-					<p class="text-white/60 text-base leading-relaxed mt-5">
+					<p class="sp-lede-inverse">
 						Cada soluci&oacute;n es un bloque probado que combinamos seg&uacute;n tu caso de uso, datos y metas de negocio.
 					</p>
 				</div>
@@ -158,69 +149,53 @@
 		<section class="py-24 px-6 md:px-12 bg-features-bg">
 			<div class="container mx-auto">
 				<div class="text-center mb-16 max-w-2xl mx-auto">
-					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
-						Nuestro proceso
-					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						C&oacute;mo trabajamos
+					<p class="sp-eyebrow">Nuestro proceso</p>
+					<h2 class="sp-section-title">
+						C&oacute;mo <em>trabajamos</em>
 					</h2>
-					<p class="text-text-light text-base leading-relaxed mt-5">
+					<p class="sp-lede">
 						Un proceso probado que garantiza resultados predecibles y transparencia total.
 					</p>
 				</div>
 
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+				<div class="process-grid">
 					<div
 						v-for="(step, i) in processSteps"
 						:key="step.title"
-						class="relative"
+						class="process-step"
+						:class="{ 'is-last': i === processSteps.length - 1 }"
 					>
-						<!-- Connector line -->
-						<div
-							v-if="i < processSteps.length - 1"
-							class="hidden lg:block absolute top-6 left-[calc(50%+28px)] w-[calc(100%-28px)] h-px bg-border"
-						></div>
-						<div class="text-center">
-							<span
-								class="relative z-10 inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-primary text-primary font-bold text-sm shadow-sm"
-							>
-								{{ i + 1 }}
-							</span>
-							<h4 class="text-dark font-semibold text-base mt-5">{{ step.title }}</h4>
-							<p class="text-text-light text-sm leading-relaxed mt-2">{{ step.desc }}</p>
-						</div>
+						<span class="process-step-num">{{ i + 1 }}</span>
+						<h4 class="process-step-title">{{ step.title }}</h4>
+						<p class="process-step-desc">{{ step.desc }}</p>
 					</div>
 				</div>
 			</div>
 		</section>
 
 		<!-- Benefits section -->
-		<section class="py-24 px-6 md:px-12" :style="`background: ${service.bg}`">
-			<div class="container mx-auto">
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+		<section class="benefits-section">
+			<div class="container mx-auto px-6 md:px-12">
+				<div class="benefits-grid">
 					<div>
-						<p class="text-primary-sky text-sm font-semibold uppercase tracking-widest mb-4">
-							Ventajas
-						</p>
-						<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-							&iquest;Por qu&eacute; elegirnos para {{ service.title.toLowerCase() }}?
+						<p class="sp-eyebrow" style="color: var(--color-primary-300);">Ventajas</p>
+						<h2 class="sp-section-title-inverse">
+							&iquest;Por qu&eacute; elegirnos para <em>{{ service.title.toLowerCase() }}</em>?
 						</h2>
-						<p class="text-white/60 text-base leading-relaxed mt-5">
+						<p class="sp-lede-inverse">
 							Trabajamos con los m&aacute;s altos est&aacute;ndares de calidad y transparencia para que tu inversi&oacute;n se traduzca en resultados reales.
 						</p>
 					</div>
-					<div class="space-y-4">
+					<div class="benefits-list">
 						<div
 							v-for="benefit in service.benefits"
 							:key="benefit"
-							class="flex items-center gap-4 bg-white/5 backdrop-blur-sm rounded-2xl p-5 border border-white/10 hover:border-primary/40 transition-colors"
+							class="benefit-item"
 						>
-							<span class="shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-								<i class="ion-checkmark-round text-primary text-sm"></i>
+							<span class="benefit-check">
+								<i class="ion-checkmark-round"></i>
 							</span>
-							<p class="text-white/80 text-sm font-medium leading-relaxed">
-								{{ benefit }}
-							</p>
+							<p>{{ benefit }}</p>
 						</div>
 					</div>
 				</div>
@@ -231,41 +206,33 @@
 		<section class="py-24 px-6 md:px-12">
 			<div class="container mx-auto">
 				<div class="text-center mb-16">
-					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
-						Servicios relacionados
-					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						Complementa tu estrategia
+					<p class="sp-eyebrow">Servicios relacionados</p>
+					<h2 class="sp-section-title">
+						Complementa tu <em>estrategia</em>
 					</h2>
 				</div>
 
-				<div :key="`related-${service.slug}`" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+				<div :key="`related-${service.slug}`" class="related-grid">
 					<RouterLink
 						v-for="related in relatedServices"
 						:key="related.slug"
 						:to="`/servicios/${related.slug}`"
 						class="related-card no-underline group"
 					>
-						<div class="relative overflow-hidden rounded-2xl h-[240px]">
-							<img
-								:src="related.image"
-								:alt="related.title"
-								class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-								loading="lazy"
-							>
-							<div
-								class="absolute inset-0 transition-opacity duration-300"
-								:style="`background: linear-gradient(to top, ${related.bg}ee 0%, ${related.bg}88 40%, transparent 100%)`"
-							></div>
-							<div class="absolute bottom-0 left-0 right-0 p-6">
-								<i :class="[related.icon, 'text-primary-sky text-xl mb-2 block']"></i>
-								<h3 class="text-white text-lg font-semibold">{{ related.title }}</h3>
-								<p class="text-white/50 text-sm mt-1">{{ related.headline }}</p>
-								<span class="inline-flex items-center gap-2 text-primary-sky text-xs font-semibold uppercase tracking-wide mt-3 group-hover:gap-3 transition-all">
-									Ver servicio
-									<i class="fa fa-arrow-right text-[10px]"></i>
-								</span>
-							</div>
+						<img
+							:src="related.image"
+							:alt="related.title"
+							class="related-card-img"
+							loading="lazy"
+						>
+						<div class="related-card-body">
+							<i :class="[related.icon, 'related-card-icon']"></i>
+							<h3 class="related-card-title">{{ related.title }}</h3>
+							<p class="related-card-desc">{{ related.headline }}</p>
+							<span class="related-card-link">
+								Ver servicio
+								<i class="fa fa-arrow-right text-[9px]"></i>
+							</span>
 						</div>
 					</RouterLink>
 				</div>
@@ -273,28 +240,20 @@
 		</section>
 
 		<!-- CTA -->
-		<section class="py-24 px-6 md:px-12 bg-dark">
-			<div class="container mx-auto text-center max-w-2xl">
-				<i :class="[service.icon, 'text-primary-sky text-5xl mb-6 block']"></i>
-				<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-					&iquest;Listo para empezar?
+		<section class="page-cta is-dark">
+			<div class="container mx-auto px-6 md:px-12">
+				<h2 class="sp-section-title-inverse" style="max-width: 24ch; margin: 0 auto; text-align: center;">
+					&iquest;Listo para <em>empezar</em>?
 				</h2>
-				<p class="text-white/60 text-base leading-relaxed mt-5">
+				<p class="page-cta-lede">
 					Conversemos sobre c&oacute;mo podemos ayudarte con {{ service.title.toLowerCase() }}.
 					Agenda una asesor&iacute;a gratuita y te contamos todo.
 				</p>
-				<div class="flex flex-wrap items-center justify-center gap-4 mt-10">
-					<RouterLink
-						to="/#contact"
-						class="inline-flex items-center gap-2 bg-primary text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-full no-underline transition-all duration-200 hover:bg-primary-dark"
-					>
+				<div class="page-cta-ctas">
+					<RouterLink to="/#contact" class="btn btn-primary">
 						{{ service.cta }}
-						<i class="fa fa-arrow-right text-xs"></i>
 					</RouterLink>
-					<RouterLink
-						to="/"
-						class="inline-flex items-center gap-2 text-white font-medium text-sm border border-white/30 px-8 py-4 rounded-full no-underline transition-all duration-200 hover:bg-white/10 hover:border-white/60"
-					>
+					<RouterLink to="/" class="btn btn-ghost-dark">
 						Ver todos los servicios
 					</RouterLink>
 				</div>
@@ -304,7 +263,7 @@
 
 	<section v-else class="py-20 px-4 text-center">
 		<div class="container mx-auto">
-			<h3 class="text-2xl font-light uppercase tracking-wide text-dark">Servicio no encontrado</h3>
+			<h3 class="text-2xl font-light uppercase tracking-wide text-text">Servicio no encontrado</h3>
 			<p class="text-text-light mt-4">El servicio que buscas no existe.</p>
 			<RouterLink
 				to="/"
@@ -351,21 +310,477 @@ const processSteps = [
 </script>
 
 <style scoped>
+/* ── HERO ── */
 .service-hero-overlay {
-	background: linear-gradient(to top, rgba(20, 18, 24, 0.95) 0%, rgba(20, 18, 24, 0.6) 50%, rgba(20, 18, 24, 0.3) 100%);
+	background: linear-gradient(180deg,
+		rgba(4, 23, 30, 0.6) 0%,
+		rgba(4, 23, 30, 0.88) 65%,
+		var(--color-primary-900) 100%);
 }
 
-.service-feature-card {
+.hero-kicker {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.55);
+	text-decoration: none;
+	transition: color 0.2s ease;
+	margin-bottom: 24px;
+}
+
+.hero-kicker::before {
+	content: "";
+	display: block;
+	width: 24px;
+	height: 1px;
+	background: var(--color-primary-300);
+}
+
+.hero-kicker:hover {
+	color: var(--color-primary-300);
+}
+
+.hero-icon-chip {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 14px;
+	background: rgba(103, 215, 228, 0.18);
+}
+
+.hero-service-tag {
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--color-primary-300);
+}
+
+.hero-title {
+	color: #FFFFFF;
+	font-family: var(--font-display);
+	font-size: clamp(40px, 5.4vw, 72px);
+	font-weight: 300;
+	line-height: 1.05;
+	letter-spacing: -0.025em;
+	max-width: 18ch;
+	margin: 0;
+}
+
+.hero-title :deep(em) {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-weight: 400;
+	color: var(--color-primary-300);
+}
+
+.hero-lede {
+	font-family: var(--font-serif);
+	font-weight: 300;
+	font-size: 18px;
+	line-height: 1.7;
+	color: rgba(255, 255, 255, 0.78);
+	margin-top: 28px;
+	max-width: 54ch;
+}
+
+/* ── ITEMS STRIP ── */
+.items-strip {
+	background: var(--color-primary-800);
+	padding: 24px 0;
+}
+
+.items-strip-item {
+	text-align: center;
+	padding: 16px 8px;
+	border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.items-strip-item:last-child {
+	border-right: none;
+}
+
+.items-strip-item i {
+	color: var(--color-primary-400);
+	font-size: 18px;
+	display: block;
+	margin-bottom: 6px;
+}
+
+.items-strip-item span {
+	font-size: 12px;
+	font-weight: 500;
+	color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── EYEBROWS & TITLES ── */
+.sp-eyebrow {
+	display: inline-block;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--color-primary);
+	margin-bottom: 18px;
+}
+
+.sp-section-title {
+	font-family: var(--font-display);
+	font-size: clamp(28px, 3.5vw, 42px);
+	font-weight: 300;
+	letter-spacing: -0.025em;
+	line-height: 1.1;
+	color: var(--color-text);
+	margin: 0;
+}
+
+.sp-section-title :deep(em) {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-weight: 400;
+	color: var(--color-primary);
+}
+
+.sp-lede {
+	font-family: var(--font-serif);
+	font-weight: 300;
+	font-size: 15px;
+	line-height: 1.7;
+	color: var(--color-text-light);
+	margin-top: 16px;
+}
+
+.sp-section-title-inverse {
+	font-family: var(--font-display);
+	font-size: clamp(28px, 3.2vw, 40px);
+	font-weight: 300;
+	letter-spacing: -0.025em;
+	line-height: 1.1;
+	color: #FFFFFF;
+	margin: 0;
+}
+
+.sp-section-title-inverse :deep(em) {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-weight: 400;
+	color: var(--color-primary-300);
+}
+
+.sp-lede-inverse {
+	font-family: var(--font-serif);
+	font-weight: 300;
+	font-size: 16px;
+	line-height: 1.75;
+	color: rgba(255, 255, 255, 0.72);
+	margin-top: 20px;
+}
+
+/* ── DETAIL FEATURES · CARDS ── */
+.sp-feature-card {
 	padding: 28px;
-	border-radius: 20px;
 	border: 1px solid var(--color-border);
-	background: white;
-	transition: box-shadow 0.3s, transform 0.3s;
+	background: var(--color-surface);
+	border-radius: 20px;
+	transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
 }
 
-.service-feature-card:hover {
-	box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+.sp-feature-card:hover {
+	box-shadow: 0 12px 28px rgba(13, 17, 23, 0.08);
 	transform: translateY(-2px);
+	border-color: var(--color-border-strong);
+}
+
+.sp-feature-num {
+	flex-shrink: 0;
+	width: 48px;
+	height: 48px;
+	border-radius: 14px;
+	background: var(--color-primary-pastel);
+	color: var(--color-primary);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-family: var(--font-display);
+	font-size: 16px;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	transition: transform 0.3s ease;
+}
+
+.sp-feature-card:hover .sp-feature-num {
+	transform: scale(1.06);
+}
+
+.sp-feature-title {
+	font-size: 18px;
+	font-weight: 700;
+	letter-spacing: -0.005em;
+	color: var(--color-text);
+	margin: 0;
+}
+
+.sp-feature-desc {
+	font-size: 14px;
+	line-height: 1.65;
+	color: var(--color-text-light);
+	margin-top: 8px;
+}
+
+/* ── PROCESS ── */
+.process-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 24px;
+}
+
+@media (max-width: 960px) {
+	.process-grid { grid-template-columns: 1fr 1fr; gap: 32px 16px; }
+}
+
+@media (max-width: 640px) {
+	.process-grid { grid-template-columns: 1fr; }
+}
+
+.process-step {
+	text-align: center;
+	position: relative;
+}
+
+@media (min-width: 961px) {
+	.process-step:not(.is-last)::after {
+		content: "";
+		position: absolute;
+		top: 24px;
+		left: calc(50% + 32px);
+		width: calc(100% - 32px);
+		height: 1px;
+		background: var(--color-border-strong);
+	}
+}
+
+.process-step-num {
+	position: relative;
+	z-index: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	border-radius: 999px;
+	background: var(--color-surface);
+	border: 2px solid var(--color-primary);
+	color: var(--color-primary);
+	font-family: var(--font-display);
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.process-step-title {
+	font-size: 15px;
+	font-weight: 700;
+	letter-spacing: -0.005em;
+	color: var(--color-text);
+	margin: 20px 0 0;
+}
+
+.process-step-desc {
+	font-size: 13px;
+	line-height: 1.6;
+	color: var(--color-text-light);
+	margin-top: 8px;
+}
+
+/* ── BENEFITS ── */
+.benefits-section {
+	padding: 96px 0;
+	background: var(--color-primary-800);
+	color: #FFFFFF;
+}
+
+.benefits-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 64px;
+	align-items: center;
+}
+
+@media (max-width: 1024px) {
+	.benefits-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+
+.benefits-list {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.benefit-item {
+	padding: 18px 20px;
+	border-radius: 14px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	display: flex;
+	gap: 14px;
+	align-items: center;
+	transition: border-color 0.2s ease;
+}
+
+.benefit-item:hover {
+	border-color: rgba(103, 215, 228, 0.4);
+}
+
+.benefit-check {
+	flex-shrink: 0;
+	width: 28px;
+	height: 28px;
+	border-radius: 999px;
+	background: rgba(50, 191, 212, 0.2);
+	color: var(--color-primary-300);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+}
+
+.benefit-item p {
+	font-size: 14px;
+	color: rgba(255, 255, 255, 0.85);
+	line-height: 1.5;
+	margin: 0;
+}
+
+/* ── RELATED SERVICES ── */
+.related-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+}
+
+@media (max-width: 960px) {
+	.related-grid { grid-template-columns: 1fr; }
+}
+
+.related-card {
+	position: relative;
+	border-radius: 20px;
+	overflow: hidden;
+	height: 240px;
+	background: linear-gradient(165deg, var(--color-primary-700), var(--color-primary-800));
+	transition: transform 0.3s ease;
+	display: block;
+}
+
+.related-card:hover {
+	transform: translateY(-3px);
+}
+
+.related-card-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: 0.5;
+	transition: opacity 0.3s ease, transform 0.6s ease;
+}
+
+.related-card:hover .related-card-img {
+	opacity: 0.7;
+	transform: scale(1.05);
+}
+
+.related-card::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to top,
+		var(--color-primary-900) 5%,
+		color-mix(in oklab, var(--color-primary-800) 50%, transparent) 55%,
+		transparent 100%);
+	pointer-events: none;
+}
+
+.related-card-body {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 20px;
+	z-index: 2;
+	color: #FFFFFF;
+}
+
+.related-card-icon {
+	color: var(--color-primary-300);
+	font-size: 18px;
+	display: block;
+	margin-bottom: 4px;
+}
+
+.related-card-title {
+	font-size: 16px;
+	font-weight: 700;
+	letter-spacing: -0.005em;
+	color: #FFFFFF;
+	margin: 0;
+}
+
+.related-card-desc {
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.65);
+	margin-top: 4px;
+}
+
+.related-card-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--color-primary-300);
+	margin-top: 14px;
+	transition: gap 0.2s ease;
+}
+
+.related-card:hover .related-card-link {
+	gap: 10px;
+}
+
+/* ── CTA ── */
+.page-cta {
+	padding: 96px 0;
+	background: var(--color-surface-muted);
+	text-align: center;
+}
+
+.page-cta.is-dark {
+	background: var(--color-primary-800);
+	color: #FFFFFF;
+}
+
+.page-cta-lede {
+	font-family: var(--font-serif);
+	font-weight: 300;
+	font-size: 16px;
+	line-height: 1.7;
+	color: rgba(255, 255, 255, 0.7);
+	margin: 20px auto 0;
+	max-width: 52ch;
+}
+
+.page-cta-ctas {
+	display: inline-flex;
+	gap: 14px;
+	margin-top: 36px;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
 .ai-solution-card {

@@ -73,8 +73,8 @@
 					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 						Lo que incluye
 					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						Capacidades de {{ solution.title }}
+					<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+						Capacidades de <em>{{ solution.title }}</em>
 					</h2>
 				</div>
 
@@ -92,7 +92,7 @@
 								{{ String(i + 1).padStart(2, '0') }}
 							</span>
 							<div>
-								<h3 class="text-lg font-semibold text-dark group-hover:text-primary transition-colors">
+								<h3 class="text-lg font-semibold text-text group-hover:text-primary transition-colors">
 									{{ feat.title }}
 								</h3>
 								<p class="text-text-light text-sm leading-relaxed mt-2">
@@ -112,8 +112,8 @@
 					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 						Nuestro proceso
 					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						C&oacute;mo lo implementamos
+					<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+						C&oacute;mo lo <em>implementamos</em>
 					</h2>
 					<p class="text-text-light text-base leading-relaxed mt-5">
 						Un camino probado para llevar IA desde el caso de uso hasta producción con impacto real.
@@ -136,7 +136,7 @@
 							>
 								{{ i + 1 }}
 							</span>
-							<h4 class="text-dark font-semibold text-base mt-5">{{ step.title }}</h4>
+							<h4 class="text-text font-semibold text-base mt-5">{{ step.title }}</h4>
 							<p class="text-text-light text-sm leading-relaxed mt-2">{{ step.desc }}</p>
 						</div>
 					</div>
@@ -153,7 +153,7 @@
 							Ventajas
 						</p>
 						<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-							&iquest;Por qu&eacute; elegir {{ solution.title }}?
+							&iquest;Por qu&eacute; elegir <em>{{ solution.title }}</em>?
 						</h2>
 						<p class="text-white/60 text-base leading-relaxed mt-5">
 							Implementamos con foco en adopci&oacute;n, m&eacute;tricas objetivas y control de costos para que la IA deje resultados medibles en tu negocio.
@@ -184,8 +184,8 @@
 					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 						Otras soluciones
 					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						Combina con otras capacidades de IA
+					<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+						Combina con <em>otras capacidades</em> de IA
 					</h2>
 				</div>
 
@@ -227,7 +227,7 @@
 			<div class="container mx-auto text-center max-w-2xl">
 				<i :class="[solution.icon, 'text-primary-sky text-5xl mb-6 block']"></i>
 				<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-					&iquest;Listo para empezar?
+					&iquest;Listo para <em>empezar</em>?
 				</h2>
 				<p class="text-white/60 text-base leading-relaxed mt-5">
 					Conversemos sobre tu caso de uso de {{ solution.title }}. Agenda una asesor&iacute;a gratuita y definimos juntos el camino m&aacute;s corto a producci&oacute;n.
@@ -253,7 +253,7 @@
 
 	<section v-else class="py-20 px-4 text-center">
 		<div class="container mx-auto">
-			<h3 class="text-2xl font-light uppercase tracking-wide text-dark">Soluci&oacute;n no encontrada</h3>
+			<h3 class="text-2xl font-light uppercase tracking-wide text-text">Soluci&oacute;n no encontrada</h3>
 			<p class="text-text-light mt-4">La soluci&oacute;n de IA que buscas no existe.</p>
 			<RouterLink
 				to="/servicios/inteligencia-artificial"

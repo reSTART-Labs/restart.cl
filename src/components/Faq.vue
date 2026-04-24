@@ -1,12 +1,10 @@
 <template>
-	<section id="faq" class="py-24 px-6 md:px-12 bg-dark">
+	<section id="faq" class="py-24 px-6 md:px-12 faq-bg">
 		<div class="container mx-auto max-w-3xl">
 			<div class="text-center mb-16">
-				<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
-					FAQ
-				</p>
-				<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-					Preguntas frecuentes
+				<p class="faq-eyebrow">FAQ</p>
+				<h2 class="faq-title">
+					Preguntas <em>frecuentes</em>
 				</h2>
 			</div>
 
@@ -44,12 +42,12 @@
 			</div>
 
 			<div class="text-center mt-16 pt-10 border-t border-white/10">
-				<p class="text-white/60 text-base">
+				<p class="faq-foot-text">
 					&iquest;No encontraste lo que buscabas?
 				</p>
 				<RouterLink
 					to="/#contact"
-					class="inline-flex items-center gap-2 bg-primary text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-full no-underline transition-all duration-200 hover:bg-primary-dark mt-6"
+					class="inline-flex items-center gap-2 bg-primary text-white font-bold text-sm uppercase tracking-[0.08em] px-8 py-4 rounded-full no-underline transition-all duration-200 hover:bg-primary-dark mt-6"
 				>
 					Cont&aacute;ctanos ahora
 				</RouterLink>
@@ -57,6 +55,51 @@
 		</div>
 	</section>
 </template>
+
+<style scoped>
+.faq-bg {
+	background: #060A11;
+}
+
+html[data-theme="light"] .faq-bg {
+	background: var(--color-primary-900);
+}
+
+.faq-eyebrow {
+	display: inline-block;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--color-primary-300);
+	margin-bottom: 18px;
+}
+
+.faq-title {
+	font-family: var(--font-display);
+	font-size: clamp(30px, 3.6vw, 48px);
+	font-weight: 300;
+	letter-spacing: -0.025em;
+	line-height: 1.1;
+	color: #FFFFFF;
+	margin: 0;
+}
+
+.faq-title :deep(em) {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-weight: 400;
+	color: var(--color-primary-300);
+}
+
+.faq-foot-text {
+	font-family: var(--font-serif);
+	font-weight: 300;
+	font-style: italic;
+	font-size: 16px;
+	color: rgba(255, 255, 255, 0.7);
+}
+</style>
 
 <script setup>
 import { ref } from 'vue'

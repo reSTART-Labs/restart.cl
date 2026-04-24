@@ -23,6 +23,8 @@ async function start() {
 		app.use(express.static(path.resolve(__dirname, 'dist/client'), { index: false }))
 	}
 
+	app.get(/^\/\.well-known\//, (_req, res) => res.status(204).end())
+
 	app.use('*all', async (req, res) => {
 		const url = req.originalUrl
 

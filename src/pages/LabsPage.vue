@@ -1,30 +1,27 @@
 <template>
 	<!-- Hero -->
-	<section class="labs-hero relative overflow-hidden pt-32 pb-20 px-6 md:px-12">
-		<div class="absolute inset-0 labs-hero-bg"></div>
-		<div class="relative z-10 container mx-auto max-w-4xl">
-			<p class="text-primary-sky text-sm font-semibold uppercase tracking-widest mb-5">
-				re/START Labs
-			</p>
-			<h1 class="text-white text-4xl md:text-5xl lg:text-6xl font-light leading-[1.05]">
-				Laboratorio de productos que exploran, validan y ven la luz.
+	<section class="labs-hero relative overflow-hidden">
+		<div class="relative z-10 container mx-auto px-6 md:px-12 py-36">
+			<p class="page-hero-kicker">re/START Labs</p>
+			<h1 class="labs-hero-title">
+				Laboratorio de productos que <em>exploran</em>, validan y ven la luz.
 			</h1>
-			<p class="text-white/60 text-lg leading-relaxed mt-6 max-w-2xl">
+			<p class="labs-hero-lede">
 				Un espacio donde prototipamos ideas, probamos tecnolog&iacute;as y lanzamos productos propios. Algunos escalan, otros ense&ntilde;an &mdash; todos dejan algo.
 			</p>
 
-			<div class="flex flex-wrap items-center gap-6 mt-10">
-				<div class="flex items-center gap-2">
-					<span class="w-1.5 h-1.5 rounded-full bg-primary-sky animate-pulse"></span>
-					<span class="text-white/60 text-xs font-semibold uppercase tracking-widest">
-						{{ projects.length }} proyectos vivos
-					</span>
+			<div class="labs-hero-stats">
+				<div class="labs-hero-stat">
+					<span class="labs-hero-dot"></span>
+					<strong>{{ projects.length }}</strong> proyectos vivos
 				</div>
-				<RouterLink
-					to="/#contact"
-					class="inline-flex items-center gap-2 text-primary-sky text-xs font-semibold uppercase tracking-widest no-underline hover:gap-3 transition-all"
-				>
-					&iquest;Tienes una idea? Convers&eacute;mosla
+				<div class="labs-hero-divider">&middot;</div>
+				<div class="labs-hero-stat">
+					<strong>{{ yearRange }}</strong> activo
+				</div>
+				<div class="labs-hero-divider">&middot;</div>
+				<RouterLink to="/#contact" class="labs-hero-stat labs-hero-cta">
+					&iquest;Tu idea el siguiente?
 					<i class="fa fa-arrow-right text-[10px]"></i>
 				</RouterLink>
 			</div>
@@ -120,33 +117,38 @@
 	</section>
 
 	<!-- CTA -->
-	<section class="py-24 px-6 md:px-12 bg-dark">
-		<div class="container mx-auto max-w-2xl text-center">
-			<p class="text-primary-sky text-sm font-semibold uppercase tracking-widest mb-4">
-				Construye con nosotros
-			</p>
-			<h2 class="text-3xl md:text-4xl font-light text-white leading-tight">
-				&iquest;Tu pr&oacute;xima idea puede ser el siguiente lab?
+	<section class="page-cta is-dark">
+		<div class="container mx-auto px-6 md:px-12">
+			<p class="cta-eyebrow">Construye con nosotros</p>
+			<h2 class="cta-title">
+				&iquest;Tu pr&oacute;xima idea puede ser el <em>siguiente lab</em>?
 			</h2>
-			<p class="text-white/60 text-base leading-relaxed mt-5">
+			<p class="cta-lede">
 				Si tienes un producto en mente y necesitas un equipo que lo construya con el rigor de un lab y la velocidad de un startup, hablemos.
 			</p>
-			<RouterLink
-				to="/#contact"
-				class="inline-flex items-center gap-2 bg-primary text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-full no-underline transition-all duration-200 hover:bg-primary-dark mt-10"
-			>
-				Conversemos
-				<i class="fa fa-arrow-right text-xs"></i>
-			</RouterLink>
+			<div class="cta-ctas">
+				<RouterLink to="/#contact" class="btn btn-primary">
+					Conversemos
+				</RouterLink>
+			</div>
 		</div>
 	</section>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { labsProjects } from '@/data/labsProjects.js'
 
 const projects = labsProjects
+
+const yearRange = computed(() => {
+	const years = projects.map(p => p.year).filter(Boolean)
+	if (!years.length) return ''
+	const min = Math.min(...years)
+	const max = Math.max(...years)
+	return min === max ? `${min}` : `${min}–${max}`
+})
 
 function cardBindings(project) {
 	if (project.external) {
@@ -162,15 +164,115 @@ function cardSizeClass(index) {
 </script>
 
 <style scoped>
+/* ── Hero (idéntico a la propuesta) ── */
 .labs-hero {
-	background: #141218;
+	background:
+		radial-gradient(ellipse 50% 50% at 15% 10%, rgba(79, 61, 245, 0.22), transparent 55%),
+		radial-gradient(ellipse 50% 50% at 85% 90%, rgba(50, 191, 212, 0.2), transparent 55%),
+		radial-gradient(ellipse 60% 60% at 50% 50%, rgba(245, 159, 36, 0.06), transparent 60%),
+		var(--color-primary-900);
 }
 
-.labs-hero-bg {
-	background:
-		radial-gradient(circle at 15% 10%, rgba(86, 60, 248, 0.22) 0%, transparent 45%),
-		radial-gradient(circle at 85% 90%, rgba(65, 190, 207, 0.18) 0%, transparent 50%),
-		radial-gradient(circle at 50% 50%, rgba(250, 169, 43, 0.08) 0%, transparent 60%);
+.page-hero-kicker {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: var(--color-primary-300);
+	margin-bottom: 24px;
+}
+
+.page-hero-kicker::before {
+	content: "";
+	display: block;
+	width: 24px;
+	height: 1px;
+	background: var(--color-primary-300);
+}
+
+.labs-hero-title {
+	font-family: var(--font-display);
+	font-size: clamp(40px, 5.4vw, 72px);
+	font-weight: 300;
+	color: #FFFFFF;
+	line-height: 1.05;
+	letter-spacing: -0.025em;
+	max-width: 18ch;
+	margin: 0;
+}
+
+.labs-hero-title :deep(em) {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-weight: 400;
+	color: var(--color-primary-300);
+}
+
+.labs-hero-lede {
+	font-family: var(--font-serif);
+	font-weight: 300;
+	font-size: 18px;
+	line-height: 1.7;
+	color: rgba(255, 255, 255, 0.78);
+	margin-top: 28px;
+	max-width: 54ch;
+}
+
+.labs-hero-stats {
+	display: inline-flex;
+	align-items: center;
+	gap: 24px;
+	flex-wrap: wrap;
+	margin-top: 40px;
+	padding: 14px 24px;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 999px;
+}
+
+.labs-hero-stat {
+	font-size: 12px;
+	font-weight: 500;
+	color: rgba(255, 255, 255, 0.8);
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	text-decoration: none;
+}
+
+.labs-hero-stat :deep(strong),
+.labs-hero-stat strong {
+	color: var(--color-primary-300);
+	font-weight: 700;
+}
+
+.labs-hero-dot {
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-radius: 999px;
+	background: var(--color-primary-300);
+}
+
+.labs-hero-divider {
+	color: rgba(255, 255, 255, 0.35);
+	font-size: 12px;
+}
+
+.labs-hero-cta {
+	transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.labs-hero-cta:hover {
+	color: var(--color-primary-300);
+	gap: 12px;
+}
+
+.labs-hero-cta i {
+	color: var(--color-primary-300);
 }
 
 .masonry {
@@ -228,5 +330,63 @@ function cardSizeClass(index) {
 	.masonry-content {
 		padding: 28px;
 	}
+}
+
+/* ── CTA (idéntico a la propuesta) ── */
+.page-cta {
+	padding: 96px 0;
+	text-align: center;
+	background: var(--color-surface-muted);
+}
+
+.page-cta.is-dark {
+	background: var(--color-primary-800);
+	color: #FFFFFF;
+}
+
+.cta-eyebrow {
+	display: inline-block;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--color-primary-300);
+	margin-bottom: 16px;
+}
+
+.cta-title {
+	font-family: var(--font-display);
+	font-size: clamp(28px, 3.2vw, 42px);
+	font-weight: 300;
+	letter-spacing: -0.025em;
+	line-height: 1.1;
+	color: #FFFFFF;
+	max-width: 24ch;
+	margin: 0 auto;
+}
+
+.cta-title :deep(em) {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-weight: 400;
+	color: var(--color-primary-300);
+}
+
+.cta-lede {
+	font-family: var(--font-serif);
+	font-weight: 300;
+	font-size: 16px;
+	line-height: 1.7;
+	color: rgba(255, 255, 255, 0.7);
+	margin: 20px auto 0;
+	max-width: 52ch;
+}
+
+.cta-ctas {
+	display: inline-flex;
+	gap: 14px;
+	margin-top: 36px;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 </style>

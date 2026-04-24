@@ -26,8 +26,8 @@
 					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 						Nuestra historia
 					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						Construimos soluciones digitales que impulsan el crecimiento de emprendedores y empresas
+					<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+						Construimos soluciones digitales que impulsan el <em>crecimiento</em> de emprendedores y empresas
 					</h2>
 				</div>
 				<div class="flex flex-col gap-6">
@@ -50,8 +50,8 @@
 					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 						Lo que hacemos
 					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						Especializados en transformar ideas en productos digitales reales
+					<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+						Especializados en transformar <em>ideas</em> en productos digitales reales
 					</h2>
 				</div>
 				<div class="flex flex-col gap-6">
@@ -72,7 +72,7 @@
 			<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 				Nuestro equipo
 			</p>
-			<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
+			<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
 				Somos un equipo multidisciplinario de profesionales, unidos por la convicci&oacute;n de crear soluciones que hacen crecer negocios
 			</h2>
 			<p class="text-base text-text-light leading-[29px] mt-8">
@@ -88,8 +88,8 @@
 				<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 					Nuestros valores
 				</p>
-				<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-					Lo que nos define
+				<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+					Lo que nos <em>define</em>
 				</h2>
 			</div>
 
@@ -100,7 +100,7 @@
 					class="bg-white rounded-2xl p-7 border border-border/60"
 				>
 					<i :class="[value.icon, 'text-primary text-2xl']"></i>
-					<h4 class="text-base font-semibold text-dark mt-4 mb-2">{{ value.title }}</h4>
+					<h4 class="text-base font-semibold text-text mt-4 mb-2">{{ value.title }}</h4>
 					<p class="text-sm text-text-light leading-relaxed">{{ value.description }}</p>
 				</div>
 			</div>
@@ -115,8 +115,8 @@
 					<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
 						Nuestro compromiso
 					</p>
-					<h2 class="text-3xl md:text-4xl font-light text-dark leading-tight">
-						M&aacute;s que proveedores, somos tu socio tecnol&oacute;gico
+					<h2 class="text-3xl md:text-4xl font-light text-text leading-tight">
+						M&aacute;s que proveedores, somos tu <em>socio tecnol&oacute;gico</em>
 					</h2>
 				</div>
 				<div class="flex flex-col gap-6">

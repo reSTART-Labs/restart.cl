@@ -51,6 +51,10 @@ export function useCalEmbed(containerRef, options = {}) {
 		})
 
 		window.Cal('ui', {
+			cssVarsPerTheme: {
+				light: { 'cal-brand': brandColor },
+				dark: { 'cal-brand': brandColor },
+			},
 			styles: { branding: { brandColor } },
 			hideEventTypeDetails: false,
 			layout,

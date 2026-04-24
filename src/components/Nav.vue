@@ -1,18 +1,18 @@
 <template>
 	<header class="fixed top-0 left-0 right-0 z-50 px-4 pt-4 flex justify-center">
 		<nav
-			class="w-full max-w-5xl flex items-center justify-between px-5 md:px-6 h-14 rounded-full transition-all duration-300"
+			class="nav-pill w-full max-w-5xl flex items-center justify-between px-5 md:px-6 h-14 rounded-full transition-all duration-300 border"
 			:class="scrolled
-				? 'bg-white/95 backdrop-blur-md shadow-lg'
-				: 'bg-white/10 backdrop-blur-sm'"
+				? 'bg-surface/90 backdrop-blur-md shadow-lg border-border'
+				: 'bg-white/10 backdrop-blur-sm border-white/15'"
 		>
 			<!-- Logo -->
 			<RouterLink
 				to="/"
-				class="text-base font-semibold tracking-wide no-underline transition-colors duration-200 shrink-0"
-				:class="scrolled ? 'text-dark' : 'text-white'"
+				class="inline-flex items-center no-underline shrink-0 nav-logo"
+				:class="scrolled ? 'nav-logo-solid' : 'nav-logo-transparent'"
 			>
-				re/START
+				<img src="/logo@0.5x.png" alt="re/START" class="h-[22px] w-auto block">
 			</RouterLink>
 
 			<!-- Desktop links -->
@@ -21,19 +21,20 @@
 					<RouterLink
 						to="/nosotros"
 						class="text-[13px] font-medium no-underline transition-colors duration-200"
-						:class="scrolled ? 'text-text hover:text-primary' : 'text-white/80 hover:text-white'"
+						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
 						Nosotros
 					</RouterLink>
 				</li>
-				<li class="relative" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
-					<button
-						class="text-[13px] font-medium transition-colors duration-200 flex items-center gap-1.5 cursor-pointer"
-						:class="scrolled ? 'text-text hover:text-primary' : 'text-white/80 hover:text-white'"
+				<li class="relative flex items-center" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
+					<RouterLink
+						to="/servicios"
+						class="text-[13px] font-medium transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer no-underline"
+						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
 						Servicios
 						<i class="fa fa-angle-down text-[10px] transition-transform duration-200" :class="servicesOpen ? 'rotate-180' : ''"></i>
-					</button>
+					</RouterLink>
 					<transition
 						enter-active-class="transition duration-200 ease-out"
 						enter-from-class="opacity-0 -translate-y-2"
@@ -43,18 +44,44 @@
 						leave-to-class="opacity-0 -translate-y-2"
 					>
 						<div v-show="servicesOpen" class="absolute top-full left-1/2 -translate-x-1/2 pt-4">
-							<ul class="bg-white rounded-2xl shadow-2xl py-3 min-w-[240px] list-none m-0 p-0 border border-border/50">
-								<li v-for="service in services" :key="service.slug">
-									<RouterLink
-										:to="`/servicios/${service.slug}`"
-										class="flex items-center gap-3 px-5 py-3 text-sm text-text hover:bg-features-bg hover:text-primary no-underline transition-colors"
-										@click="servicesOpen = false"
-									>
-										<i :class="[service.icon, 'text-primary text-lg w-5 text-center']"></i>
-										{{ service.title }}
-									</RouterLink>
-								</li>
-							</ul>
+							<div class="bg-surface rounded-2xl shadow-2xl p-3 min-w-[440px] border border-border">
+								<p class="text-[10px] font-bold uppercase tracking-[0.18em] text-text-muted px-3 pt-2 pb-3">
+									Servicios &middot; cinco frentes
+								</p>
+								<ul class="list-none m-0 p-0 grid grid-cols-1 gap-1">
+									<li v-for="service in services" :key="service.slug">
+										<RouterLink
+											:to="`/servicios/${service.slug}`"
+											class="group flex items-start gap-4 p-3 rounded-xl text-text-soft hover:bg-features-bg no-underline transition-colors"
+											@click="servicesOpen = false"
+										>
+											<span
+												class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110"
+												:class="service.slug === 'inteligencia-artificial' ? 'bg-accent-electric/15 text-accent-electric' : 'bg-primary-pastel text-primary'"
+											>
+												<i :class="[service.icon, 'text-base']"></i>
+											</span>
+											<div class="flex-1 min-w-0">
+												<p class="text-sm font-semibold text-text leading-tight flex items-center gap-2">
+													{{ service.title }}
+													<span v-if="service.slug === 'inteligencia-artificial'" class="text-[9px] font-bold uppercase tracking-wider text-accent-electric bg-accent-electric/10 rounded-full px-1.5 py-0.5">Lab</span>
+												</p>
+												<p class="text-xs text-text-light leading-snug mt-1 font-serif italic">
+													{{ service.headline }}
+												</p>
+											</div>
+										</RouterLink>
+									</li>
+								</ul>
+								<RouterLink
+									to="/servicios"
+									class="flex items-center justify-between gap-3 mx-3 mt-2 mb-1 py-2 text-xs font-bold uppercase tracking-[0.16em] text-primary hover:text-primary-dark no-underline"
+									@click="servicesOpen = false"
+								>
+									<span>Ver todos los servicios</span>
+									<i class="fa fa-arrow-right text-[10px]"></i>
+								</RouterLink>
+							</div>
 						</div>
 					</transition>
 				</li>
@@ -62,32 +89,49 @@
 					<RouterLink
 						to="/labs"
 						class="text-[13px] font-medium no-underline transition-colors duration-200"
-						:class="scrolled ? 'text-text hover:text-primary' : 'text-white/80 hover:text-white'"
+						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
 						Labs
 					</RouterLink>
 				</li>
 			</ul>
 
-			<!-- Desktop CTA -->
-			<RouterLink
-				to="/#contact"
-				class="hidden lg:inline-block text-xs font-bold uppercase tracking-wide px-5 py-2 rounded-full no-underline transition-all duration-200"
-				:class="scrolled
-					? 'bg-primary text-white hover:bg-primary-dark'
-					: 'bg-white/15 text-white hover:bg-white/25'"
-			>
-				Conversemos
-			</RouterLink>
+			<!-- Right cluster -->
+			<div class="flex items-center gap-2">
+				<!-- Theme toggle -->
+				<button
+					type="button"
+					class="hidden lg:inline-flex w-9 h-9 items-center justify-center rounded-full transition-all duration-200 cursor-pointer border-0 bg-transparent"
+					:class="scrolled
+						? 'text-text-soft hover:text-primary hover:bg-features-bg'
+						: 'text-white/70 hover:text-white hover:bg-white/10'"
+					:title="theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+					@click="toggle"
+				>
+					<i v-if="theme === 'dark'" class="fa fa-sun-o text-sm"></i>
+					<i v-else class="fa fa-moon-o text-sm"></i>
+				</button>
 
-			<!-- Mobile hamburger -->
-			<button
-				class="lg:hidden w-9 h-9 flex items-center justify-center transition-colors duration-200"
-				:class="scrolled ? 'text-dark' : 'text-white'"
-				@click="mobileOpen = true"
-			>
-				<i class="fa fa-bars text-lg"></i>
-			</button>
+				<!-- Desktop CTA -->
+				<RouterLink
+					to="/#contact"
+					class="hidden lg:inline-block text-xs font-bold uppercase tracking-wide px-5 py-2 rounded-full no-underline transition-all duration-200"
+					:class="scrolled
+						? 'bg-primary text-white hover:bg-primary-dark'
+						: 'bg-white/15 text-white hover:bg-white/25'"
+				>
+					Conversemos
+				</RouterLink>
+
+				<!-- Mobile hamburger -->
+				<button
+					class="lg:hidden w-9 h-9 flex items-center justify-center transition-colors duration-200 bg-transparent border-0 cursor-pointer"
+					:class="scrolled ? 'text-text' : 'text-white'"
+					@click="mobileOpen = true"
+				>
+					<i class="fa fa-bars text-lg"></i>
+				</button>
+			</div>
 		</nav>
 
 		<!-- Mobile overlay (teleported to body to avoid stacking context issues) -->
@@ -108,17 +152,25 @@
 				<div class="relative z-10 flex items-center justify-between px-6 h-16 shrink-0">
 					<RouterLink
 						to="/"
-						class="text-base font-semibold tracking-wide text-white no-underline"
+						class="inline-flex items-center no-underline nav-logo nav-logo-transparent"
 						@click="mobileOpen = false"
 					>
-						re/START
+						<img src="/logo@0.5x.png" alt="re/START" class="h-[22px] w-auto block">
 					</RouterLink>
-					<button
-						class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-						@click="mobileOpen = false"
-					>
-						<i class="fa fa-times text-sm"></i>
-					</button>
+					<div class="flex items-center gap-2">
+						<button
+							class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors border-0 cursor-pointer"
+							@click="toggle"
+						>
+							<i :class="theme === 'dark' ? 'fa fa-sun-o' : 'fa fa-moon-o'" class="text-sm"></i>
+						</button>
+						<button
+							class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors border-0 cursor-pointer"
+							@click="mobileOpen = false"
+						>
+							<i class="fa fa-times text-sm"></i>
+						</button>
+					</div>
 				</div>
 
 				<!-- Mobile links -->
@@ -206,6 +258,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { services } from '@/data/services.js'
+import { useTheme } from '@/composables/useTheme'
+
+const { theme, toggle } = useTheme()
 
 const scrolled = ref(false)
 const mobileOpen = ref(false)
@@ -227,3 +282,4 @@ onUnmounted(() => {
 	window.removeEventListener('scroll', onScroll)
 })
 </script>
+

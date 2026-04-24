@@ -1,66 +1,177 @@
 @import "tailwindcss";
 
 @theme {
-	/* Azules / Celestes - marca */
-	--color-primary: #41BECF;
-	--color-primary-dark: #25A1B4;
-	--color-primary-deep: #228398;
-	--color-primary-ocean: #11303B;
-	--color-primary-sky: #7DD8E3;
-	--color-primary-pastel: #D6F4F7;
-	--color-primary-light: #EBFFFE;
+	/* ============================================================
+	   PALETA REFRESCADA · turquesa refinada + 2 acentos narrativos
+	   ============================================================ */
 
-	/* Oscuros / Fondos */
-	--color-dark: #141218;
-	--color-dark-soft: #1E1E1E;
+	/* Rampa primaria · turquesa con 10 pasos */
+	--color-primary-50:  #E6F7FA;
+	--color-primary-100: #C2EBF1;
+	--color-primary-200: #8DD9E3;
+	--color-primary-300: #67D7E4;
+	--color-primary-400: #32BFD4;
+	--color-primary-500: #0EA5BD;
+	--color-primary-600: #08798C;
+	--color-primary-700: #0A5366;
+	--color-primary-800: #082C38;
+	--color-primary-900: #04171E;
+
+	/* Aliases de marca (compatibilidad) */
+	--color-primary:        var(--color-primary-500);
+	--color-primary-dark:   var(--color-primary-600);
+	--color-primary-deep:   var(--color-primary-700);
+	--color-primary-ocean:  var(--color-primary-800);
+	--color-primary-sky:    var(--color-primary-300);
+	--color-primary-pastel: var(--color-primary-50);
+	--color-primary-light:  #F2FCFE;
+
+	/* Text color on top of primary backgrounds (adapts per theme) */
+	--color-primary-on: #FFFFFF;
+
+	/* Acentos · reducidos a 2 roles narrativos */
+	--color-accent-electric: #4F3DF5;
+	--color-accent-electric-hover: #3A28DE;
+	--color-accent-gold:     #F59F24;
+	--color-accent-gold-hover: #D8830F;
+
+	/* Signals funcionales (feedback) */
+	--color-signal-success: #10B981;
+	--color-signal-warning: #F59E0B;
+	--color-signal-danger:  #EF4444;
+
+	/* Legacy aliases (deprecados pero mantienen retrocompatibilidad) */
+	--color-accent-violet:  var(--color-accent-electric);
+	--color-accent-magenta: #E60A62;
+	--color-accent-orange:  #FF6B00;
+	--color-accent-green:   #47AE89;
+
+	/* ============================================================
+	   TOKENS SEMÁNTICOS · resuelven según [data-theme]
+	   ============================================================ */
+
+	/* Defaults = light theme */
+	--color-bg: #FAFAF7;
+	--color-surface: #FFFFFF;
+	--color-surface-muted: #F3F2EC;
+	--color-surface-raised: #FFFFFF;
+
+	--color-text: #0D1117;
+	--color-text-soft: #2E3440;
+	--color-text-light: #4E5563;
+	--color-text-muted: #8A8F99;
+
+	--color-border: #E8E6DC;
+	--color-border-soft: #EFEDE4;
+	--color-border-strong: #D6D2C3;
+
+	--color-dark: #0B0E14;
+	--color-dark-soft: #131820;
 	--color-dark-slate: #3D3D3D;
-	--color-dark-graphite: #36343B;
+	--color-dark-graphite: #06202B;
 	--color-dark-smoke: #494651;
 
-	/* Texto */
-	--color-text: #585858;
-	--color-text-light: #707070;
-	--color-text-muted: #999999;
-
-	/* Bordes y grises */
-	--color-border: #E0E0E0;
+	/* Legacy aliases usadas en componentes */
 	--color-gray-light: #DBDBDB;
 	--color-gray-soft: #BDBDBD;
+	--color-features-bg: var(--color-surface-muted);
+	--color-contact-bg: var(--color-primary-800);
+	--color-footer-bg: #07090E;
+	--color-footer-text: #8A8F99;
 
-	/* Fondos claros */
-	--color-features-bg: #F7F7F7;
-	--color-contact-bg: #36343B;
-	--color-footer-bg: #141218;
-	--color-footer-text: #BDBDBD;
-
-	/* Acentos */
-	--color-accent-violet: #563CF8;
-	--color-accent-magenta: #E60A62;
-	--color-accent-orange: #FF6B00;
-	--color-accent-gold: #FAA92B;
-	--color-accent-green: #47AE89;
-
-	/* Fuentes */
-	--font-sans: "Libre Franklin", "Lato", "Helvetica Neue", Arial, sans-serif;
+	/* ============================================================
+	   TIPOGRAFÍA · Lato display/sans + Merriweather serif
+	   ============================================================ */
+	--font-sans: "Lato", "Helvetica Neue", Arial, sans-serif;
+	--font-display: "Lato", "Helvetica Neue", Arial, sans-serif;
 	--font-serif: "Merriweather", Georgia, serif;
+	--font-code: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
 }
 
+/* ================================================================
+   DARK THEME · overrides
+   ================================================================ */
+html[data-theme="dark"] {
+	--color-bg: #0B0E14;
+	--color-surface: #121722;
+	--color-surface-muted: #0F141D;
+	--color-surface-raised: #1A202C;
+
+	--color-text: #EDEFF3;
+	--color-text-soft: #D0D4DE;
+	--color-text-light: #B5BAC5;
+	--color-text-muted: #7A8192;
+
+	--color-border: #232935;
+	--color-border-soft: #1A202C;
+	--color-border-strong: #323847;
+
+	--color-primary: var(--color-primary-400);
+	--color-primary-dark: var(--color-primary-300);
+	--color-primary-on: var(--color-primary-900);
+	--color-primary-pastel: rgba(50, 191, 212, 0.14);
+
+	/* Electric accent brighter in dark for contrast on dark surfaces */
+	--color-accent-electric: #8577FF;
+	--color-accent-electric-hover: #A29AFF;
+
+	--color-features-bg: var(--color-surface-muted);
+	--color-contact-bg: #06202B;
+	--color-footer-bg: #07090E;
+	--color-footer-text: #7A8192;
+}
+
+/* ================================================================
+   BASE
+   ================================================================ */
 html {
 	scroll-behavior: smooth;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	background: var(--color-bg);
+	color: var(--color-text);
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
 	font-family: var(--font-sans);
 	color: var(--color-text);
+	background: var(--color-bg);
 }
 
-/* Hero background image */
+/* Headings base */
+h1, h2, h3, h4, h5 {
+	font-family: var(--font-display);
+	letter-spacing: -0.025em;
+	line-height: 1.1;
+}
+
+/* Em italic = Merriweather editorial accent */
+em {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-weight: 400;
+}
+
+/* Headings that contain em get the primary accent on dark bg: the em sits
+   in the color context of the parent, so ensure contrast in both directions */
+h1 em, h2 em, h3 em, h4 em {
+	color: var(--color-primary);
+}
+
+/* When heading is white (over dark bg), em brightens to primary-300 */
+.text-white em,
+[class*="text-white"] em {
+	color: var(--color-primary-300);
+}
+
+/* ================================================================
+   HERO BG (sitio)
+   ================================================================ */
 .hero-bg {
 	background-image: url('/img/hero.jpg');
 	background-size: cover;
-	background-position: center 50%;
+	background-position: center 30%;
 	background-attachment: fixed;
 }
 
@@ -70,12 +181,15 @@ body {
 	}
 }
 
-/* Hero overlay */
 .hero-overlay {
-	background: linear-gradient(135deg, rgba(17, 48, 59, 0.88), rgba(20, 18, 24, 0.85));
+	background: linear-gradient(135deg,
+		color-mix(in oklab, var(--color-primary-800) 92%, transparent),
+		color-mix(in oklab, #0B0E14 88%, transparent));
 }
 
-/* Hero entrance animations */
+/* ================================================================
+   ANIMACIONES
+   ================================================================ */
 @keyframes customFadeInUp {
 	from {
 		opacity: 0;
@@ -88,45 +202,178 @@ body {
 }
 
 .animate-fade-in-up {
-	animation: customFadeInUp 0.6s ease-out both;
+	animation: customFadeInUp 0.7s ease-out both;
 }
 
-.animation-delay-100 {
-	animation-delay: 0.1s;
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+
+/* Respect reduced motion: skip the fade-in-up so content is never stuck invisible */
+@media (prefers-reduced-motion: reduce) {
+	.animate-fade-in-up,
+	.animation-delay-100,
+	.animation-delay-200,
+	.animation-delay-400 {
+		animation: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
 }
 
-.animation-delay-200 {
-	animation-delay: 0.2s;
-}
-
-.animation-delay-400 {
-	animation-delay: 0.4s;
-}
-
-/* Cal.com embed container */
+/* ================================================================
+   CAL.COM
+   ================================================================ */
 #my-cal-inline {
 	width: 100%;
 	height: 100%;
 	overflow: auto;
 }
 
-/* Social link hover scale */
+/* ================================================================
+   SOCIAL LINKS
+   ================================================================ */
 .social-link {
 	transition: transform 0.2s ease-out;
 }
 
 .social-link:hover {
-	transform: scale3d(1.6, 1.6, 1.6);
+	transform: scale3d(1.15, 1.15, 1.15);
 }
 
-/* Tech showroom marquee */
+/* ================================================================
+   BUTTON SYSTEM · reusable across pages
+   ================================================================ */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-family: var(--font-sans);
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	padding: 14px 28px;
+	border-radius: 999px;
+	border: 1px solid transparent;
+	text-decoration: none;
+	transition: all 0.2s ease;
+	cursor: pointer;
+	line-height: 1;
+}
+
+.btn-primary {
+	background: var(--color-primary);
+	color: var(--color-primary-on);
+	border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+	background: var(--color-primary-dark);
+	border-color: var(--color-primary-dark);
+	transform: translateY(-1px);
+}
+
+/* Dark-mode contrast: turquesa brighter → use deep navy text on any primary background */
+html[data-theme="dark"] .bg-primary,
+html[data-theme="dark"] .bg-primary-dark,
+html[data-theme="dark"] .hover\:bg-primary-dark:hover {
+	color: var(--color-primary-on);
+}
+
+/* Fix Tailwind's inline `text-white` on primary bg in dark mode */
+html[data-theme="dark"] .bg-primary.text-white,
+html[data-theme="dark"] .bg-primary-dark.text-white,
+html[data-theme="dark"] [class~="bg-primary"][class~="text-white"] {
+	color: var(--color-primary-on) !important;
+}
+
+/* Same when bg-primary is applied on hover states for links */
+html[data-theme="dark"] a.bg-primary,
+html[data-theme="dark"] button.bg-primary {
+	color: var(--color-primary-on);
+}
+
+.btn-ghost-dark {
+	background: transparent;
+	color: #FFFFFF;
+	border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-ghost-dark:hover {
+	background: rgba(255, 255, 255, 0.1);
+	border-color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-ghost {
+	background: transparent;
+	color: var(--color-text);
+	border-color: var(--color-border-strong);
+}
+
+.btn-ghost:hover {
+	border-color: var(--color-text);
+}
+
+.btn-text {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--color-primary);
+	font-size: 14px;
+	font-weight: 500;
+	text-decoration: none;
+	transition: gap 0.2s ease;
+}
+
+.btn-text:hover { gap: 12px; }
+
+/* ================================================================
+   LAB PROJECT STATS · dark-mode bg override (deeper than body bg)
+   ================================================================ */
+html[data-theme="dark"] .lab-stats {
+	background: #060A11;
+}
+
+html[data-theme="dark"] .lab-stat {
+	border-right-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ================================================================
+   CONTACT FLOATING CARD · theme-aware shadow, no border, minimal radius
+   ================================================================ */
+.contact-card {
+	border-radius: 2px;
+	box-shadow: 0 20px 80px rgba(8, 44, 56, 0.22);
+}
+
+html[data-theme="dark"] .contact-card {
+	box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+}
+
+/* ================================================================
+   NAV LOGO · invert filter according to theme + scroll state
+   ================================================================ */
+.nav-logo img {
+	transition: filter 0.3s ease;
+}
+
+/* Over transparent nav (hero): always white */
+.nav-logo-transparent img {
+	filter: brightness(0) invert(1);
+}
+
+/* Solid nav (scrolled state) — white only in dark theme */
+html[data-theme="dark"] .nav-logo-solid img {
+	filter: brightness(0) invert(1);
+}
+
+/* ================================================================
+   TECH SHOWROOM MARQUEE
+   ================================================================ */
 @keyframes marquee {
-	0% {
-		transform: translateX(0);
-	}
-	100% {
-		transform: translateX(-50%);
-	}
+	0% { transform: translateX(0); }
+	100% { transform: translateX(-50%); }
 }
 
 .marquee-wrapper {

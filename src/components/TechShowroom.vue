@@ -1,11 +1,9 @@
 <template>
 	<section class="py-20 bg-features-bg overflow-hidden">
 		<div class="container mx-auto px-6 md:px-12 text-center mb-12">
-			<p class="text-primary text-sm font-semibold uppercase tracking-widest mb-4">
-				Tecnolog&iacute;as
-			</p>
-			<h2 class="text-3xl md:text-4xl font-light text-dark">
-				Stack que utilizamos
+			<p class="tech-eyebrow">Tecnolog&iacute;as</p>
+			<h2 class="tech-title">
+				Stack que <em>utilizamos</em>
 			</h2>
 		</div>
 
@@ -37,3 +35,32 @@ const techs = [
 	{ name: 'Git', label: '', fa: 'ion-social-github' },
 ]
 </script>
+
+<style scoped>
+.tech-eyebrow {
+	display: inline-block;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--color-primary);
+	margin-bottom: 18px;
+}
+
+.tech-title {
+	font-family: var(--font-display);
+	font-size: clamp(28px, 3.2vw, 42px);
+	font-weight: 300;
+	letter-spacing: -0.025em;
+	line-height: 1.1;
+	color: var(--color-text);
+	margin: 0;
+}
+
+.tech-title :deep(em) {
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-weight: 400;
+	color: var(--color-primary);
+}
+</style>
