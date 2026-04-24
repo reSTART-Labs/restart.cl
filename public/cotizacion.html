@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+	<meta charset="utf-8">
+	<title>Cotización · re/START</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,400;1,700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<style>
+		:root {
+			--font-display: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+			--font-sans: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+			--font-serif: 'Merriweather', Georgia, serif;
+			--font-code: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
+
+			--primary-50:  #E6F7FA;
+			--primary-100: #C2EBF1;
+			--primary-200: #8DD9E3;
+			--primary-300: #67D7E4;
+			--primary-400: #32BFD4;
+			--primary-500: #0EA5BD;
+			--primary-600: #08798C;
+			--primary-700: #0A5366;
+			--primary-800: #082C38;
+			--primary-900: #04171E;
+
+			--accent-electric: #4F3DF5;
+			--accent-gold: #F59F24;
+
+			--r-xs: 6px;
+			--r-sm: 10px;
+			--r-md: 14px;
+			--r-lg: 20px;
+			--r-xl: 28px;
+			--r-pill: 999px;
+
+			--bg: #FAFAF7;
+			--surface: #FFFFFF;
+			--surface-muted: #F3F2EC;
+			--text: #0D1117;
+			--text-soft: #2E3440;
+			--text-light: #4E5563;
+			--text-muted: #8A8F99;
+			--border: #E8E6DC;
+			--border-soft: #EFEDE4;
+			--border-strong: #D6D2C3;
+			--primary: var(--primary-500);
+			--primary-hover: var(--primary-600);
+			--primary-on: #FFFFFF;
+			--ocean: var(--primary-800);
+		}
+
+		*, *::before, *::after { box-sizing: border-box; }
+		html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+		body { margin: 0; background: var(--surface-muted); color: var(--text); font-family: var(--font-sans); font-weight: 400; line-height: 1.6; }
+		h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; }
+		p { margin: 0; }
+		a { color: inherit; text-decoration: none; }
+
+		.page {
+			max-width: 800px;
+			margin: 40px auto;
+			background: var(--surface);
+			box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+		}
+
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			padding: 40px 48px;
+			border-bottom: 1px solid var(--border);
+			background: linear-gradient(135deg, var(--primary-800) 0%, var(--primary-700) 100%);
+		}
+
+		.header-brand {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+		}
+
+		.header-brand img {
+			height: 36px;
+			width: auto;
+		}
+
+		.header-brand .tagline {
+			font-size: 11px;
+			font-weight: 600;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--primary-300);
+		}
+
+		.header-meta {
+			text-align: right;
+			color: var(--primary-50);
+		}
+
+		.header-meta .label {
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+			opacity: 0.7;
+		}
+
+		.header-meta .value {
+			font-size: 14px;
+			font-weight: 600;
+			margin-top: 2px;
+		}
+
+		.header-meta .id {
+			font-family: var(--font-code);
+			font-size: 13px;
+			color: var(--primary-300);
+			margin-top: 8px;
+		}
+
+		.content {
+			padding: 48px;
+		}
+
+		.quote-title {
+			margin-bottom: 8px;
+		}
+
+		.quote-title h1 {
+			font-size: clamp(26px, 4vw, 32px);
+			color: var(--text);
+		}
+
+		.quote-title h1 em {
+			color: var(--primary);
+		}
+
+		.quote-client {
+			font-size: 14px;
+			color: var(--text-light);
+			padding-bottom: 24px;
+			border-bottom: 1px solid var(--border);
+			margin-bottom: 32px;
+		}
+
+		.quote-client strong {
+			color: var(--text);
+			font-weight: 600;
+		}
+
+		.section-title {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+			color: var(--primary);
+			margin-bottom: 20px;
+		}
+
+		.service-table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-bottom: 24px;
+		}
+
+		.service-table th {
+			text-align: left;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			padding: 12px 0;
+			border-bottom: 2px solid var(--border);
+		}
+
+		.service-table td {
+			padding: 16px 0;
+			border-bottom: 1px solid var(--border-soft);
+			vertical-align: top;
+		}
+
+		.service-table td.monto {
+			text-align: right;
+			font-weight: 600;
+			white-space: nowrap;
+			width: 120px;
+		}
+
+		.service-name {
+			font-weight: 600;
+			font-size: 15px;
+			color: var(--text);
+		}
+
+		.service-desc {
+			font-size: 13px;
+			color: var(--text-light);
+			margin-top: 4px;
+		}
+
+		.service-actions {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 28px;
+			height: 28px;
+			margin-left: 8px;
+			border-radius: var(--r-sm);
+			color: var(--text-muted);
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+
+		.service-actions:hover {
+			color: var(--primary);
+			background: var(--primary-50);
+		}
+
+		.total-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 24px;
+			background: var(--primary-800);
+			border-radius: var(--r-md);
+			margin-top: 16px;
+		}
+
+		.total-label {
+			font-size: 12px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			color: var(--primary-100);
+		}
+
+		.total-value {
+			font-size: 24px;
+			font-weight: 700;
+			color: #fff;
+		}
+
+		.notes-section {
+			margin-top: 32px;
+			padding-top: 24px;
+			border-top: 1px solid var(--border);
+		}
+
+		.notes-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.notes-list li {
+			font-size: 13px;
+			color: var(--text-light);
+			padding: 6px 0;
+			padding-left: 16px;
+			position: relative;
+		}
+
+		.notes-list li::before {
+			content: "•";
+			position: absolute;
+			left: 0;
+			color: var(--primary);
+		}
+
+		.notes-list li strong {
+			color: var(--text);
+		}
+
+		.validity-box {
+			margin-top: 24px;
+			padding: 16px 20px;
+			background: var(--surface-muted);
+			border-radius: var(--r-md);
+			border-left: 3px solid var(--primary);
+		}
+
+		.validity-box .title {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--primary);
+			margin-bottom: 8px;
+		}
+
+		.validity-box p {
+			font-size: 13px;
+			color: var(--text-light);
+			line-height: 1.6;
+		}
+
+		.footer {
+			padding: 32px 48px;
+			background: var(--primary-900);
+			color: var(--primary-100);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.footer-brand img {
+			height: 20px;
+			filter: brightness(0) invert(1);
+		}
+
+		.footer-info {
+			text-align: right;
+			font-size: 12px;
+			color: rgba(255,255,255,0.6);
+		}
+
+		.actions {
+			display: flex;
+			gap: 12px;
+			margin-top: 32px;
+			padding-top: 24px;
+			border-top: 1px solid var(--border);
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			font-family: var(--font-sans);
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			padding: 12px 24px;
+			border-radius: var(--r-pill);
+			border: 1px solid transparent;
+			transition: all 0.2s ease;
+			cursor: pointer;
+		}
+
+		.btn-primary {
+			background: var(--primary);
+			color: var(--primary-on);
+			border-color: var(--primary);
+		}
+
+		.btn-primary:hover {
+			background: var(--primary-hover);
+			transform: translateY(-1px);
+		}
+
+		.btn-secondary {
+			background: transparent;
+			color: var(--text);
+			border-color: var(--border-strong);
+		}
+
+		.btn-secondary:hover {
+			border-color: var(--text);
+		}
+
+		.ajax-loading {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+
+		@media print {
+			@page {
+				size: A4;
+				margin: 0;
+			}
+			body {
+				background: #fff;
+				-webkit-print-color-adjust: exact;
+				print-color-adjust: exact;
+			}
+			.page {
+				margin: 0;
+				box-shadow: none;
+				max-width: none;
+				width: 100%;
+			}
+			.actions {
+				display: none;
+			}
+			.service-actions {
+				display: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="page">
+		<header class="header">
+			<div class="header-brand">
+				<img src="/logo@0.5x.png" alt="re/START">
+				<span class="tagline">Agencia digital</span>
+			</div>
+			<div class="header-meta">
+				<div class="label">Fecha</div>
+				<div class="value">23 de abril de 2026</div>
+				<div class="label" style="margin-top: 12px;">Cotización</div>
+				<div class="id">#RS-2026-0142</div>
+			</div>
+		</header>
+
+		<div class="content">
+			<div class="quote-title">
+				<h1>Propuesta de <em>Transformación</em> Digital</h1>
+			</div>
+
+			<div class="quote-client">
+				<strong>Cliente:</strong> MineClass<br>
+				<strong>Contacto:</strong> Andrea López · andrea@mineclass.cl
+			</div>
+
+			<div class="section-title">Servicios propuestos</div>
+
+			<table class="service-table" id="services-table">
+				<thead>
+					<tr>
+						<th>Servicio</th>
+						<th style="text-align: right;">Monto</th>
+					</tr>
+				</thead>
+				<tbody id="services-body">
+					<tr data-id="1">
+						<td>
+							<div class="service-name">Diseño de Producto Digital</div>
+							<div class="service-desc">Investigación de usuarios, UX/UI, prototipado y diseño de interfaz</div>
+						</td>
+						<td class="monto">$4.500.000</td>
+					</tr>
+					<tr data-id="2">
+						<td>
+							<div class="service-name">Desarrollo Web (MVP)</div>
+							<div class="service-desc">Plataforma web responsive con Vue.js + Node.js</div>
+						</td>
+						<td class="monto">$8.200.000</td>
+					</tr>
+					<tr data-id="3">
+						<td>
+							<div class="service-name">Integración Cloud AWS</div>
+							<div class="service-desc">Infraestructura, despliegue y configuración de servidores</div>
+						</td>
+						<td class="monto">$2.800.000</td>
+					</tr>
+					<tr data-id="4">
+						<td>
+							<div class="service-name">Soporte y Mantenimiento (3 meses)</div>
+							<div class="service-desc">Monitoreo, actualizaciones y soporte técnico</div>
+						</td>
+						<td class="monto">$1.500.000</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="total-row">
+				<span class="total-label">Total estimado</span>
+				<span class="total-value" id="total-value">$17.000.000</span>
+			</div>
+
+			<div class="actions">
+				<button class="btn btn-primary" onclick="addService()">
+					<i class="fa fa-plus"></i> Agregar servicio
+				</button>
+				<button class="btn btn-secondary" onclick="window.print()">
+					<i class="fa fa-print"></i> Imprimir
+				</button>
+			</div>
+
+			<div class="notes-section">
+				<div class="section-title">Notas</div>
+				<ul class="notes-list">
+					<li><strong>Forma de pago:</strong> 40% inicio, 30% avance, 30% entrega</li>
+					<li><strong>IVA:</strong> No incluido en los valores presentados</li>
+					<li><strong>Timeline:</strong> 10-12 semanas desde aprobación</li>
+					<li><strong>Hosting:</strong> Servicio no incluido (cliente proporciona)</li>
+				</ul>
+			</div>
+
+			<div class="validity-box">
+				<div class="title">Validez</div>
+				<p>Esta cotización tiene validez de 30 días. Después de este período, los valores pueden variar.<br>
+				<strong>Próximos pasos:</strong> Una vez aprobada, enviaremos el contrato y comenzaremos con la fase de descubrimiento.</p>
+			</div>
+		</div>
+
+		<footer class="footer">
+			<div class="footer-brand">
+				<img src="/logo@0.5x.png" alt="re/START">
+			</div>
+			<div class="footer-info">
+				restart.cl · help@restart.cl<br>
+				+56 9 1234 5678
+			</div>
+		</footer>
+	</div>
+
+	<script>
+		const services = [
+			{ name: 'Diseño de Producto Digital', desc: 'Investigación de usuarios, UX/UI, prototipado y diseño de interfaz', price: '$4.500.000' },
+			{ name: 'Desarrollo Web (MVP)', desc: 'Plataforma web responsive con Vue.js + Node.js', price: '$8.200.000' },
+			{ name: 'Integración Cloud AWS', desc: 'Infraestructura, despliegue y configuración de servidores', price: '$2.800.000' },
+			{ name: 'Soporte y Mantenimiento (3 meses)', desc: 'Monitoreo, actualizaciones y soporte técnico', price: '$1.500.000' }
+		];
+
+		let nextId = 5;
+
+		function parsePrice(priceStr) {
+			return parseInt(priceStr.replace(/[^0-9]/g, ''), 10);
+		}
+
+		function formatPrice(num) {
+			return '$' + num.toLocaleString('es-CL');
+		}
+
+		function calculateTotal() {
+			const rows = document.querySelectorAll('#services-body tr');
+			let total = 0;
+			rows.forEach(row => {
+				const monto = row.querySelector('.monto').textContent;
+				total += parsePrice(monto);
+			});
+			document.getElementById('total-value').textContent = formatPrice(total);
+		}
+
+		function addService() {
+			const name = prompt('Nombre del servicio:');
+			if (!name) return;
+
+			const desc = prompt('Descripción del servicio:', '');
+			const priceStr = prompt('Monto (ej: $1.000.000):', '$0');
+			if (!priceStr) return;
+
+			const price = priceStr.startsWith('$') ? priceStr : '$' + priceStr;
+
+			const tbody = document.getElementById('services-body');
+			const tr = document.createElement('tr');
+			tr.dataset.id = nextId++;
+			tr.innerHTML = `
+				<td>
+					<div class="service-name">${name}</div>
+					<div class="service-desc">${desc}</div>
+				</td>
+				<td class="monto">${price}</td>
+			`;
+			tbody.appendChild(tr);
+			calculateTotal();
+		}
+
+		function removeService(id) {
+			const row = document.querySelector(`tr[data-id="${id}"]`);
+			if (row) {
+				row.remove();
+				calculateTotal();
+			}
+		}
+
+		// Drag and drop reordering
+		let draggedRow = null;
+
+		document.getElementById('services-body').addEventListener('dragstart', function(e) {
+			if (e.target.tagName === 'TR') {
+				draggedRow = e.target;
+				e.target.style.opacity = '0.5';
+			}
+		});
+
+		document.getElementById('services-body').addEventListener('dragend', function(e) {
+			if (e.target.tagName === 'TR') {
+				e.target.style.opacity = '1';
+				draggedRow = null;
+			}
+		});
+
+		document.getElementById('services-body').addEventListener('dragover', function(e) {
+			e.preventDefault();
+		});
+
+		document.getElementById('services-body').addEventListener('drop', function(e) {
+			e.preventDefault();
+			const targetRow = e.target.closest('tr');
+			if (draggedRow && targetRow && draggedRow !== targetRow) {
+				const tbody = document.getElementById('services-body');
+				const rows = Array.from(tbody.querySelectorAll('tr'));
+				const draggedIndex = rows.indexOf(draggedRow);
+				const targetIndex = rows.indexOf(targetRow);
+
+				if (draggedIndex < targetIndex) {
+					targetRow.parentNode.insertBefore(draggedRow, targetRow.nextSibling);
+				} else {
+					targetRow.parentNode.insertBefore(draggedRow, targetRow);
+				}
+			}
+		});
+	</script>
+</body>
+</html>

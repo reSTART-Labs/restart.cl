@@ -1,0 +1,1185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Presentación · re/START</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,400;1,700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+<script>
+/**
+ * <deck-stage> — reusable web component for HTML decks.
+ *
+ * Handles:
+ *  (a) speaker notes — reads <script type="application/json" id="speaker-notes">
+ *      and posts {slideIndexChanged: N} to the parent window on nav.
+ *  (b) keyboard navigation — ←/→, PgUp/PgDn, Space, Home/End, number keys.
+ *  (c) press R to reset to slide 0 (with a tasteful keyboard hint).
+ *  (d) bottom-center overlay showing slide count + hints, fades out on idle.
+ *  (e) auto-scaling — inner canvas is a fixed design size (default 1920×1080)
+ *      scaled with `transform: scale()` to fit the viewport, letterboxed.
+ *      Set the `noscale` attribute to render at authored size (1:1) — the
+ *      PPTX exporter sets this so its DOM capture sees unscaled geometry.
+ *  (f) print — `@media print` lays every slide out as its own page at the
+ *      design size, so the browser's Print → Save as PDF produces a clean
+ *      one-page-per-slide PDF with no extra setup.
+ *
+ * Slides are HIDDEN, not unmounted. tay in the DOM with
+ * `visibility: hidden` + `opacity: 0`, so their state (videos, iframes,
+ * form inputs, React trees) is preserved across navigation.
+ *
+ * Lifecycle event — the component dispatches a `slidechange` CustomEvent on
+ * itself whenever the active slide changes (including the initial mount).
+ * The event bubbles and composes out of shadow DOM, so you can listen on
+ * the <deck-stage> element or on document:
+ *
+ *   document.querySelector('deck-stage').addEventListener('slidechange', (e) => {
+ *     e.detail.index         // new 0-based index
+ *     e.detail.previousIndex // previous index, or -1 on init
+ *     e.detail.total         // total slide count
+ *     e.detail.slide         // the new active slide element
+ *     e.detail.previousSlide // the prior slide element, or null on init
+ *     e.detail.reason        // 'init' | 'keyboard' | 'click' | 'tap' | 'api'
+ *   });
+ *
+ * Persistence: current slide index is saved to localStorage keyed by the
+ * document path, so refresh returns you  the same place.
+ *
+ * Usage:
+ *   <deck-stage width="1920" height="1080">
+ *     <section data-label="Title">...</section>
+ *     <section data-label="Agenda">...</section>
+ *   </deck-stage>
+ *
+ * Slides are the direct element children of <deck-stage>. Each slide is
+ * automatically tagged with:
+ *   - data-screen-label="NN Label"   (1-indexed, for comment flow)
+ *   - data-om-validate="no_overflowing_text,no_overlapping_text,slide_sized_text"
+ */
+
+(() => {
+  const DESIGN_W_DEFAULT = 1920;
+  const DESIGN_H_DEFAULT = 1080;
+  const STORAGE_PREFIX = 'deck-stage:slide:';
+  const OVERLAY_HIDE_MS = 1800;
+  const VALIDATE_ATTR = 'no_overflowing_text,no_overlapping_text,slide_sized_text';
+
+  const pad2 = (n) => String(n).padStart(2, '0');
+
+  const stylesheet = `
+    :host {
+      position: fixed;
+      inset: 0;
+      display: block;
+      background: #0B0E14;
+      color: #fff;
+      font-family: 'Lato', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .stage {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .canvas {
+      position: relative;
+      transform-origin: center center;
+      flex-shrink: 0;
+      background: #0B0E14;
+      will-change: transform;
+    }
+
+    ::slotted(*) {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      box-sizing: border-box !important;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+    ::slotted([data-deck-active]) {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .tapzones {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      z-index: 2147482000;
+      pointer-events: none;
+    }
+    .tapzone {
+      flex: 1;
+      pointer-events: auto;
+      -webkit-tap-highlight-color: transparent;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .tapzones { display: none; }
+    }
+
+    .overlay {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translate(-50%, 6px) scale(0.92);
+      filter: blur(6px);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      background: #000;
+      color: #fff;
+      border-radius: 999px;
+      font-size: 12px;
+      font-feature-settings: "tnum" 1;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 260ms ease, transform 260ms cubic-bezier(.2,.8,.2,1), filter 260ms ease;
+      transform-origin: center bottom;
+      z-index: 2147483000;
+      user-select: none;
+    }
+    .overlay[data-visible] {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, 0) scale(1);
+      filter: blur(0);
+    }
+
+    .btn {
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent;
+      border: 0;
+      margin: 0;
+      padding: 0;
+      color: inherit;
+      font: inherit;
+      cursor: default;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 999px;
+      color: rgba(255,255,255,0.72);
+      transition: background 140ms ease, color 140ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .btn:active { background: rgba(255,255,255,0.18); }
+    .btn:focus { outline: none; }
+    .btn:focus-visible { outline: none; }
+    .btn::-moz-focus-inner { border: 0; }
+    .btn svg { width: 14px; height: 14px; display: block; }
+    .btn.reset {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      padding: 0 10px 0 12px;
+      gap: 6px;
+      color: rgba(255,255,255,0.72);
+    }
+    .btn.reset .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 10px;
+      line-height: 1;
+      color: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.12);
+      border-radius: 4px;
+    }
+
+    .count {
+      font-variant-numeric: tabular-nums;
+      color: #fff;
+      font-weight: 500;
+      padding: 0 8px;
+      min-width: 42px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .count .sep { color: rgba(255,255,255,0.45); margin: 0 3px; font-weight: 400; }
+    .count .total { color: rgba(255,255,255,0.55); }
+
+    .divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.18);
+      margin: 0 2px;
+    }
+
+    @media print {
+      :host {
+        position: static;
+        inset: auto;
+        background: none;
+        overflow: visible;
+        color: inherit;
+      }
+      .stage { position: static; display: block; }
+      .canvas {
+        transform: none !important;
+        width: auto !important;
+        height: auto !important;
+        background: none;
+        will-change: auto;
+      }
+      ::slotted(*) {
+        position: relative !important;
+        inset: auto !important;
+        width: var(--decksign-h) !important;
+        box-sizing: border-box !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto;
+        break-after: page;
+        page-break-after: always;
+        break-inside: avoid;
+        overflow: hidden;
+      }
+      ::slotted(*:last-child) {
+        break-after: auto;
+        page-break-after: auto;
+      }
+      .overlay, .tapzones { display: none !important; }
+    }
+  `;
+
+  class DeckStage extends HTMLElement {
+    static get observedAttributes() { return ['width', 'height', 'noscale']; }
+
+    constructor() {
+      super();
+      this._root = this.attachShadow({ mode: 'open' });
+      this._index = 0;
+      this._slides = [];
+      this._notes = [];
+      this._hideTimer = null;
+      this._mouseIdleTimer = null;
+      this._storageKey = STORAGE_PREFIX + (location.pathname || '/');
+
+      this._onKey = this._onKey.bind(this);
+      this._onResize = this._onResize.bind(this);
+      this._onSlotChange = this._onSlotChange.bind(this);
+      this._onMouseMove = this._onMouseMove.bind(this);
+      this._onTapBack = this._onTapBack.bind(this);
+      this._onTapForward = this._onTapForward.bind(this);
+    }
+
+    get designWidth() {
+      return parseInt(this.getAttribute('width'), 10) || DESIGN_W_DEFAULT;
+    }
+    get designHeight() {
+      return parseInt(this.getAttribute('height'), 10) || DESIGN_H_DEFAULT;
+    }
+
+    connectedCallback() {
+      this._render();
+      this._loadNotes();
+      this._syncPrintPageRule();
+      window.addEventListener('keydown', this._onKey);
+      window.addEventListener('resize', this._onResize);
+      window.addEventListener('mousemove', this._onMouseMove, { passive: true });
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener('keydown', this._onKey);
+      window.removeEventListener('resize', this._onResize);
+      window.removeEventListener('mousemove', this._onMouseMove);
+      if (this._hideTimer) clearTimeout(this._hideTimer);
+      if (this._mouseIdleTimer) clearTimeout(this._mouseIdleTimer);
+    }
+
+    attributeChangedCallback() {
+      if (this._canvas) {
+        this._canvas.style.width = this.designWidth + 'px';
+        this._canvas.style.height = this.designHeight + 'px';
+        this._canvas.style.setProperty('--decksign-w', this.designWidth + 'px');
+        this._canvas.style.setProperty('--decksign-h', this.designHeight + 'px');
+        this._fit();
+        this._syncPrintPageRule();
+      }
+    }
+
+    _render() {
+      const style = document.createElement('style');
+      style.textContent = stylesheet;
+
+      const stage = document.createElement('div');
+      stage.className = 'stage';
+
+      const canvas = document.createElement('div');
+      canvas.className = 'canvas';
+      canvas.style.width = this.designWidth + 'px';
+      canvas.style.height = this.designHeight + 'px';
+      canvas.style.setProperty('--decksign-w', this.designWidth + 'px');
+      canvas.style.setProperty('--decksign-h', this.designHeight + 'px');
+
+      const slot = document.createElement('slot');
+      slot.addEventListener('slotchange', this._onSlotChange);
+      canvas.appendChild(slot);
+      stage.appendChild(canvas);
+
+      const tapzones = document.createElement('div');
+      tapzones.className = 'tapzones export-hidden';
+      tapzones.setAttribute('aria-hidden', 'true');
+      const tzBack = document.createElement('div');
+      tzBack.className = 'tapzone tapzone--back';
+      const tzMid = document.createElement('div');
+      tzMid.className = 'tapzone tapzone--mid';
+      tzMid.style.pointerEvents = 'none';
+      const tzFwd = document.createElement('div');
+      tzFwd.className = 'tapzone tapzone--fwd';
+      tzBack.addEventListener('click', this._onTapBack);
+      tzFwd.addEventListener('click', this._onTapForward);
+      tapzones.append(tzBack, tzMid, tzFwd);
+
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay export-hidden';
+      overlay.setAttribute('role', 'toolbar');
+      overlay.setAttribute('aria-label', 'Deck controls');
+      overlay.innerHTML = `
+        <button class="btn prev" type="button" aria-label="Previous slide" title="Previous (←)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+        </button>
+        <span class="count" aria-live="polite"><span class="current">1</span><span class="sep">/</span><span class="total">1</span></span>
+        <button class="btn next" type="button" aria-label="Next slide" title="Next (→)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+        </button>
+        <span class="divider"></span>
+        <button class="btn reset" type="button" aria-label="Reset to first slide" title="Reset (R)">Reset<span class="kbd">R</span></button>
+      `;
+
+      overlay.querySelector('.prev').addEventListener('click', () => this._go(this._index - 1, 'click'));
+      overlay.querySelector('.next').addEventListener('click', () => this._go(this._index + 1, 'click'));
+      overlay.querySelector('.reset').addEventListener('click', () => this._go(0, 'click'));
+
+      this._root.append(style, stage, tapzones, overlay);
+      this._canvas = canvas;
+      this._slot = slot;
+      this._overlay = overlay;
+      this._countEl = overlay.querySelector('.current');
+      this._totalEl = overlay.querySelector('.total');
+    }
+
+    _syncPrintPageRule() {
+      const id = 'deck-stage-printage';
+      let tag = document.getElementById(id);
+      if (!tag) {
+        tag = document.createElement('style');
+        tag.id = id;
+        document.head.appendChild(tag);
+      }
+      tag.textContent =
+        '@page { size: ' + this.designWidth + 'px ' + this.designHeight + 'px; margin: 0; } ' +
+        '@media print { html, body { margin: 0 !important; padding: 0 !important; background: none !important; overflow: visible !important; height: auto !important; } ' +
+        '* { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }';
+    }
+
+    _onSlotChange() {
+      this._collectSlides();
+      this._restoreIndex();
+      this._applyIndex({ showOverlay: false, broadcast: true, reason: 'init' });
+      this._fit();
+    }
+
+    _collectSlides() {
+      const assigned = this._slot.assignedElements({ flatten: true });
+      this._slides = assigned.filter((el) => {
+        const tag = el.tagName;
+        return tag !== 'TEMPLATE' && tag !== 'SCRIPT' && tag !== 'STYLE';
+      });
+
+      this._slides.forEach((slide, i) => {
+        const n = i + 1;
+        let label = slide.getAttribute('data-label');
+        if (!label) {
+          const existing = slide.getAttribute('data-screen-label');
+          if (existing) {
+            label = existing.replace(/^\s*\d+\s*/, '').trim() || existing;
+          }
+        }
+        if (!label) {
+          const h = slide.querySelector('h1, h2, h3, [data-title]');
+          if (h) label = (h.textContent || '').trim().slice(0, 40);
+        }
+        if (!label) label = 'Slide';
+        slide.setAttribute('data-screen-label', `${pad2(n)} ${label}`);
+
+        if (!slide.hasAttribute('data-om-validate')) {
+          slide.setAttribute('data-om-validate', VALIDATE_ATTR);
+        }
+
+        slide.setAttribute('data-deck-slide', String(i));
+      });
+
+      if (this._totalEl) this._totalEl.textContent = String(this._slides.length || 1);
+      if (this._index >= this._slides.length) this._index = Math.max(0, this._slides.length - 1);
+    }
+
+    _loadNotes() {
+      const tag = document.getElementById('speaker-notes');
+      if (!tag) { this._notes = []; return; }
+      try {
+        const parsed = JSON.parse(tag.textContent || '[]');
+        if (Array.isArray(parsed)) this._notes = parsed;
+      } catch (e) {
+        console.warn('[deck-stage] Failed to parse #speaker-notes JSON:', e);
+        this._notes = [];
+      }
+    }
+
+    _restoreIndex() {
+      try {
+        const raw = localStorage.getItem(this._storageKey);
+        if (raw != null) {
+          const n = parseInt(raw, 10);
+          if (Number.isFinite(n) && n >= 0 && n < this._slides.length) {
+            this._index = n;
+          }
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    _persistIndex() {
+      try { localStorage.setItem(this._storageKey, String(this._index)); }
+      catch (e) { /* ignore */ }
+    }
+
+    _applyIndex({ showOverlay = true, broadcast = true, reason = 'init' } = {}) {
+      if (!this._slides.length) return;
+      const prev = this._prevIndex == null ? -1 : this._prevIndex;
+      const curr = this._index;
+      this._slides.forEach((s, i) => {
+        if (i === curr) s.setAttribute('data-deck-active', '');
+        else s.removeAttribute('data-deck-active');
+      });
+      if (this._countEl) this._countEl.textContent = String(curr + 1);
+      this._persistIndex();
+
+      if (broadcast) {
+        try { window.postMessage({ slideIndexChanged: curr }, '*'); } catch (e) {}
+
+        const detail = {
+          index: curr,
+          previousIndex: prev,
+          total: this._slides.length,
+          slide: this._slides[curr] || null,
+          previousSlide: prev >= 0 ? (this._slides[prev] || null) : null,
+          reason: reason,
+        };
+        this.dispatchEvent(new CustomEvent('slidechange', {
+          detail,
+          bubbles: true,
+          composed: true,
+        }));
+      }
+
+      this._prevIndex = curr;
+      if (showOverlay) this._flashOverlay();
+    }
+
+    _flashOverlay() {
+      if (!this._overlay) return;
+      this._overlay.setAttribute('data-visible', '');
+      if (this._hideTimer) clearTimeout(this._hideTimer);
+      this._hideTimer = setTimeout(() => {
+        this._overlay.removeAttribute('data-visible');
+      }, OVERLAY_HIDE_MS);
+    }
+
+    _fit() {
+      if (!this._canvas) return;
+      if (this.hasAttribute('noscale')) {
+        this._canvas.style.transform = 'none';
+        return;
+      }
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const s = Math.min(vw / this.designWidth, vh / this.designHeight);
+      this._canvas.style.transform = `scale(${s})`;
+    }
+
+    _onResize() { this._fit(); }
+
+    _onMouseMove() {
+      this._flashOverlay();
+    }
+
+    _onTapBack(e) {
+      e.preventDefault();
+      this._go(this._index - 1, 'tap');
+    }
+
+    _onTapForward(e) {
+      e.preventDefault();
+      this._go(this._index + 1, 'tap');
+    }
+
+    _onKey(e) {
+      const t = e.target;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      const key = e.key;
+      let handled = true;
+
+      if (key === 'ArrowRight' || key === 'PageDown' || key === ' ' || key === 'Spacebar') {
+        this._go(this._index + 1, 'keyboard');
+      } else if (key === 'ArrowLeft' || key === 'PageUp') {
+        this._go(this._index - 1, 'keyboard');
+      } else if (key === 'Home') {
+        this._go(0, 'keyboard');
+      } else if (key === 'End') {
+        this._go(this._slides.length - 1, 'keyboard');
+      } else if (key === 'r' || key === 'R') {
+        this._go(0, 'keyboard');
+      } else if (/^[0-9]$/.test(key)) {
+        const n = key === '0' ? 9 : parseInt(key, 10) - 1;
+        if (n < this._slides.length) this._go(n, 'keyboard');
+      } else {
+        handled = false;
+      }
+
+      if (handled) {
+        e.preventDefault();
+        this._flashOverlay();
+      }
+    }
+
+    _go(i, reason = 'api') {
+      if (!this._slides.length) return;
+      const clamped = Math.max(0, Math.min(this._slides.length - 1, i));
+      if (clamped === this._index) {
+        this._flashOverlay();
+        return;
+      }
+      this._index = clamped;
+      this._applyIndex({ showOverlay: true, broadcast: true, reason });
+    }
+
+    get index() { return this._index; }
+    get length() { return this._slides.length; }
+    goTo(i) { this._go(i, 'api'); }
+    next() { this._go(this._index + 1, 'api'); }
+    prev() { this._go(this._index - 1, 'api'); }
+    reset() { this._go(0, 'api'); }
+  }
+
+  if (!customElements.get('deck-stage')) {
+    customElements.define('deck-stage', DeckStage);
+  }
+})();
+</script>
+
+<style>
+:root{
+  --font-display: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Merriweather', Georgia, serif;
+  --font-code: ui-monospace, 'SF Mono', 'Menlo', Consolas, monospace;
+
+  --primary-50:  #E6F7FA;
+  --primary-100: #C2EBF1;
+  --primary-200: #8DD9E3;
+  --primary-300: #67D7E4;
+  --primary-400: #32BFD4;
+  --primary-500: #0EA5BD;
+  --primary-600: #08798C;
+  --primary-700: #0A5366;
+  --primary-800: #082C38;
+  --primary-900: #04171E;
+
+  --accent-electric: #4F3DF5;
+  --accent-gold: #F59F24;
+
+  --bg: #0B0E14;
+  --surface: #121722;
+  --surface-muted: #0F141D;
+  --text: #EDEFF3;
+  --text-soft: #D0D4DE;
+  --text-light: #B5BAC5;
+  --text-muted: #7A8192;
+  --border: #232935;
+  --primary: var(--primary-400);
+  --primary-hover: var(--primary-300);
+  --primary-on: #04171E;
+  --ocean: #06202B;
+}
+
+html,body{margin:0;padding:0;background:var(--bg);font-family:var(--font-sans);}
+
+section{
+  width:1920px;
+  height:1080px;
+  background:var(--bg);
+  color:var(--text);
+  position:relative;
+  overflow:hidden;
+  box-sizing:border-box;
+}
+
+.chrome{
+  position:absolute;
+  inset:0;
+  padding:72px 96px;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+}
+
+.top-rule, .bottom-rule{
+  position:absolute;
+  left:96px;
+  right:96px;
+  height:1px;
+  background:var(--border);
+}
+
+.top-rule{top:72px;}
+.bottom-rule{bottom:72px;}
+
+.top-meta, .bot-meta{
+  position:absolute;
+  left:96px;
+  right:96px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:var(--font-code);
+  font-size:14px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--text);
+}
+
+.top-meta{top:40px;}
+.bot-meta{bottom:40px;color:var(--text-muted);}
+
+.mark{display:flex;align-items:center;gap:10px;}
+.mark .dot{width:8px;height:8px;background:var(--primary);border-radius:50%;}
+
+h1,h2,h3,p{margin:0;}
+.eyebrow{
+  font-family:var(--font-code);
+  font-size:16px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--primary);
+  font-weight:500;
+}
+.kicker{
+  font-family:var(--font-code);
+  font-size:14px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  font-weight:500;
+}
+.display{
+  font-family:var(--font-display);
+  font-weight:300;
+  font-size:220px;
+  line-height:0.92;
+  letter-spacing:-0.025em;
+  color:var(--text);
+}
+.title{
+  font-family:var(--font-display);
+  font-weight:300;
+  font-size:124px;
+  line-height:0.96;
+  letter-spacing:-0.02em;
+}
+.subtitle{
+  font-family:var(--font-serif);
+  font-weight:300;
+  font-style:italic;
+  font-size:48px;
+  line-height:1.15;
+  letter-spacing:-0.01em;
+  color:var(--text-soft);
+}
+.body{
+  font-family:var(--font-sans);
+  font-size:28px;
+  line-height:1.45;
+  color:var(--text-light);
+  max-width:68ch;
+}
+.lead{
+  font-family:var(--font-serif);
+  font-weight:320;
+  font-size:56px;
+  line-height:1.15;
+  letter-spacing:-0.01em;
+  color:var(--text);
+}
+.big-num{
+  font-family:var(--font-display);
+  font-weight:300;
+  font-size:520px;
+  line-height:0.85;
+  letter-spacing:-0.04em;
+}
+
+.italic{font-style:italic;font-family:var(--font-serif);font-weight:300;}
+
+.col{display:flex;flex-direction:column;}
+.row{display:flex;flex-direction:row;}
+.spacer{flex:1;}
+.rule{height:1px;background:var(--border);}
+.rule-v{width:1px;background:var(--border);}
+.accent{color:var(--primary);}
+
+/* service grid */
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:16px;
+  border-top:1px solid var(--border);
+}
+
+.service-card{
+  padding:36px 28px;
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.service-card:last-child{border-right:none;}
+
+.service-card .num{
+  font-family:var(--font-code);
+  font-size:12px;
+  letter-spacing:0.2em;
+  color:var(--primary);
+}
+
+.service-card h3{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:28px;
+  line-height:1.1;
+}
+
+.service-card p{
+  font-size:16px;
+  line-height:1.5;
+  color:var(--text-light);
+}
+
+/* stats */
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:32px;
+  margin-top:48px;
+}
+
+.stat-card{
+  text-align:center;
+  padding:32px;
+  background:rgba(50,191,212,0.05);
+  border:1px solid var(--border);
+  border-radius:14px;
+}
+
+.stat-num{
+  font-family:var(--font-display);
+  font-size:clamp(48px,5vw,72px);
+  font-weight:100;
+  color:var(--primary);
+  letter-spacing:-0.03em;
+  line-height:1;
+}
+
+.stat-label{
+  font-family:var(--font-code);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-top:12px;
+}
+
+/* process flow */
+.process-flow{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  border-top:1px solid var(--border);
+}
+
+.process-step{
+  padding:32px;
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.process-step:last-child{border-right:none;}
+
+.process-step .num{
+  font-family:var(--font-code);
+  font-size:12px;
+  letter-spacing:0.2em;
+  color:var(--primary);
+}
+
+.process-step h4{
+  font-size:20px;
+  font-weight:700;
+}
+
+.process-step p{
+  font-size:15px;
+  color:var(--text-light);
+  line-height:1.5;
+}
+
+/* slide dark variant */
+section.dark{background:var(--primary-900);color:var(--primary-50);}
+section.dark .top-rule, section.dark .bottom-rule{background:rgba(255,255,255,0.15);}
+section.dark .top-meta{color:var(--primary-50);}
+section.dark .bot-meta{color:#888;}
+section.dark .body{color:rgba(255,255,255,0.7);}
+section.dark .kicker{color:#999;}
+section.dark .services-grid{border-top-color:rgba(255,255,255,0.15);}
+section.dark .service-card{border-right-color:rgba(255,255,255,0.15);}
+section.dark .process-flow{border-top-color:rgba(255,255,255,0.15);}
+section.dark .process-step{border-right-color:rgba(255,255,255,0.15);}
+section.dark .process-step .num{color:var(--primary-300);}
+section.dark .subtitle{color:var(--primary-200);}
+
+/* cta slide */
+.cta-content{
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:24px;
+}
+
+.cta-content p{
+  font-family:var(--font-serif);
+  font-size:24px;
+  color:rgba(255,255,255,0.8);
+}
+
+.cta-buttons{
+  display:flex;
+  gap:16px;
+  margin-top:16px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-family:var(--font-sans);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  padding:16px 32px;
+  border-radius:999px;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  text-decoration:none;
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:var(--primary-on);
+  border-color:var(--primary);
+}
+
+.btn-primary:hover{
+  background:var(--primary-hover);
+  transform:translateY(-1px);
+}
+
+.btn-ghost{
+  background:transparent;
+  color:#fff;
+  border-color:rgba(255,255,255,0.3);
+}
+
+.btn-ghost:hover{
+  background:rgba(255,255,255,0.1);
+  border-color:rgba(255,255,255,0.6);
+}
+
+/* logo */
+.logo{position:absolute;top:64px;left:96px;}
+.logo img{height:24px;filter:brightness(0) invert(1);}
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+<!-- ============ 01 · COVER ============ -->
+<section data-label="Portada">
+  <div class="top-meta">
+    <div class="mark"><span class="dot"></span><span>re/START</span></div>
+    <div>ED. 01 · V1</div>
+  </div>
+  <div class="top-rule"></div>
+
+  <div class="chrome" style="padding-top:160px;">
+    <div class="logo"><img src="/logo@0.5x.png" alt="re/START"></div>
+
+    <div style="display:grid;grid-template-columns:1fr auto;height:100%;gap:80px;align-items:center;">
+      <div class="col" style="justify-content:space-between;">
+        <div>
+          <div class="eyebrow">Agencia digital</div>
+          <h1 class="display" style="margin-top:40px;">
+            Diseño y<br>
+            <em style="font-style:italic;font-weight:300;color:var(--primary);">tecnología</em><br>
+            para tu negocio.
+          </h1>
+        </div>
+        <div class="subtitle" style="max-width:24ch;margin-top:40px;">
+          Impulsamos el crecimiento<br>de empresas con soluciones<br>digitales a <em>medida</em>.
+        </div>
+      </div>
+      <div class="col" style="gap:32px;padding-bottom:140px;min-width:540px;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+          <div class="stat-card">
+            <div class="stat-num">+50</div>
+            <div class="stat-label">Proyectos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">+30</div>
+            <div class="stat-label">Clientes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">+8</div>
+            <div class="stat-label">Años</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-rule"></div>
+  <div class="bot-meta">
+    <div>5 Servicios · 4 Proceso</div>
+    <div>01 — Portada</div>
+  </div>
+</section>
+
+<!-- ============ 02 · SERVICIOS ============ -->
+<section data-label="Servicios">
+  <div class="top-meta">
+    <div class="mark"><span class="dot"></span><span>Capítulo 01</span></div>
+    <div>Lo que hacemos</div>
+  </div>
+  <div class="top-rule"></div>
+
+  <div class="chrome" style="padding-top:140px;gap:48px;">
+    <div>
+      <div class="eyebrow">Nuestros servicios</div>
+      <h2 class="title" style="margin-top:16px;max-width:16ch;">
+        Soluciones <em>integrales</em> para transformar tu negocio.
+      </h2>
+      <div class="body" style="margin-top:24px;max-width:52ch;">
+        Combinamos talento, tecnología y diseño para crear soluciones digitales a medida que impulsan el crecimiento de tu empresa.
+      </div>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="num">01 · Equipo</div>
+        <i class="ion-ios-people" style="font-size:32px;color:var(--primary);"></i>
+        <h3>Staffing</h3>
+        <p>Profesionales calificados integrándose rápido a tus proyectos.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">02 · Software</div>
+        <i class="ion-code" style="font-size:32px;color:var(--primary);"></i>
+        <h3>Desarrollo</h3>
+        <p>Web, móviles y soluciones a medida robustas.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">03 · Producto</div>
+        <i class="ion-ios-lightbulb" style="font-size:32px;color:var(--primary);"></i>
+        <h3>Diseño</h3>
+        <p>UX/UI e interfaces pixel-perfect.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">04 · Cloud</div>
+        <i class="ion-ios-cloud" style="font-size:32px;color:var(--primary);"></i>
+        <h3>Cloud</h3>
+        <p>AWS y Google Cloud con escalamiento.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">05 · IA</div>
+        <i class="ion-ios-bolt" style="font-size:32px;color:var(--primary);"></i>
+        <h3>Inteligencia Artificial</h3>
+        <p>Agentes, RAG y automatización.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-rule"></div>
+  <div class="bot-meta">
+    <div>re/START · Servicios</div>
+    <div>02 / 05</div>
+  </div>
+</section>
+
+<!-- ============ 03 · PROCESO ============ -->
+<section data-label="Proceso">
+  <div class="top-meta">
+    <div class="mark"><span class="dot"></span><span>Capítulo 02</span></div>
+    <div>Cómo trabajamos</div>
+  </div>
+  <div class="top-rule"></div>
+
+  <div class="chrome" style="padding-top:140px;gap:48px;">
+    <div>
+      <div class="kicker">Metodología</div>
+      <h2 class="title" style="margin-top:16px;max-width:16ch;">
+        Un proceso <em>colaborativo</em> en cada etapa.
+      </h2>
+    </div>
+
+    <div class="process-flow">
+      <div class="process-step">
+        <div class="num">01</div>
+        <h4>Descubrimiento</h4>
+        <p>Entendemos tu negocio, objetivos y desafíos únicos.</p>
+      </div>
+      <div class="process-step">
+        <div class="num">02</div>
+        <h4>Diseño</h4>
+        <p>UX/UI, prototipado y arquitectura.</p>
+      </div>
+      <div class="process-step">
+        <div class="num">03</div>
+        <h4>Desarrollo</h4>
+        <p>Construcción iterativa con metodología ágil.</p>
+      </div>
+      <div class="process-step">
+        <div class="num">04</div>
+        <h4>Lanzamiento</h4>
+        <p>Deploy, testing y soporte continuo.</p>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:48px;padding-top:24px;border-top:1px solid var(--border);justify-content:space-between;align-items:center;">
+      <div class="kicker">Tecnologías</div>
+      <div style="font-size:14px;color:var(--text-light);">
+        Vue.js · React · Node.js · Python · AWS · PostgreSQL · Docker
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-rule"></div>
+  <div class="bot-meta">
+    <div>re/START · Proceso</div>
+    <div>03 / 05</div>
+  </div>
+</section>
+
+<!-- ============ 04 · POR QUÉ NOSOTROS ============ -->
+<section data-label="Por qué nosotros">
+  <div class="top-meta">
+    <div class="mark"><span class="dot"></span><span>Capítulo 03</span></div>
+    <div>Nuestra propuesta</div>
+  </div>
+  <div class="top-rule"></div>
+
+  <div class="chrome" style="padding-top:140px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;">
+      <div class="col" style="gap:32px;">
+        <div class="eyebrow">Por qué re/START</div>
+        <h2 class="title" style="font-size:88px;max-width:14ch;">
+          Nacimos para <em>emprendedores</em>.
+        </h2>
+        <div class="body" style="margin-top:24px;font-size:22px;line-height:1.7;">
+          Entendemos los desafíos de construir algo desde cero. Por eso adaptamos nuestros servicios para que accedas a tecnología de primer nivel sin importar tu tamaño.
+        </div>
+      </div>
+
+      <div class="col" style="gap:16px;">
+        <div class="stat-card" style="text-align:left;padding:28px;">
+          <div class="stat-num" style="font-size:48px;">+50</div>
+          <div class="stat-label">Proyectos entregados</div>
+        </div>
+        <div class="stat-card" style="text-align:left;padding:28px;">
+          <div class="stat-num" style="font-size:48px;">+30</div>
+          <div class="stat-label">Clientes activos</div>
+        </div>
+        <div class="stat-card" style="text-align:left;padding:28px;">
+          <div class="stat-num" style="font-size:48px;">99.9%</div>
+          <div class="stat-label">Uptime promedio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-rule"></div>
+  <div class="bot-meta">
+    <div>re/START · Por qué nosotros</div>
+    <div>04 / 05</div>
+  </div>
+</section>
+
+<!-- ============ 05 · CTA / CONTACTO ============ -->
+<section data-label="Contacto" class="dark">
+  <div class="top-meta">
+    <div class="mark"><span class="dot" style="background:var(--primary-300);"></span><span>Capítulo 04</span></div>
+    <div>Hablemos</div>
+  </div>
+  <div class="top-rule"></div>
+
+  <div class="chrome" style="padding-top:160px;justify-content:center;align-items:center;">
+    <div class="cta-content">
+      <div class="eyebrow" style="color:var(--primary-300);">¿Listo para empezar?</div>
+      <h2 class="title" style="color:#fff;font-size:96px;max-width:14ch;">
+        Conversemos sobre tu <em>próximo proyecto</em>.
+      </h2>
+      <p>Elige el canal que prefieras: completa el formulario o agenda directamente una reunión.</p>
+      <div class="cta-buttons">
+        <a href="#contact" class="btn btn-primary">Agendar reunión</a>
+        <a href="#servicios" class="btn btn-ghost">Ver servicios</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-rule"></div>
+  <div class="bot-meta">
+    <div>restart.cl · help@restart.cl</div>
+    <div>05 / 05</div>
+  </div>
+</section>
+
+</deck-stage>
+</body>
+</html>

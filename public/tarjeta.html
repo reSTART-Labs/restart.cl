@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+	<meta charset="utf-8">
+	<title>Tarjeta · re/START</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,400;1,700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+	<style>
+		:root {
+			--font-display: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+			--font-sans: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+			--font-serif: 'Merriweather', Georgia, serif;
+
+			--primary-50:  #E6F7FA;
+			--primary-100: #C2EBF1;
+			--primary-200: #8DD9E3;
+			--primary-300: #67D7E4;
+			--primary-400: #32BFD4;
+			--primary-500: #0EA5BD;
+			--primary-600: #08798C;
+			--primary-700: #0A5366;
+			--primary-800: #082C38;
+			--primary-900: #04171E;
+
+			--r-sm: 10px;
+			--r-md: 14px;
+			--r-lg: 20px;
+			--r-pill: 999px;
+		}
+
+		[data-theme="light"] {
+			--bg: #FAFAF7;
+			--surface: #FFFFFF;
+			--surface-muted: #F3F2EC;
+			--text: #0D1117;
+			--text-soft: #2E3440;
+			--text-light: #4E5563;
+			--text-muted: #8A8F99;
+			--border: #E8E6DC;
+			--primary: var(--primary-500);
+			--primary-on: #FFFFFF;
+			--ocean: var(--primary-800);
+		}
+
+		[data-theme="dark"] {
+			--bg: #0B0E14;
+			--surface: #121722;
+			--surface-muted: #0F141D;
+			--text: #EDEFF3;
+			--text-soft: #D0D4DE;
+			--text-light: #B5BAC5;
+			--text-muted: #7A8192;
+			--border: #232935;
+			--primary: var(--primary-400);
+			--primary-on: #04171E;
+			--ocean: #06202B;
+		}
+
+		*, *::before, *::after { box-sizing: border-box; }
+		html { -webkit-font-smoothing: antialiased; }
+		body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: var(--font-sans); display: flex; align-items: center; justify-content: center; padding: 32px; }
+
+		.card {
+			width: 400px;
+			height: 240px;
+			position: relative;
+			border-radius: var(--r-lg);
+			overflow: hidden;
+			box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+		}
+
+		.card-front, .card-back {
+			position: absolute;
+			inset: 0;
+			transition: transform 0.5s ease, opacity 0.5s ease;
+			backface-visibility: hidden;
+		}
+
+		.card-front {
+			background: linear-gradient(135deg, var(--primary-800) 0%, var(--primary-900) 100%);
+			padding: 24px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+
+		.card-back {
+			background: var(--surface);
+			transform: rotateY(180deg);
+			padding: 24px;
+		}
+
+		.card.flipped .card-front { transform: rotateY(180deg); }
+		.card.flipped .card-back { transform: rotateY(0deg); }
+
+		.card-logo {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.card-logo img {
+			height: 20px;
+			filter: brightness(0) invert(1);
+		}
+
+		.card-logo span {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--primary-300);
+		}
+
+		.card-avatar {
+			position: absolute;
+			top: 24px;
+			right: 24px;
+			width: 64px;
+			height: 64px;
+			border-radius: var(--r-pill);
+			background: var(--primary-700);
+			border: 2px solid var(--primary-400);
+			overflow: hidden;
+		}
+
+		.card-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+		.card-name {
+			font-size: 22px;
+			font-weight: 700;
+			color: #fff;
+			letter-spacing: -0.01em;
+			margin-bottom: 4px;
+		}
+
+		.card-role {
+			font-size: 13px;
+			color: var(--primary-300);
+			font-weight: 500;
+		}
+
+		.card-info {
+			display: flex;
+			gap: 16px;
+			margin-top: 8px;
+		}
+
+		.card-info-item {
+			font-size: 11px;
+			color: rgba(255,255,255,0.7);
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.card-info-item i { font-size: 12px; }
+
+		.card-footer {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-end;
+		}
+
+		.card-socials {
+			display: flex;
+			gap: 8px;
+		}
+
+		.card-socials a {
+			width: 28px;
+			height: 28px;
+			border-radius: var(--r-pill);
+			background: rgba(255,255,255,0.1);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 12px;
+			color: rgba(255,255,255,0.8);
+			transition: all 0.2s ease;
+		}
+
+		.card-socials a:hover {
+			background: var(--primary);
+			color: #fff;
+		}
+
+		.card-url {
+			font-size: 10px;
+			color: var(--primary-300);
+			font-weight: 600;
+			letter-spacing: 0.1em;
+		}
+
+		/* Back side */
+		.card-back .logo {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 16px;
+		}
+
+		.card-back .logo img { height: 18px; }
+		[data-theme="dark"] .card-back .logo img { filter: brightness(0) invert(1); }
+
+		.card-back .logo span {
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--primary);
+		}
+
+		.card-back h3 {
+			font-size: 18px;
+			font-weight: 700;
+			margin-bottom: 4px;
+		}
+
+		.card-back .tagline {
+			font-size: 12px;
+			color: var(--text-light);
+			margin-bottom: 16px;
+		}
+
+		.card-back .services {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+			margin-bottom: 16px;
+		}
+
+		.card-back .service {
+			font-size: 10px;
+			padding: 4px 10px;
+			background: var(--surface-muted);
+			border-radius: var(--r-pill);
+			color: var(--text-soft);
+		}
+
+		.card-back .contact {
+			font-size: 11px;
+			color: var(--text-muted);
+			line-height: 1.8;
+		}
+
+		.card-back .contact strong {
+			color: var(--text);
+			font-weight: 600;
+		}
+
+		.flip-hint {
+			position: fixed;
+			bottom: 24px;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: 11px;
+			color: var(--text-muted);
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.theme-toggle {
+			position: fixed;
+			top: 24px;
+			right: 24px;
+			padding: 8px 16px;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: var(--r-pill);
+			cursor: pointer;
+			color: var(--text);
+		}
+
+		.card-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 24px;
+		}
+
+		@media print {
+			body { padding: 0; }
+			.card { box-shadow: none; break-inside: avoid; margin-bottom: 24px; }
+			.flip-hint, .theme-toggle { display: none; }
+		}
+	</style>
+</head>
+<body>
+	<div class="card-grid">
+		<!-- Card 1: Front -->
+		<div class="card" onclick="this.classList.toggle('flipped')">
+			<div class="card-front">
+				<div class="card-logo">
+					<img src="/logo@0.5x.png" alt="re/START">
+					<span>Agencia digital</span>
+				</div>
+				<div class="card-avatar">
+					<img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80" alt="Foto">
+				</div>
+				<div style="margin-top: 48px;">
+					<div class="card-name">Ricardo Gática</div>
+					<div class="card-role">Director & Founder</div>
+					<div class="card-info">
+						<div class="card-info-item">
+							<i class="ion-ios-telephone"></i> +56 9 1234 5678
+						</div>
+						<div class="card-info-item">
+							<i class="ion-ios-email"></i> ricardo@restart.cl
+						</div>
+					</div>
+				</div>
+				<div class="card-footer">
+					<div class="card-socials">
+						<a href="#"><i class="ion-social-linkedin"></i></a>
+						<a href="#"><i class="ion-social-twitter"></i></a>
+						<a href="#"><i class="ion-social-github"></i></a>
+					</div>
+					<div class="card-url">restart.cl</div>
+				</div>
+			</div>
+			<div class="card-back">
+				<div class="logo">
+					<img src="/logo@0.5x.png" alt="re/START">
+					<span>Agencia digital</span>
+				</div>
+				<h3>re/START</h3>
+				<p class="tagline">Diseño y tecnología para emprendedores.</p>
+				<div class="services">
+					<span class="service">Desarrollo Web</span>
+					<span class="service">Diseño UI/UX</span>
+					<span class="service">Cloud AWS</span>
+					<span class="service">Inteligencia Artificial</span>
+				</div>
+				<div class="contact">
+					<strong>Contacto</strong><br>
+					help@restart.cl<br>
+					restart.cl
+				</div>
+			</div>
+		</div>
+
+		<!-- Card 2: Another team member -->
+		<div class="card" onclick="this.classList.toggle('flipped')">
+			<div class="card-front">
+				<div class="card-logo">
+					<img src="/logo@0.5x.png" alt="re/START">
+					<span>Agencia digital</span>
+				</div>
+				<div class="card-avatar">
+					<img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" alt="Foto">
+				</div>
+				<div style="margin-top: 48px;">
+					<div class="card-name">María Pérez</div>
+					<div class="card-role">Lead Designer</div>
+					<div class="card-info">
+						<div class="card-info-item">
+							<i class="ion-ios-telephone"></i> +56 9 8765 4321
+						</div>
+						<div class="card-info-item">
+							<i class="ion-ios-email"></i> maria@restart.cl
+						</div>
+					</div>
+				</div>
+				<div class="card-footer">
+					<div class="card-socials">
+						<a href="#"><i class="ion-social-linkedin"></i></a>
+						<a href="#"><i class="ion-social-dribbble"></i></a>
+					</div>
+					<div class="card-url">restart.cl</div>
+				</div>
+			</div>
+			<div class="card-back">
+				<div class="logo">
+					<img src="/logo@0.5x.png" alt="re/START">
+					<span>Agencia digital</span>
+				</div>
+				<h3>re/START</h3>
+				<p class="tagline">Diseño y tecnología para emprendedores.</p>
+				<div class="services">
+					<span class="service">Diseño UI/UX</span>
+					<span class="service">Branding</span>
+					<span class="service">Prototipado</span>
+					<span class="service">Figma</span>
+				</div>
+				<div class="contact">
+					<strong>Contacto</strong><br>
+					help@restart.cl<br>
+					restart.cl
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<button class="theme-toggle" onclick="document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')">
+		<i class="fa fa-moon-o"></i> <span>Toggle</span>
+	</button>
+
+	<div class="flip-hint">
+		<i class="fa fa-hand-pointer-o"></i> Click para voltear
+	</div>
+</body>
+</html>
