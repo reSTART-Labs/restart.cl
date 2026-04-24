@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+	<meta charset="utf-8">
+	<title>Re/START · Preview de páginas internas</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,400;1,700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+	<style>
+		/* =========================================================================
+		   TOKENS (same refreshed palette)
+		   ========================================================================= */
+		:root {
+			--font-display: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+			--font-sans: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+			--font-serif: 'Merriweather', Georgia, serif;
+			--font-code: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
+
+			--primary-50:  #E6F7FA;
+			--primary-100: #C2EBF1;
+			--primary-200: #8DD9E3;
+			--primary-300: #67D7E4;
+			--primary-400: #32BFD4;
+			--primary-500: #0EA5BD;
+			--primary-600: #08798C;
+			--primary-700: #0A5366;
+			--primary-800: #082C38;
+			--primary-900: #04171E;
+
+			--accent-electric: #4F3DF5;
+			--accent-electric-hover: #3A28DE;
+			--accent-gold: #F59F24;
+
+			--r-xs: 6px; --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-pill: 999px;
+		}
+
+		[data-theme="light"] {
+			--bg: #FAFAF7;
+			--surface: #FFFFFF;
+			--surface-muted: #F3F2EC;
+			--surface-raised: #FFFFFF;
+			--text: #0D1117;
+			--text-soft: #2E3440;
+			--text-light: #4E5563;
+			--text-muted: #8A8F99;
+			--border: #E8E6DC;
+			--border-soft: #EFEDE4;
+			--border-strong: #D6D2C3;
+			--primary: var(--primary-500);
+			--primary-hover: var(--primary-600);
+			--primary-pastel: var(--primary-50);
+			--primary-on: #FFFFFF;
+			--ocean: var(--primary-800);
+			--shadow-md: 0 12px 28px rgba(13, 17, 23, 0.08);
+			--shadow-lg: 0 30px 60px rgba(13, 17, 23, 0.1);
+			--shadow-float: 0 20px 80px rgba(8, 44, 56, 0.22);
+		}
+
+		[data-theme="dark"] {
+			--bg: #0B0E14;
+			--surface: #121722;
+			--surface-muted: #0F141D;
+			--surface-raised: #1A202C;
+			--text: #EDEFF3;
+			--text-soft: #D0D4DE;
+			--text-light: #B5BAC5;
+			--text-muted: #7A8192;
+			--border: #232935;
+			--border-soft: #1A202C;
+			--border-strong: #323847;
+			--primary: var(--primary-400);
+			--primary-hover: var(--primary-300);
+			--primary-pastel: rgba(50, 191, 212, 0.12);
+			--primary-on: #04171E;
+			--ocean: #06202B;
+			--shadow-md: 0 12px 28px rgba(0, 0, 0, 0.5);
+			--shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
+			--shadow-float: 0 25px 80px rgba(0, 0, 0, 0.6);
+		}
+
+		*, *::before, *::after { box-sizing: border-box; }
+		html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+		body {
+			margin: 0;
+			background: var(--bg);
+			color: var(--text);
+			font-family: var(--font-sans);
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
+		h1, h2, h3, h4, h5 { margin: 0; font-family: var(--font-display); font-weight: 300; letter-spacing: -0.02em; line-height: 1.1; }
+		em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+		p { margin: 0; }
+		a { color: inherit; text-decoration: none; }
+		img { max-width: 100%; display: block; }
+		button { font-family: inherit; cursor: pointer; }
+		.container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+
+		.eyebrow {
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--primary);
+			display: inline-block;
+			margin-bottom: 16px;
+		}
+
+		/* =========================================================================
+		   PREVIEW HEADER
+		   ========================================================================= */
+		.preview-top {
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			background: color-mix(in oklab, var(--bg) 84%, transparent);
+			backdrop-filter: blur(16px);
+			-webkit-backdrop-filter: blur(16px);
+			border-bottom: 1px solid var(--border-soft);
+		}
+
+		.preview-top-inner {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			height: 56px;
+			padding: 0 24px;
+			max-width: 1400px;
+			margin: 0 auto;
+		}
+
+		.preview-top-label {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.preview-top-label::before {
+			content: "";
+			width: 6px;
+			height: 6px;
+			border-radius: var(--r-pill);
+			background: var(--primary);
+			box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 22%, transparent);
+		}
+
+		.theme-toggle {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+			color: var(--text);
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: var(--r-pill);
+			padding: 8px 16px;
+			transition: border-color 0.2s ease, transform 0.2s ease;
+		}
+		.theme-toggle:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+		.theme-toggle-dot { width: 8px; height: 8px; border-radius: var(--r-pill); background: var(--primary); }
+
+		/* =========================================================================
+		   URL DIVIDER (between pages)
+		   ========================================================================= */
+		.page-divider {
+			padding: 80px 32px 40px;
+			background: var(--bg);
+			border-top: 1px solid var(--border-soft);
+			max-width: 1400px;
+			margin: 0 auto;
+		}
+
+		.page-divider-inner {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+			max-width: 1180px;
+			margin: 0 auto;
+		}
+
+		.page-divider-label {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			flex-shrink: 0;
+		}
+
+		.url-bar {
+			flex: 1;
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			padding: 12px 18px;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: var(--r-pill);
+			font-family: var(--font-code);
+			font-size: 13px;
+			color: var(--text);
+		}
+
+		.url-bar-dots {
+			display: inline-flex;
+			gap: 6px;
+			margin-right: 8px;
+		}
+
+		.url-bar-dots span {
+			width: 8px;
+			height: 8px;
+			border-radius: var(--r-pill);
+			background: var(--border-strong);
+		}
+
+		.url-bar-dots span:first-child { background: #F87171; }
+		.url-bar-dots span:nth-child(2) { background: var(--accent-gold); }
+		.url-bar-dots span:last-child { background: var(--primary-400); }
+
+		.url-bar-lock {
+			color: var(--primary);
+			font-size: 11px;
+		}
+
+		.url-bar-host { color: var(--text-muted); }
+		.url-bar-path { color: var(--text); font-weight: 500; }
+
+		/* =========================================================================
+		   NAV (shared)
+		   ========================================================================= */
+		.site-nav {
+			position: relative;
+			z-index: 50;
+			display: flex;
+			justify-content: center;
+			padding: 16px;
+		}
+
+		.nav-pill {
+			width: 100%;
+			max-width: 980px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 24px;
+			padding: 8px 12px 8px 22px;
+			border-radius: var(--r-pill);
+			background: rgba(255, 255, 255, 0.1);
+			backdrop-filter: blur(14px);
+			-webkit-backdrop-filter: blur(14px);
+			border: 1px solid rgba(255, 255, 255, 0.14);
+		}
+
+		.nav-pill.is-solid {
+			background: color-mix(in oklab, var(--surface) 92%, transparent);
+			border-color: var(--border);
+			box-shadow: var(--shadow-md);
+		}
+
+		.nav-logo img { height: 22px; width: auto; display: block; }
+		.nav-logo.is-light img { filter: brightness(0) invert(1); }
+		[data-theme="dark"] .nav-pill.is-solid .nav-logo img { filter: brightness(0) invert(1); }
+
+		.nav-links {
+			display: flex;
+			gap: 28px;
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		.nav-links a {
+			font-size: 13px;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 0.85);
+			transition: color 0.2s ease;
+			position: relative;
+		}
+
+		.nav-pill.is-solid .nav-links a { color: var(--text-soft); }
+		.nav-links a:hover { color: var(--primary-300); }
+		.nav-pill.is-solid .nav-links a:hover { color: var(--primary); }
+
+		.nav-cta {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			padding: 10px 20px;
+			border-radius: var(--r-pill);
+			background: rgba(255, 255, 255, 0.12);
+			color: #FFFFFF;
+			border: none;
+			transition: background 0.2s ease;
+		}
+
+		.nav-pill.is-solid .nav-cta { background: var(--primary); color: var(--primary-on); }
+		.nav-cta:hover { background: rgba(255, 255, 255, 0.22); }
+		.nav-pill.is-solid .nav-cta:hover { background: var(--primary-hover); }
+
+		/* =========================================================================
+		   BUTTONS
+		   ========================================================================= */
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			font-family: var(--font-sans);
+			font-size: 13px;
+			font-weight: 700;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			padding: 14px 28px;
+			border-radius: var(--r-pill);
+			border: 1px solid transparent;
+			transition: all 0.2s ease;
+			cursor: pointer;
+		}
+		.btn-primary { background: var(--primary); color: var(--primary-on); border-color: var(--primary); }
+		.btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); transform: translateY(-1px); }
+		.btn-ghost-dark { background: transparent; color: #FFFFFF; border-color: rgba(255, 255, 255, 0.3); }
+		.btn-ghost-dark:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.6); }
+		.btn-ghost { background: transparent; color: var(--text); border-color: var(--border-strong); }
+		.btn-ghost:hover { border-color: var(--text); }
+		.btn-text {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			color: var(--primary);
+			font-size: 14px;
+			font-weight: 500;
+			transition: gap 0.2s ease;
+		}
+		.btn-text:hover { gap: 12px; }
+
+		/* =========================================================================
+		   PAGE WRAPPER (for each page preview)
+		   ========================================================================= */
+		.page {
+			background: var(--bg);
+		}
+
+		.page-hero {
+			position: relative;
+			overflow: hidden;
+			padding: 140px 0 96px;
+		}
+
+		.page-hero-bg {
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+		}
+
+		.page-hero-bg img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.page-hero-overlay {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(180deg, rgba(4, 23, 30, 0.6) 0%, rgba(4, 23, 30, 0.88) 65%, var(--primary-900) 100%);
+			z-index: 1;
+		}
+
+		.page-hero > .container { position: relative; z-index: 2; }
+
+		.page-hero-kicker {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.22em;
+			text-transform: uppercase;
+			color: var(--primary-300);
+			margin-bottom: 24px;
+		}
+
+		.page-hero-kicker::before {
+			content: "";
+			display: block;
+			width: 24px;
+			height: 1px;
+			background: var(--primary-300);
+		}
+
+		.page-hero h1 {
+			font-size: clamp(40px, 5.4vw, 72px);
+			font-weight: 300;
+			color: #FFFFFF;
+			max-width: 18ch;
+			line-height: 1.05;
+			letter-spacing: -0.025em;
+		}
+
+		.page-hero h1 em { color: var(--primary-300); }
+
+		.page-hero-lede {
+			font-family: var(--font-serif);
+			font-weight: 300;
+			font-size: 18px;
+			line-height: 1.7;
+			color: rgba(255, 255, 255, 0.78);
+			margin-top: 28px;
+			max-width: 54ch;
+		}
+
+		.page-hero-ctas {
+			display: flex;
+			gap: 14px;
+			margin-top: 40px;
+			flex-wrap: wrap;
+		}
+
+		/* =========================================================================
+		   /SERVICIOS INDEX
+		   ========================================================================= */
+		.services-index {
+			padding: 96px 0;
+		}
+
+		.services-list {
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
+		}
+
+		.service-row {
+			display: grid;
+			grid-template-columns: 1fr 1.4fr;
+			gap: 48px;
+			align-items: center;
+			padding: 32px;
+			border-radius: var(--r-xl);
+			background: var(--surface);
+			border: 1px solid var(--border);
+			transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+		}
+
+		.service-row:hover {
+			border-color: var(--border-strong);
+			box-shadow: var(--shadow-lg);
+			transform: translateY(-2px);
+		}
+
+		.service-row:nth-child(even) { grid-template-columns: 1.4fr 1fr; }
+
+		.service-row-media {
+			position: relative;
+			border-radius: var(--r-lg);
+			overflow: hidden;
+			height: 320px;
+			background: linear-gradient(165deg, var(--primary-700), var(--primary-800), var(--primary-900));
+		}
+
+		.service-row-media img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			opacity: 0.78;
+			transition: transform 0.6s ease, opacity 0.3s ease;
+		}
+
+		.service-row:hover .service-row-media img { transform: scale(1.04); opacity: 0.88; }
+
+		.service-row-media::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(135deg, color-mix(in oklab, var(--primary-800) 70%, transparent), transparent 60%);
+		}
+
+		.service-row-icon {
+			position: absolute;
+			bottom: 20px;
+			left: 20px;
+			width: 48px;
+			height: 48px;
+			border-radius: var(--r-md);
+			background: rgba(255, 255, 255, 0.14);
+			backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 22px;
+			color: #FFFFFF;
+		}
+
+		.service-row-num {
+			font-family: var(--font-code);
+			font-size: 11px;
+			letter-spacing: 0.18em;
+			color: var(--primary);
+			margin-bottom: 8px;
+		}
+
+		.service-row h3 {
+			font-size: clamp(28px, 3vw, 40px);
+			font-weight: 300;
+			letter-spacing: -0.02em;
+		}
+
+		.service-row-desc {
+			font-family: var(--font-serif);
+			font-weight: 300;
+			font-size: 16px;
+			line-height: 1.75;
+			color: var(--text-light);
+			margin-top: 16px;
+			max-width: 56ch;
+		}
+
+		.service-row-bullets {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+			margin-top: 20px;
+		}
+
+		.service-row-bullet {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			background: var(--surface-muted);
+			border: 1px solid var(--border);
+			padding: 6px 12px;
+			border-radius: var(--r-pill);
+		}
+
+		.service-row .btn-text { margin-top: 24px; }
+
+		/* =========================================================================
+		   SERVICE DETAIL (/servicios/staffing)
+		   ========================================================================= */
+		.items-strip {
+			background: var(--ocean);
+			padding: 24px 0;
+		}
+
+		.items-strip-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			divide-x: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.items-strip-item {
+			text-align: center;
+			padding: 16px 8px;
+			border-right: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.items-strip-item:last-child { border-right: none; }
+
+		.items-strip-item i {
+			color: var(--primary-400);
+			font-size: 18px;
+			display: block;
+			margin-bottom: 6px;
+		}
+
+		.items-strip-item span {
+			font-size: 12px;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 0.85);
+		}
+
+		.detail-features {
+			padding: 96px 0;
+		}
+
+		.detail-features-head {
+			text-align: center;
+			max-width: 600px;
+			margin: 0 auto 48px;
+		}
+
+		.detail-features-head h2 {
+			font-size: clamp(28px, 3.5vw, 42px);
+			font-weight: 300;
+		}
+
+		.detail-features-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 24px;
+		}
+
+		.df-card {
+			padding: 28px;
+			border: 1px solid var(--border);
+			background: var(--surface);
+			border-radius: var(--r-lg);
+			display: flex;
+			gap: 20px;
+			align-items: flex-start;
+			transition: box-shadow 0.3s ease, transform 0.3s ease;
+		}
+
+		.df-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+		.df-num {
+			flex-shrink: 0;
+			width: 48px;
+			height: 48px;
+			border-radius: var(--r-md);
+			background: var(--primary-pastel);
+			color: var(--primary);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-family: var(--font-display);
+			font-size: 16px;
+			font-weight: 700;
+			letter-spacing: -0.01em;
+		}
+
+		.df-card h4 {
+			font-size: 18px;
+			font-weight: 700;
+			letter-spacing: -0.005em;
+		}
+
+		.df-card p {
+			font-size: 14px;
+			line-height: 1.65;
+			color: var(--text-light);
+			margin-top: 8px;
+		}
+
+		/* Process */
+		.process {
+			padding: 96px 0;
+			background: var(--surface-muted);
+		}
+
+		.process-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 24px;
+		}
+
+		.process-step { text-align: center; position: relative; }
+
+		.process-step:not(:last-child)::after {
+			content: "";
+			position: absolute;
+			top: 24px;
+			left: calc(50% + 32px);
+			width: calc(100% - 32px);
+			height: 1px;
+			background: var(--border-strong);
+		}
+
+		.process-step-num {
+			width: 48px;
+			height: 48px;
+			border-radius: var(--r-pill);
+			background: var(--surface);
+			border: 2px solid var(--primary);
+			color: var(--primary);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-family: var(--font-display);
+			font-size: 14px;
+			font-weight: 700;
+			position: relative;
+			z-index: 1;
+		}
+
+		.process-step h4 {
+			font-size: 15px;
+			font-weight: 700;
+			margin-top: 20px;
+		}
+
+		.process-step p {
+			font-size: 13px;
+			line-height: 1.6;
+			color: var(--text-light);
+			margin-top: 8px;
+		}
+
+		/* Benefits */
+		.benefits-section {
+			padding: 96px 0;
+			background: var(--ocean);
+			color: #FFFFFF;
+		}
+
+		.benefits-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 64px;
+			align-items: center;
+		}
+
+		.benefits-head h2 {
+			font-size: clamp(28px, 3.2vw, 40px);
+			font-weight: 300;
+			color: #FFFFFF;
+		}
+
+		.benefits-head p {
+			font-family: var(--font-serif);
+			font-weight: 300;
+			font-size: 16px;
+			line-height: 1.75;
+			color: rgba(255, 255, 255, 0.72);
+			margin-top: 20px;
+		}
+
+		.benefits-list {
+			display: flex;
+			flex-direction: column;
+			gap: 14px;
+		}
+
+		.benefit-item {
+			padding: 18px 20px;
+			border-radius: var(--r-md);
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			display: flex;
+			gap: 14px;
+			align-items: center;
+			transition: border-color 0.2s ease;
+		}
+
+		.benefit-item:hover { border-color: rgba(103, 215, 228, 0.4); }
+
+		.benefit-item .check {
+			flex-shrink: 0;
+			width: 28px;
+			height: 28px;
+			border-radius: var(--r-pill);
+			background: rgba(50, 191, 212, 0.2);
+			color: var(--primary-300);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 12px;
+		}
+
+		.benefit-item p {
+			font-size: 14px;
+			color: rgba(255, 255, 255, 0.85);
+			line-height: 1.5;
+		}
+
+		/* Related services */
+		.related {
+			padding: 96px 0;
+		}
+
+		.related-head { text-align: center; margin-bottom: 48px; }
+		.related-head h2 { font-size: clamp(28px, 3vw, 38px); font-weight: 300; }
+
+		.related-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 20px;
+		}
+
+		.related-card {
+			position: relative;
+			border-radius: var(--r-lg);
+			overflow: hidden;
+			height: 240px;
+			background: linear-gradient(165deg, var(--primary-700), var(--primary-800));
+			transition: transform 0.3s ease;
+		}
+
+		.related-card:hover { transform: translateY(-3px); }
+
+		.related-card img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			opacity: 0.5;
+			transition: opacity 0.3s ease, transform 0.6s ease;
+		}
+
+		.related-card:hover img { opacity: 0.7; transform: scale(1.05); }
+
+		.related-card::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(to top, var(--primary-900) 5%, color-mix(in oklab, var(--primary-800) 50%, transparent) 55%, transparent 100%);
+		}
+
+		.related-card-body {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			padding: 20px;
+			z-index: 2;
+			color: #FFFFFF;
+		}
+
+		.related-card-body i {
+			color: var(--primary-300);
+			font-size: 18px;
+			display: block;
+			margin-bottom: 4px;
+		}
+
+		.related-card-body h3 {
+			font-size: 16px;
+			font-weight: 700;
+			letter-spacing: -0.005em;
+		}
+
+		.related-card-body p {
+			font-size: 12px;
+			color: rgba(255, 255, 255, 0.65);
+			margin-top: 4px;
+		}
+
+		.related-card-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--primary-300);
+			margin-top: 10px;
+		}
+
+		/* CTA end */
+		.page-cta {
+			padding: 96px 0;
+			background: var(--surface-muted);
+			text-align: center;
+		}
+
+		.page-cta.is-dark { background: var(--ocean); color: #FFFFFF; }
+
+		.page-cta h2 {
+			font-size: clamp(28px, 3.2vw, 42px);
+			font-weight: 300;
+			max-width: 24ch;
+			margin: 0 auto;
+		}
+
+		.page-cta.is-dark h2 { color: #FFFFFF; }
+
+		.page-cta p {
+			font-family: var(--font-serif);
+			font-weight: 300;
+			font-size: 16px;
+			line-height: 1.7;
+			color: var(--text-light);
+			margin-top: 20px;
+			max-width: 52ch;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.page-cta.is-dark p { color: rgba(255, 255, 255, 0.7); }
+
+		.page-cta .ctas { display: inline-flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; justify-content: center; }
+
+		/* =========================================================================
+		   /LABS INDEX — masonry
+		   ========================================================================= */
+		.labs-hero {
+			background:
+				radial-gradient(ellipse 50% 50% at 15% 10%, rgba(79, 61, 245, 0.22), transparent 55%),
+				radial-gradient(ellipse 50% 50% at 85% 90%, rgba(50, 191, 212, 0.2), transparent 55%),
+				radial-gradient(ellipse 60% 60% at 50% 50%, rgba(245, 159, 36, 0.06), transparent 60%),
+				var(--primary-900);
+		}
+
+		.labs-hero .page-hero-overlay { display: none; }
+
+		.labs-hero-stats {
+			display: inline-flex;
+			align-items: center;
+			gap: 24px;
+			margin-top: 40px;
+			padding: 14px 24px;
+			background: rgba(255, 255, 255, 0.06);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			border-radius: var(--r-pill);
+		}
+
+		.labs-hero-stat {
+			font-size: 12px;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 0.8);
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.labs-hero-stat strong {
+			color: var(--primary-300);
+			font-weight: 700;
+		}
+
+		.labs-masonry-section {
+			padding: 80px 0;
+			background: var(--surface-muted);
+		}
+
+		.masonry {
+			column-count: 3;
+			column-gap: 20px;
+		}
+
+		.masonry-item {
+			display: block;
+			break-inside: avoid;
+			margin-bottom: 20px;
+			transition: transform 0.3s ease;
+		}
+
+		.masonry-item:hover { transform: translateY(-4px); }
+
+		.masonry-card {
+			position: relative;
+			border-radius: var(--r-lg);
+			overflow: hidden;
+			border: 1px solid var(--border-soft);
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+			background: var(--primary-900);
+		}
+
+		.masonry-image {
+			position: relative;
+			overflow: hidden;
+			aspect-ratio: 4 / 3;
+		}
+
+		.masonry-item.is-tall .masonry-image { aspect-ratio: 3 / 4; }
+
+		.masonry-image img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform 0.6s ease;
+		}
+
+		.masonry-item:hover .masonry-image img { transform: scale(1.05); }
+
+		.masonry-image::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(to top, var(--primary-900) 0%, color-mix(in oklab, var(--primary-900) 20%, transparent) 60%, transparent 100%);
+		}
+
+		.masonry-cat {
+			position: absolute;
+			top: 14px;
+			left: 14px;
+			z-index: 2;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--primary-300);
+			background: rgba(50, 191, 212, 0.15);
+			border: 1px solid rgba(50, 191, 212, 0.3);
+			padding: 4px 10px;
+			border-radius: var(--r-pill);
+			backdrop-filter: blur(8px);
+		}
+
+		.masonry-ext {
+			position: absolute;
+			top: 14px;
+			right: 14px;
+			z-index: 2;
+			width: 30px;
+			height: 30px;
+			border-radius: var(--r-pill);
+			background: rgba(255, 255, 255, 0.12);
+			color: rgba(255, 255, 255, 0.85);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 10px;
+			backdrop-filter: blur(8px);
+		}
+
+		.masonry-body {
+			padding: 24px;
+			color: #FFFFFF;
+		}
+
+		.masonry-body h3 {
+			font-size: 22px;
+			font-weight: 700;
+			letter-spacing: -0.01em;
+		}
+
+		.masonry-body .tagline {
+			font-family: var(--font-serif);
+			font-style: italic;
+			font-size: 14px;
+			color: var(--primary-300);
+			margin-top: 8px;
+		}
+
+		.masonry-body p {
+			font-size: 13px;
+			line-height: 1.65;
+			color: rgba(255, 255, 255, 0.7);
+			margin-top: 14px;
+		}
+
+		.masonry-footer {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			flex-wrap: wrap;
+			margin-top: 20px;
+		}
+
+		.masonry-platform {
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: rgba(255, 255, 255, 0.55);
+			padding: 4px 10px;
+			border-radius: var(--r-pill);
+			border: 1px solid rgba(255, 255, 255, 0.12);
+		}
+
+		.masonry-year {
+			margin-left: auto;
+			font-family: var(--font-code);
+			font-size: 11px;
+			color: rgba(255, 255, 255, 0.4);
+		}
+
+		.masonry-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--primary-300);
+			margin-top: 20px;
+			transition: gap 0.2s ease;
+		}
+
+		.masonry-item:hover .masonry-link { gap: 10px; }
+
+		/* Override brand color per card */
+		.m-bogy { --card-brand: #00ff87; background: #07070d; }
+		.m-petsit { --card-brand: #47AE89; background: #11303B; }
+		.m-indicadores { --card-brand: var(--accent-gold); background: #141218; }
+		.m-learningpath { --card-brand: var(--accent-electric); background: #1E1E1E; }
+		.m-minicatalogo { --card-brand: #E60A62; background: #141218; }
+
+		.masonry-card[class*="m-"] .masonry-cat {
+			color: var(--card-brand);
+			background: color-mix(in oklab, var(--card-brand) 20%, transparent);
+			border-color: color-mix(in oklab, var(--card-brand) 40%, transparent);
+		}
+
+		.masonry-card[class*="m-"] .masonry-body .tagline,
+		.masonry-card[class*="m-"] .masonry-link {
+			color: var(--card-brand);
+		}
+
+		.masonry-card[class*="m-"] .masonry-image::after {
+			background: linear-gradient(to top, color-mix(in oklab, var(--primary-900) 85%, black) 0%, color-mix(in oklab, var(--primary-900) 30%, transparent) 60%, transparent 100%);
+		}
+
+		/* =========================================================================
+		   /LABS/BOGY — full project page
+		   ========================================================================= */
+		.lab-hero {
+			padding: 120px 0 80px;
+			background:
+				radial-gradient(ellipse 60% 60% at 20% 10%, rgba(0, 255, 135, 0.18), transparent 55%),
+				radial-gradient(ellipse 50% 50% at 85% 90%, rgba(50, 191, 212, 0.14), transparent 55%),
+				var(--primary-900);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.lab-hero-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 64px;
+			align-items: center;
+		}
+
+		.lab-hero-breadcrumb {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: rgba(255, 255, 255, 0.5);
+			margin-bottom: 24px;
+		}
+
+		.lab-hero-logo {
+			height: 36px;
+			width: auto;
+			margin-bottom: 24px;
+			/* For BoGy green logo placeholder: use text */
+		}
+
+		.lab-hero-status {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.2em;
+			text-transform: uppercase;
+			padding: 5px 12px;
+			border-radius: var(--r-pill);
+			background: rgba(0, 255, 135, 0.12);
+			border: 1px solid rgba(0, 255, 135, 0.3);
+			color: #00ff87;
+			margin-left: 12px;
+		}
+
+		.lab-hero-status .dot { width: 6px; height: 6px; border-radius: var(--r-pill); background: #00ff87; }
+
+		.lab-hero h1 {
+			font-size: clamp(40px, 5.4vw, 68px);
+			color: #FFFFFF;
+			font-weight: 300;
+			letter-spacing: -0.025em;
+			line-height: 1.05;
+		}
+
+		.lab-hero .tagline {
+			font-family: var(--font-serif);
+			font-style: italic;
+			font-size: 22px;
+			color: #00ff87;
+			margin-top: 10px;
+			font-weight: 300;
+		}
+
+		.lab-hero-desc {
+			font-size: 16px;
+			line-height: 1.7;
+			color: rgba(255, 255, 255, 0.72);
+			margin-top: 24px;
+			max-width: 52ch;
+		}
+
+		.lab-hero-ctas {
+			display: flex;
+			gap: 12px;
+			margin-top: 32px;
+			flex-wrap: wrap;
+		}
+
+		.btn-lab {
+			background: #00ff87;
+			color: #07070d;
+		}
+
+		.btn-lab:hover { background: #29ff9e; }
+
+		.lab-hero-platforms {
+			display: flex;
+			gap: 8px;
+			margin-top: 28px;
+		}
+
+		.lab-hero-platform {
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.2em;
+			text-transform: uppercase;
+			color: rgba(255, 255, 255, 0.55);
+			padding: 5px 12px;
+			border-radius: var(--r-pill);
+			border: 1px solid rgba(255, 255, 255, 0.15);
+		}
+
+		.lab-hero-shot {
+			position: relative;
+			border-radius: var(--r-lg);
+			overflow: hidden;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+		}
+
+		.lab-hero-shot::before {
+			content: "";
+			position: absolute;
+			inset: -16px;
+			background: radial-gradient(circle at center, rgba(0, 255, 135, 0.15), transparent 60%);
+			z-index: -1;
+			filter: blur(40px);
+		}
+
+		.lab-hero-shot img { display: block; width: 100%; height: auto; }
+
+		/* Stats strip */
+		.lab-stats {
+			background: var(--surface);
+			border-top: 1px solid var(--border-soft);
+			border-bottom: 1px solid var(--border-soft);
+			padding: 40px 0;
+		}
+
+		[data-theme="dark"] .lab-stats { background: #060A11; }
+
+		.lab-stats-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			divide-x: 1px solid var(--border);
+		}
+
+		.lab-stat {
+			text-align: center;
+			padding: 0 24px;
+			border-right: 1px solid var(--border);
+		}
+
+		[data-theme="dark"] .lab-stat { border-right-color: rgba(255, 255, 255, 0.06); }
+
+		.lab-stat:last-child { border-right: none; }
+
+		.lab-stat-value {
+			font-family: var(--font-display);
+			font-size: clamp(30px, 2.8vw, 40px);
+			font-weight: 300;
+			color: #00ff87;
+			letter-spacing: -0.025em;
+			line-height: 1;
+		}
+
+		.lab-stat-label {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			margin-top: 12px;
+		}
+
+		/* Problem/Solution */
+		.lab-ps {
+			padding: 96px 0;
+		}
+
+		.lab-ps-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 64px;
+		}
+
+		.lab-ps-col h3 {
+			font-size: 14px;
+			font-weight: 700;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			margin-bottom: 16px;
+		}
+
+		.lab-ps-col.problem h3 { color: var(--text-muted); }
+		.lab-ps-col.solution h3 { color: #00ff87; }
+
+		.lab-ps-col p {
+			font-family: var(--font-serif);
+			font-weight: 300;
+			font-size: 18px;
+			line-height: 1.8;
+			color: var(--text);
+		}
+
+		/* Features grid */
+		.lab-features {
+			padding: 96px 0;
+			background: var(--surface-muted);
+		}
+
+		.lab-features-head {
+			text-align: center;
+			margin-bottom: 56px;
+		}
+
+		.lab-features-head h2 {
+			font-size: clamp(28px, 3.2vw, 42px);
+			font-weight: 300;
+		}
+
+		.lab-features-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 16px;
+		}
+
+		.lf-card {
+			padding: 24px;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: var(--r-lg);
+			transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+		}
+
+		.lf-card:hover {
+			box-shadow: var(--shadow-md);
+			transform: translateY(-3px);
+			border-color: color-mix(in oklab, #00ff87 30%, var(--border));
+		}
+
+		.lf-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 44px;
+			height: 44px;
+			border-radius: var(--r-md);
+			background: rgba(0, 255, 135, 0.1);
+			color: #00b864;
+			font-size: 18px;
+			margin-bottom: 18px;
+		}
+
+		[data-theme="dark"] .lf-icon {
+			background: rgba(0, 255, 135, 0.12);
+			color: #00ff87;
+		}
+
+		.lf-card h4 {
+			font-size: 16px;
+			font-weight: 700;
+			letter-spacing: -0.005em;
+		}
+
+		.lf-card p {
+			font-size: 13px;
+			line-height: 1.6;
+			color: var(--text-light);
+			margin-top: 10px;
+		}
+
+		/* Screenshots section */
+		.lab-shots {
+			padding: 96px 0;
+			background: var(--ocean);
+			color: #FFFFFF;
+		}
+
+		.lab-shots-head {
+			text-align: center;
+			margin-bottom: 48px;
+		}
+
+		.lab-shots-head h2 { font-size: clamp(28px, 3.2vw, 42px); color: #FFFFFF; font-weight: 300; }
+
+		.lab-shots-tabs {
+			display: flex;
+			justify-content: center;
+			gap: 8px;
+			flex-wrap: wrap;
+			margin-bottom: 40px;
+		}
+
+		.lab-shots-tab {
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 0.16em;
+			text-transform: uppercase;
+			padding: 10px 20px;
+			border-radius: var(--r-pill);
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			color: rgba(255, 255, 255, 0.7);
+			transition: all 0.2s ease;
+		}
+
+		.lab-shots-tab:hover { background: rgba(255, 255, 255, 0.12); color: #FFFFFF; }
+
+		.lab-shots-tab.active {
+			background: #00ff87;
+			color: #07070d;
+			border-color: #00ff87;
+		}
+
+		.lab-shots-display {
+			max-width: 960px;
+			margin: 0 auto;
+			position: relative;
+		}
+
+		.lab-shots-display::before {
+			content: "";
+			position: absolute;
+			inset: -16px;
+			background: radial-gradient(circle at center, rgba(0, 255, 135, 0.16), transparent 60%);
+			filter: blur(40px);
+			z-index: 0;
+		}
+
+		.lab-shots-frame {
+			position: relative;
+			border-radius: var(--r-lg);
+			overflow: hidden;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+			z-index: 1;
+		}
+
+		.lab-shots-frame img { width: 100%; height: auto; display: block; }
+
+		.lab-shots-caption {
+			text-align: center;
+			font-family: var(--font-serif);
+			font-weight: 300;
+			font-size: 14px;
+			color: rgba(255, 255, 255, 0.6);
+			margin-top: 24px;
+			max-width: 48ch;
+			margin-left: auto;
+			margin-right: auto;
+			line-height: 1.7;
+		}
+
+		/* Tech chips */
+		.lab-tech {
+			padding: 80px 0;
+			text-align: center;
+		}
+
+		.lab-tech h2 { font-size: clamp(24px, 2.6vw, 32px); font-weight: 300; max-width: 24ch; margin: 0 auto 32px; }
+
+		.lab-tech-chips {
+			display: inline-flex;
+			gap: 8px;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		.tech-chip {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 13px;
+			color: var(--text);
+			background: var(--surface-muted);
+			border: 1px solid var(--border);
+			padding: 8px 16px;
+			border-radius: var(--r-pill);
+		}
+
+		.tech-chip-dot {
+			width: 6px;
+			height: 6px;
+			border-radius: var(--r-pill);
+			background: #00ff87;
+		}
+
+		/* =========================================================================
+		   RESPONSIVE
+		   ========================================================================= */
+		@media (max-width: 960px) {
+			.container { padding: 0 20px; }
+			.page-hero { padding: 100px 0 64px; }
+			.service-row, .service-row:nth-child(even) { grid-template-columns: 1fr; gap: 20px; }
+			.service-row-media { height: 220px; }
+			.items-strip-grid { grid-template-columns: 1fr 1fr; }
+			.items-strip-item { border-right: none; }
+			.detail-features-grid { grid-template-columns: 1fr; }
+			.process-grid { grid-template-columns: 1fr 1fr; gap: 40px 16px; }
+			.process-step::after { display: none; }
+			.benefits-grid { grid-template-columns: 1fr; gap: 40px; }
+			.related-grid { grid-template-columns: 1fr; }
+			.masonry { column-count: 1; }
+			.lab-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+			.lab-stats-grid { grid-template-columns: 1fr 1fr; gap: 32px 0; }
+			.lab-stat { border-right: none; }
+			.lab-ps-grid { grid-template-columns: 1fr; gap: 40px; }
+			.lab-features-grid { grid-template-columns: 1fr 1fr; }
+		}
+	</style>
+</head>
+<body>
+
+<!-- Preview header -->
+<div class="preview-top">
+	<div class="preview-top-inner">
+		<div class="preview-top-label">Páginas internas · paleta refrescada</div>
+		<button class="theme-toggle" onclick="toggleTheme()">
+			<span class="theme-toggle-dot"></span>
+			<span id="theme-label">dark</span>
+		</button>
+	</div>
+</div>
+
+<!-- ============================================================
+     PAGE 1 · /servicios (index page — no existe hoy, propuesta)
+     ============================================================ -->
+
+<div class="page-divider">
+	<div class="page-divider-inner">
+		<div class="page-divider-label">Página 1 de 4</div>
+		<div class="url-bar">
+			<div class="url-bar-dots"><span></span><span></span><span></span></div>
+			<i class="fa fa-lock url-bar-lock"></i>
+			<span class="url-bar-host">restart.cl</span>
+			<span class="url-bar-path">/servicios</span>
+		</div>
+	</div>
+</div>
+
+<div class="page">
+	<section class="page-hero">
+		<div class="page-hero-bg"><img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1600&q=80" alt=""></div>
+		<div class="page-hero-overlay"></div>
+
+		<nav class="site-nav" style="margin-top: -120px; padding-bottom: 60px;">
+			<div class="nav-pill">
+				<a href="#" class="nav-logo is-light"><img src="/logo@0.5x.png" alt="re/START"></a>
+				<ul class="nav-links">
+					<li><a href="#">Nosotros</a></li>
+					<li><a href="#" style="color: var(--primary-300);">Servicios</a></li>
+					<li><a href="#">Labs</a></li>
+					<li><a href="#">Contacto</a></li>
+				</ul>
+				<a href="#" class="nav-cta">Conversemos</a>
+			</div>
+		</nav>
+
+		<div class="container">
+			<div class="page-hero-kicker">Servicios · Catálogo completo</div>
+			<h1>Cinco frentes donde <em>empujamos</em> tu negocio</h1>
+			<p class="page-hero-lede">Desde integrar talento a tu equipo hasta construir productos end-to-end o experimentar con inteligencia artificial. Cada servicio es un bloque que combinamos según tu caso.</p>
+			<div class="page-hero-ctas">
+				<a href="#" class="btn btn-primary">Agendar asesoría</a>
+				<a href="#" class="btn btn-ghost-dark">Ver portafolio <i class="fa fa-arrow-right" style="font-size: 10px;"></i></a>
+			</div>
+		</div>
+	</section>
+
+	<section class="services-index">
+		<div class="container">
+			<div class="services-list">
+
+				<!-- Staffing -->
+				<a href="#" class="service-row">
+					<div class="service-row-media">
+						<img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="">
+						<div class="service-row-icon"><i class="ion-ios-people"></i></div>
+					</div>
+					<div>
+						<div class="service-row-num">01 · Equipo</div>
+						<h3>Staffing</h3>
+						<p class="service-row-desc">Contamos con un equipo multidisciplinario de profesionales calificados, listos para integrarse a tus proyectos y potenciar la capacidad de tu equipo.</p>
+						<div class="service-row-bullets">
+							<span class="service-row-bullet">Equipos dedicados</span>
+							<span class="service-row-bullet">Profesionales especializados</span>
+							<span class="service-row-bullet">Aumento de equipo</span>
+						</div>
+						<div class="btn-text">Potencia tu equipo <i class="fa fa-arrow-right" style="font-size: 10px;"></i></div>
+					</div>
+				</a>
+
+				<!-- Desarrollo -->
+				<a href="#" class="service-row">
+					<div>
+						<div class="service-row-num">02 · Software</div>
+						<h3>Desarrollo de software</h3>
+						<p class="service-row-desc">Diseñamos y desarrollamos soluciones de software innovadoras adaptadas a tu negocio: aplicaciones web, apps móviles, sistemas a medida e integraciones.</p>
+						<div class="service-row-bullets">
+							<span class="service-row-bullet">Aplicaciones web</span>
+							<span class="service-row-bullet">Apps móviles</span>
+							<span class="service-row-bullet">Sistemas a medida</span>
+							<span class="service-row-bullet">Integraciones</span>
+						</div>
+						<div class="btn-text">Construyamos juntos <i class="fa fa-arrow-right" style="font-size: 10px;"></i></div>
+					</div>
+					<div class="service-row-media">
+						<img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=80" alt="">
+						<div class="service-row-icon"><i class="ion-code"></i></div>
+					</div>
+				</a>
+
+				<!-- Diseño -->
+				<a href="#" class="service-row">
+					<div class="service-row-media">
+						<img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80" alt="">
+						<div class="service-row-icon"><i class="ion-ios-lightbulb-outline"></i></div>
+					</div>
+					<div>
+						<div class="service-row-num">03 · Producto</div>
+						<h3>Diseño de producto</h3>
+						<p class="service-row-desc">Combinamos investigación de usuarios, diseño de interfaces y prototipado para crear productos digitales intuitivos, atractivos y medibles.</p>
+						<div class="service-row-bullets">
+							<span class="service-row-bullet">UX/UI</span>
+							<span class="service-row-bullet">Prototipado</span>
+							<span class="service-row-bullet">Design systems</span>
+						</div>
+						<div class="btn-text">Diseñemos tu producto <i class="fa fa-arrow-right" style="font-size: 10px;"></i></div>
+					</div>
+				</a>
+
+				<!-- Cloud -->
+				<a href="#" class="service-row">
+					<div>
+						<div class="service-row-num">04 · Cloud</div>
+						<h3>Tecnologías cloud</h3>
+						<p class="service-row-desc">Arquitecturas en AWS y Google Cloud diseñadas para alta disponibilidad, seguridad y escalamiento automático con control total de costos.</p>
+						<div class="service-row-bullets">
+							<span class="service-row-bullet">Infraestructura cloud</span>
+							<span class="service-row-bullet">Migración</span>
+							<span class="service-row-bullet">DevOps</span>
+							<span class="service-row-bullet">Optimización de costos</span>
+						</div>
+						<div class="btn-text">Migra a la nube <i class="fa fa-arrow-right" style="font-size: 10px;"></i></div>
+					</div>
+					<div class="service-row-media">
+						<img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80" alt="">
+						<div class="service-row-icon"><i class="ion-ios-cloud-outline"></i></div>
+					</div>
+				</a>
+
+				<!-- IA -->
+				<a href="#" class="service-row" style="border-color: color-mix(in oklab, var(--accent-electric) 25%, var(--border));">
+					<div class="service-row-media" style="background: linear-gradient(165deg, var(--accent-electric), var(--primary-800), var(--primary-900));">
+						<img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80" alt="">
+						<div class="service-row-icon"><i class="ion-ios-bolt-outline"></i></div>
+					</div>
+					<div>
+						<div class="service-row-num" style="color: var(--accent-electric);">05 · IA · Lab</div>
+						<h3>Inteligencia Artificial</h3>
+						<p class="service-row-desc">Integramos IA en tus procesos y productos: agentes conversacionales, automatización, modelos a medida y conectores con OpenAI y Anthropic.</p>
+						<div class="service-row-bullets">
+							<span class="service-row-bullet">Agentes y asistentes</span>
+							<span class="service-row-bullet">RAG / Graph RAG</span>
+							<span class="service-row-bullet">Automatización</span>
+							<span class="service-row-bullet">Modelos a medida</span>
+						</div>
+						<div class="btn-text" style="color: var(--accent-electric);">Explora la IA <i class="fa fa-arrow-right" style="font-size: 10px;"></i></div>
+					</div>
+				</a>
+
+			</div>
+		</div>
+	</section>
+
+	<section class="page-cta is-dark">
+		<div class="container">
+			<div class="eyebrow" style="color: var(--primary-300);">Primera conversación · sin costo</div>
+			<h2>Agendemos <em>30 minutos</em> y definamos el plan.</h2>
+			<p>En una sola llamada entendemos tu contexto, definimos alcance y te enviamos una propuesta con tiempos y costo cerrado.</p>
+			<div class="ctas">
+				<a href="#" class="btn btn-primary">Agendar asesoría</a>
+				<a href="#" class="btn btn-ghost-dark">Ver portafolio</a>
+			</div>
+		</div>
+	</section>
+</div>
+
+<!-- ============================================================
+     PAGE 2 · /servicios/staffing
+     ============================================================ -->
+
+<div class="page-divider">
+	<div class="page-divider-inner">
+		<div class="page-divider-label">Página 2 de 4</div>
+		<div class="url-bar">
+			<div class="url-bar-dots"><span></span><span></span><span></span></div>
+			<i class="fa fa-lock url-bar-lock"></i>
+			<span class="url-bar-host">restart.cl</span>
+			<span class="url-bar-path">/servicios/staffing</span>
+		</div>
+	</div>
+</div>
+
+<div class="page">
+	<section class="page-hero">
+		<div class="page-hero-bg"><img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80" alt=""></div>
+		<div class="page-hero-overlay"></div>
+
+		<nav class="site-nav" style="margin-top: -120px; padding-bottom: 60px;">
+			<div class="nav-pill">
+				<a href="#" class="nav-logo is-light"><img src="/logo@0.5x.png" alt="re/START"></a>
+				<ul class="nav-links">
+					<li><a href="#">Nosotros</a></li>
+					<li><a href="#" style="color: var(--primary-300);">Servicios</a></li>
+					<li><a href="#">Labs</a></li>
+					<li><a href="#">Contacto</a></li>
+				</ul>
+				<a href="#" class="nav-cta">Conversemos</a>
+			</div>
+		</nav>
+
+		<div class="container">
+			<div class="page-hero-kicker" style="color: rgba(255,255,255,0.5);">
+				<i class="fa fa-arrow-left" style="font-size: 9px;"></i>
+				Servicios · Staffing
+			</div>
+			<div style="display: inline-flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+				<span style="width: 44px; height: 44px; border-radius: var(--r-md); background: rgba(103, 215, 228, 0.18); display: inline-flex; align-items: center; justify-content: center;"><i class="ion-ios-people" style="color: var(--primary-300); font-size: 22px;"></i></span>
+				<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--primary-300);">Staffing</span>
+			</div>
+			<h1>Optimizamos el <em>desarrollo</em> de tu empresa</h1>
+			<p class="page-hero-lede">Contamos con un equipo multidisciplinario de profesionales calificados, listos para integrarse a tus proyectos y potenciar la capacidad de tu equipo. Nos especializamos en encontrar el talento adecuado para cada desafío.</p>
+			<div class="page-hero-ctas">
+				<a href="#" class="btn btn-primary">Potencia tu equipo</a>
+				<a href="#" class="btn btn-ghost-dark">Conoce más <i class="fa fa-arrow-down" style="font-size: 10px;"></i></a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Items strip -->
+	<section class="items-strip">
+		<div class="container">
+			<div class="items-strip-grid">
+				<div class="items-strip-item"><i class="ion-checkmark-round"></i><span>Equipos dedicados</span></div>
+				<div class="items-strip-item"><i class="ion-checkmark-round"></i><span>Profesionales especializados</span></div>
+				<div class="items-strip-item"><i class="ion-checkmark-round"></i><span>Aumento de equipo</span></div>
+				<div class="items-strip-item"><i class="ion-checkmark-round"></i><span>Gestión de talento</span></div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Detailed features -->
+	<section class="detail-features">
+		<div class="container">
+			<div class="detail-features-head">
+				<div class="eyebrow">Lo que hacemos</div>
+				<h2>Capacidades en <em>staffing</em></h2>
+			</div>
+			<div class="detail-features-grid">
+				<div class="df-card">
+					<div class="df-num">01</div>
+					<div>
+						<h4>Equipos dedicados</h4>
+						<p>Armamos equipos completos alineados a tu cultura y metodología de trabajo, con roles definidos y responsabilidades claras.</p>
+					</div>
+				</div>
+				<div class="df-card">
+					<div class="df-num">02</div>
+					<div>
+						<h4>Profesionales especializados</h4>
+						<p>Desarrolladores senior, diseñadores UX/UI, QA engineers y DevOps listos para integrarse desde el día uno.</p>
+					</div>
+				</div>
+				<div class="df-card">
+					<div class="df-num">03</div>
+					<div>
+						<h4>Aumento de equipo</h4>
+						<p>Escala tu capacidad de desarrollo sin los costos y tiempos de un proceso de contratación tradicional.</p>
+					</div>
+				</div>
+				<div class="df-card">
+					<div class="df-num">04</div>
+					<div>
+						<h4>Gestión de talento</h4>
+						<p>Nos encargamos del onboarding, seguimiento y evaluación continua para garantizar resultados.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Process -->
+	<section class="process">
+		<div class="container">
+			<div class="detail-features-head">
+				<div class="eyebrow">Nuestro proceso</div>
+				<h2>Cómo <em>trabajamos</em></h2>
+				<p style="font-family: var(--font-serif); font-weight: 300; font-size: 15px; color: var(--text-light); margin-top: 16px; line-height: 1.7;">Un proceso probado que garantiza resultados predecibles y transparencia total.</p>
+			</div>
+			<div class="process-grid">
+				<div class="process-step">
+					<div class="process-step-num">1</div>
+					<h4>Descubrimiento</h4>
+					<p>Entendemos tu negocio, objetivos y desafíos para definir el alcance.</p>
+				</div>
+				<div class="process-step">
+					<div class="process-step-num">2</div>
+					<h4>Estrategia</h4>
+					<p>Diseñamos la solución técnica y el roadmap con entregables claros.</p>
+				</div>
+				<div class="process-step">
+					<div class="process-step-num">3</div>
+					<h4>Ejecución</h4>
+					<p>Desarrollamos en sprints con revisiones semanales y demos.</p>
+				</div>
+				<div class="process-step">
+					<div class="process-step-num">4</div>
+					<h4>Entrega y soporte</h4>
+					<p>Lanzamos, capacitamos y mantenemos soporte continuo.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Benefits -->
+	<section class="benefits-section">
+		<div class="container">
+			<div class="benefits-grid">
+				<div class="benefits-head">
+					<div class="eyebrow" style="color: var(--primary-300);">Ventajas</div>
+					<h2>¿Por qué elegirnos para <em>staffing</em>?</h2>
+					<p>Trabajamos con los más altos estándares de calidad y transparencia para que tu inversión se traduzca en resultados reales.</p>
+				</div>
+				<div class="benefits-list">
+					<div class="benefit-item">
+						<div class="check"><i class="ion-checkmark-round"></i></div>
+						<p>Reducción de hasta 40% en costos de contratación</p>
+					</div>
+					<div class="benefit-item">
+						<div class="check"><i class="ion-checkmark-round"></i></div>
+						<p>Integración en menos de 2 semanas</p>
+					</div>
+					<div class="benefit-item">
+						<div class="check"><i class="ion-checkmark-round"></i></div>
+						<p>Acceso a talento regional certificado</p>
+					</div>
+					<div class="benefit-item">
+						<div class="check"><i class="ion-checkmark-round"></i></div>
+						<p>Flexibilidad para escalar o reducir el equipo</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Related services -->
+	<section class="related">
+		<div class="container">
+			<div class="related-head">
+				<div class="eyebrow">Servicios relacionados</div>
+				<h2>Complementa tu <em>estrategia</em></h2>
+			</div>
+			<div class="related-grid">
+				<a href="#" class="related-card">
+					<img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=80" alt="">
+					<div class="related-card-body">
+						<i class="ion-code"></i>
+						<h3>Desarrollo de software</h3>
+						<p>Creamos mejores experiencias digitales</p>
+						<div class="related-card-link">Ver servicio <i class="fa fa-arrow-right" style="font-size: 9px;"></i></div>
+					</div>
+				</a>
+				<a href="#" class="related-card">
+					<img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&q=80" alt="">
+					<div class="related-card-body">
+						<i class="ion-ios-lightbulb-outline"></i>
+						<h3>Diseño de producto</h3>
+						<p>Transformamos ideas en productos funcionales</p>
+						<div class="related-card-link">Ver servicio <i class="fa fa-arrow-right" style="font-size: 9px;"></i></div>
+					</div>
+				</a>
+				<a href="#" class="related-card">
+					<img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80" alt="">
+					<div class="related-card-body">
+						<i class="ion-ios-cloud-outline"></i>
+						<h3>Tecnologías cloud</h3>
+						<p>Mejoramos la eficiencia de tu empresa</p>
+						<div class="related-card-link">Ver servicio <i class="fa fa-arrow-right" style="font-size: 9px;"></i></div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="page-cta is-dark">
+		<div class="container">
+			<i class="ion-ios-people" style="font-size: 36px; color: var(--primary-300); display: block; margin-bottom: 20px;"></i>
+			<h2>¿Listo para <em>empezar</em>?</h2>
+			<p>Conversemos sobre cómo podemos ayudarte con staffing. Agenda una asesoría gratuita y te contamos todo.</p>
+			<div class="ctas">
+				<a href="#" class="btn btn-primary">Potencia tu equipo</a>
+				<a href="#" class="btn btn-ghost-dark">Ver todos los servicios</a>
+			</div>
+		</div>
+	</section>
+</div>
+
+<!-- ============================================================
+     PAGE 3 · /labs
+     ============================================================ -->
+
+<div class="page-divider">
+	<div class="page-divider-inner">
+		<div class="page-divider-label">Página 3 de 4</div>
+		<div class="url-bar">
+			<div class="url-bar-dots"><span></span><span></span><span></span></div>
+			<i class="fa fa-lock url-bar-lock"></i>
+			<span class="url-bar-host">restart.cl</span>
+			<span class="url-bar-path">/labs</span>
+		</div>
+	</div>
+</div>
+
+<div class="page">
+	<section class="page-hero labs-hero">
+		<nav class="site-nav" style="margin-top: -120px; padding-bottom: 60px;">
+			<div class="nav-pill">
+				<a href="#" class="nav-logo is-light"><img src="/logo@0.5x.png" alt="re/START"></a>
+				<ul class="nav-links">
+					<li><a href="#">Nosotros</a></li>
+					<li><a href="#">Servicios</a></li>
+					<li><a href="#" style="color: var(--primary-300);">Labs</a></li>
+					<li><a href="#">Contacto</a></li>
+				</ul>
+				<a href="#" class="nav-cta">Conversemos</a>
+			</div>
+		</nav>
+
+		<div class="container">
+			<div class="page-hero-kicker">re/START Labs</div>
+			<h1>Laboratorio de productos que <em>exploran</em>, validan y ven la luz.</h1>
+			<p class="page-hero-lede">Un espacio donde prototipamos ideas, probamos tecnologías y lanzamos productos propios. Algunos escalan, otros enseñan — todos dejan algo.</p>
+
+			<div class="labs-hero-stats">
+				<div class="labs-hero-stat"><span style="width: 6px; height: 6px; border-radius: var(--r-pill); background: var(--primary-300); display: inline-block;"></span><strong>5</strong> proyectos vivos</div>
+				<div class="labs-hero-stat" style="color: rgba(255,255,255,0.4);">·</div>
+				<div class="labs-hero-stat"><strong>2023–2026</strong> activo</div>
+				<div class="labs-hero-stat" style="color: rgba(255,255,255,0.4);">·</div>
+				<div class="labs-hero-stat">¿Tu idea el siguiente? <i class="fa fa-arrow-right" style="font-size: 10px; color: var(--primary-300);"></i></div>
+			</div>
+		</div>
+	</section>
+
+	<section class="labs-masonry-section">
+		<div class="container">
+			<div class="masonry">
+				<!-- BoGy (internal, tall) -->
+				<a href="#" class="masonry-item is-tall">
+					<div class="masonry-card m-bogy">
+						<div class="masonry-image">
+							<img src="/img/labs/bogy/home.png" alt="BoGy">
+							<div class="masonry-cat">SaaS</div>
+						</div>
+						<div class="masonry-body">
+							<h3>BoGy</h3>
+							<p class="tagline">Gestiona tu negocio deportivo</p>
+							<p>Plataforma multi-tenant para gimnasios, academias y entrenadores: alumnos, reservas, pagos y asistencia en un solo lugar.</p>
+							<div class="masonry-footer">
+								<span class="masonry-platform">Web</span>
+								<span class="masonry-platform">iOS</span>
+								<span class="masonry-platform">Android</span>
+								<span class="masonry-year">2026</span>
+							</div>
+							<div class="masonry-link">Ver proyecto <i class="fa fa-arrow-right" style="font-size: 9px;"></i></div>
+						</div>
+					</div>
+				</a>
+
+				<!-- Indicadores (external) -->
+				<a href="#" class="masonry-item">
+					<div class="masonry-card m-indicadores">
+						<div class="masonry-image">
+							<img src="/img/labs/indicadores/home.png" alt="Indicadores">
+							<div class="masonry-cat">Herramienta</div>
+							<div class="masonry-ext"><i class="fa fa-external-link"></i></div>
+						</div>
+						<div class="masonry-body">
+							<h3>Indicadores del Día</h3>
+							<p class="tagline">UF, dólar, euro y más, al día</p>
+							<p>Consulta rápida de indicadores económicos de Chile con datos en tiempo real.</p>
+							<div class="masonry-footer">
+								<span class="masonry-platform">Web</span>
+								<span class="masonry-year">2024</span>
+							</div>
+							<div class="masonry-link">Visitar sitio <i class="fa fa-arrow-right" style="font-size: 9px;"></i></div>
+						</div>
+					</div>
+				</a>
+
+				<!-- Petsit (internal) -->
+				<a href="#" class="masonry-item">
+					<div class="masonry-card m-petsit">
+						<div class="masonry-image">
+							<img src="/img/labs/petsit/home.png" alt="Petsit">
+							<div class="masonry-cat">Marketplace</div>
+						</div>
+						<div class="masonry-body">
+							<h3>Petsit</h3>
+							<p class="tagline">Convierte tu amor por los animales en algo profesional</p>
+							<p>Marketplace que conecta cuidadores de mascotas con tutores: alojamiento, paseos, cuidados.</p>
+							<div class="masonry-footer">
+								<span class="masonry-platform">Web</span>
+								<span class="masonry-year">2025</span>
+							</div>
+							<div class="masonry-link">Ver proyecto <i class="fa fa-arrow-right" style="font-size: 9px;"></i></div>
+						</div>
+					</div>
+				</a>
+
+				<!-- LearningPath (external, tall) -->
+				<a href="#" class="masonry-item is-tall">
+					<div class="masonry-card m-learningpath">
+						<div class="masonry-image">
+							<img src="/img/labs/learningpath/home.png" alt="LearningPath">
+							<div class="masonry-cat">Educación</div>
+							<div class="masonry-ext"><i class="fa fa-external-link"></i></div>
+						</div>
+						<div class="masonry-body">
+							<h3>LearningPath</h3>
+							<p class="tagline">Caminos de aprendizaje que se adaptan</p>
+							<p>Plataforma para armar, compartir y seguir rutas de aprendizaje personalizadas en equipos y comunidades.</p>
+							<div class="masonry-footer">
+								<span class="masonry-platform">Web</span>
+								<span class="masonry-year">2024</span>
+							</div>
+							<div class="masonry-link">Visitar sitio <i class="fa fa-arrow-right" style="font-size: 9px;"></i></div>
+						</div>
+					</div>
+				</a>
+
+				<!-- Minicatalogo (external) -->
+				<a href="#" class="masonry-item">
+					<div class="masonry-card m-minicatalogo">
+						<div class="masonry-image">
+							<img src="/img/labs/minicatalogo/home.png" alt="Minicatalogo">
+							<div class="masonry-cat">E-commerce</div>
+							<div class="masonry-ext"><i class="fa fa-external-link"></i></div>
+						</div>
+						<div class="masonry-body">
+							<h3>Minicatalogo</h3>
+							<p class="tagline">Tu catálogo online en minutos</p>
+							<p>Catálogos simples para vender en redes y WhatsApp sin abrir una tienda completa.</p>
+							<div class="masonry-footer">
+								<span class="masonry-platform">Web</span>
+								<span class="masonry-year">2023</span>
+							</div>
+							<div class="masonry-link">Visitar sitio <i class="fa fa-arrow-right" style="font-size: 9px;"></i></div>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="page-cta is-dark">
+		<div class="container">
+			<div class="eyebrow" style="color: var(--primary-300);">Construye con nosotros</div>
+			<h2>¿Tu próxima idea puede ser el <em>siguiente lab</em>?</h2>
+			<p>Si tienes un producto en mente y necesitas un equipo que lo construya con el rigor de un lab y la velocidad de un startup, hablemos.</p>
+			<div class="ctas">
+				<a href="#" class="btn btn-primary">Conversemos</a>
+			</div>
+		</div>
+	</section>
+</div>
+
+<!-- ============================================================
+     PAGE 4 · /labs/bogy
+     ============================================================ -->
+
+<div class="page-divider">
+	<div class="page-divider-inner">
+		<div class="page-divider-label">Página 4 de 4</div>
+		<div class="url-bar">
+			<div class="url-bar-dots"><span></span><span></span><span></span></div>
+			<i class="fa fa-lock url-bar-lock"></i>
+			<span class="url-bar-host">restart.cl</span>
+			<span class="url-bar-path">/labs/bogy</span>
+		</div>
+	</div>
+</div>
+
+<div class="page">
+	<section class="lab-hero">
+		<nav class="site-nav" style="margin-bottom: 40px; padding: 0;">
+			<div class="nav-pill">
+				<a href="#" class="nav-logo is-light"><img src="/logo@0.5x.png" alt="re/START"></a>
+				<ul class="nav-links">
+					<li><a href="#">Nosotros</a></li>
+					<li><a href="#">Servicios</a></li>
+					<li><a href="#" style="color: var(--primary-300);">Labs</a></li>
+					<li><a href="#">Contacto</a></li>
+				</ul>
+				<a href="#" class="nav-cta">Conversemos</a>
+			</div>
+		</nav>
+
+		<div class="container">
+			<div class="lab-hero-grid">
+				<div>
+					<div class="lab-hero-breadcrumb">
+						<i class="fa fa-arrow-left" style="font-size: 9px;"></i>
+						re/START Labs
+					</div>
+					<div style="display: inline-flex; align-items: center;">
+						<img src="/img/labs/bogy/logo.png" alt="BoGy" class="lab-hero-logo">
+						<span class="lab-hero-status"><span class="dot"></span>En producción</span>
+					</div>
+					<h1>BoGy</h1>
+					<p class="tagline">Gestiona tu negocio deportivo</p>
+					<p class="lab-hero-desc">Plataforma multi-tenant para gimnasios, academias y entrenadores: alumnos, reservas, pagos y asistencia en un solo lugar. Pensada con la simpleza de un SaaS moderno y la profundidad de un ERP.</p>
+
+					<div class="lab-hero-ctas">
+						<a href="https://bogy.restart.cl" class="btn btn-lab">Visita BoGy <i class="fa fa-external-link" style="font-size: 10px;"></i></a>
+						<a href="#capturas" class="btn btn-ghost-dark">Ver capturas <i class="fa fa-arrow-down" style="font-size: 10px;"></i></a>
+					</div>
+
+					<div class="lab-hero-platforms">
+						<span class="lab-hero-platform">Web</span>
+						<span class="lab-hero-platform">iOS</span>
+						<span class="lab-hero-platform">Android</span>
+					</div>
+				</div>
+
+				<div class="lab-hero-shot">
+					<img src="/img/labs/bogy/home.png" alt="BoGy home">
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Stats -->
+	<section class="lab-stats">
+		<div class="container">
+			<div class="lab-stats-grid">
+				<div class="lab-stat">
+					<div class="lab-stat-value">25<em style="color: inherit;">+</em></div>
+					<div class="lab-stat-label">Modelos de datos</div>
+				</div>
+				<div class="lab-stat">
+					<div class="lab-stat-value">5</div>
+					<div class="lab-stat-label">Pasarelas de pago</div>
+				</div>
+				<div class="lab-stat">
+					<div class="lab-stat-value">3</div>
+					<div class="lab-stat-label">Clientes (web, dash, app)</div>
+				</div>
+				<div class="lab-stat">
+					<div class="lab-stat-value">24/7</div>
+					<div class="lab-stat-label">Disponibilidad</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Problem / Solution -->
+	<section class="lab-ps">
+		<div class="container">
+			<div class="lab-ps-grid">
+				<div class="lab-ps-col problem">
+					<h3>El problema</h3>
+					<p>Los gimnasios y academias deportivas usan Excel, WhatsApp y hojas impresas para gestionar alumnos, planes, horarios y pagos. El resultado: cobros perdidos, dobles reservas y horas desperdiciadas en tareas manuales.</p>
+				</div>
+				<div class="lab-ps-col solution">
+					<h3>Nuestra solución</h3>
+					<p>Un único dashboard web para el dueño y una app mobile simple para alumnos y entrenadores. Todo conectado en tiempo real: alumnos reservan, el sistema valida plan y cupo, el entrenador marca asistencia y los pagos se cobran automáticamente.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Features -->
+	<section class="lab-features">
+		<div class="container">
+			<div class="lab-features-head">
+				<div class="eyebrow" style="color: #00b864;">Lo que incluye</div>
+				<h2>Capacidades <em>principales</em></h2>
+			</div>
+			<div class="lab-features-grid">
+				<div class="lf-card">
+					<div class="lf-icon"><i class="ion-ios-people-outline"></i></div>
+					<h4>Gestión de alumnos</h4>
+					<p>Invita por email, crea perfiles directos, asigna planes y consulta historial de asistencia y pagos.</p>
+				</div>
+				<div class="lf-card">
+					<div class="lf-icon"><i class="ion-ios-calendar-outline"></i></div>
+					<h4>Horarios y reservas</h4>
+					<p>Slots recurrentes por disciplina con capacidad máxima. Los alumnos reservan desde la app.</p>
+				</div>
+				<div class="lf-card">
+					<div class="lf-icon"><i class="ion-ios-checkmark-outline"></i></div>
+					<h4>Asistencia por clase</h4>
+					<p>Grilla por entrenador con marcado rápido, alta y baja de alumnos en tiempo real.</p>
+				</div>
+				<div class="lf-card">
+					<div class="lf-icon"><i class="ion-card"></i></div>
+					<h4>Pagos online</h4>
+					<p>Mercado Pago, Transbank, Apple Pay y Google Pay con suscripciones y alertas de vencimiento.</p>
+				</div>
+				<div class="lf-card">
+					<div class="lf-icon"><i class="ion-ios-email-outline"></i></div>
+					<h4>Correos automáticos</h4>
+					<p>Verificación, invitaciones, confirmaciones de reserva y avisos de vencimiento vía MailerSend.</p>
+				</div>
+				<div class="lf-card">
+					<div class="lf-icon"><i class="ion-ios-locked-outline"></i></div>
+					<h4>Multi-tenant seguro</h4>
+					<p>Aislamiento por negocio con guards y credenciales cifradas AES-256-GCM.</p>
+				</div>
+				<div class="lf-card">
+					<div class="lf-icon"><i class="ion-ios-analytics-outline"></i></div>
+					<h4>Reportes y KPIs</h4>
+					<p>Métricas de alumnos, entrenadores, planes activos y asistencia con exportación.</p>
+				</div>
+				<div class="lf-card">
+					<div class="lf-icon"><i class="ion-ios-paperplane-outline"></i></div>
+					<h4>Invitaciones por código</h4>
+					<p>Códigos de 6 dígitos para sumar alumnos y entrenadores sin fricción.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Screenshots -->
+	<section class="lab-shots" id="capturas">
+		<div class="container">
+			<div class="lab-shots-head">
+				<div class="eyebrow" style="color: #00ff87;">Capturas</div>
+				<h2>Un vistazo a la <em>experiencia</em></h2>
+			</div>
+
+			<div class="lab-shots-tabs">
+				<button class="lab-shots-tab active">Inicio</button>
+				<button class="lab-shots-tab">Características</button>
+				<button class="lab-shots-tab">App mobile</button>
+				<button class="lab-shots-tab">Precios</button>
+				<button class="lab-shots-tab">Contacto</button>
+			</div>
+
+			<div class="lab-shots-display">
+				<div class="lab-shots-frame">
+					<img src="/img/labs/bogy/home.png" alt="BoGy home">
+				</div>
+				<p class="lab-shots-caption">Hero del marketplace con los seis servicios, flujo de reserva en tres pasos y cobertura por zonas.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Tech -->
+	<section class="lab-tech">
+		<div class="container">
+			<div class="eyebrow" style="color: #00b864;">Stack</div>
+			<h2>Construido con tecnología <em>moderna</em></h2>
+			<div class="lab-tech-chips">
+				<span class="tech-chip"><span class="tech-chip-dot"></span>Vue 3</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>Vite SSR</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>NestJS</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>Prisma</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>PostgreSQL</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>Redis</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>React Native</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>Docker</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>Railway</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>Nginx</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>MailerSend</span>
+				<span class="tech-chip"><span class="tech-chip-dot"></span>Supabase Storage</span>
+			</div>
+		</div>
+	</section>
+
+	<!-- Highlights -->
+	<section style="padding: 96px 0; background: #07070d; color: #FFFFFF;">
+		<div class="container">
+			<div class="benefits-grid">
+				<div class="benefits-head">
+					<div class="eyebrow" style="color: #00ff87;">Destacados técnicos</div>
+					<h2 style="color: #FFFFFF;">Decisiones que marcan la <em style="color: #00ff87;">diferencia</em></h2>
+				</div>
+				<div class="benefits-list">
+					<div class="benefit-item" style="background: rgba(0, 255, 135, 0.05); border-color: rgba(0, 255, 135, 0.15);">
+						<div class="check" style="background: rgba(0, 255, 135, 0.22); color: #00ff87;"><i class="ion-checkmark-round"></i></div>
+						<p>Arquitectura multi-tenant con aislamiento estricto por negocio</p>
+					</div>
+					<div class="benefit-item" style="background: rgba(0, 255, 135, 0.05); border-color: rgba(0, 255, 135, 0.15);">
+						<div class="check" style="background: rgba(0, 255, 135, 0.22); color: #00ff87;"><i class="ion-checkmark-round"></i></div>
+						<p>Checkout con Strategy Pattern para 5 pasarelas de pago</p>
+					</div>
+					<div class="benefit-item" style="background: rgba(0, 255, 135, 0.05); border-color: rgba(0, 255, 135, 0.15);">
+						<div class="check" style="background: rgba(0, 255, 135, 0.22); color: #00ff87;"><i class="ion-checkmark-round"></i></div>
+						<p>SSR en la landing para SEO y primer render rápido</p>
+					</div>
+					<div class="benefit-item" style="background: rgba(0, 255, 135, 0.05); border-color: rgba(0, 255, 135, 0.15);">
+						<div class="check" style="background: rgba(0, 255, 135, 0.22); color: #00ff87;"><i class="ion-checkmark-round"></i></div>
+						<p>Credenciales de pasarelas cifradas con AES-256-GCM</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="page-cta is-dark">
+		<div class="container">
+			<i class="ion-ios-bolt-outline" style="font-size: 40px; color: #00ff87; display: block; margin-bottom: 20px;"></i>
+			<h2>¿Listo para <em>empezar</em>?</h2>
+			<p>Conversemos sobre tu caso de uso. Agenda una asesoría gratuita y definimos juntos el camino más corto a producción.</p>
+			<div class="ctas">
+				<a href="#" class="btn btn-lab">Visita BoGy <i class="fa fa-arrow-right" style="font-size: 10px;"></i></a>
+				<a href="#" class="btn btn-ghost-dark">Ver todas las soluciones</a>
+			</div>
+		</div>
+	</section>
+</div>
+
+<!-- Bottom note -->
+<div style="padding: 64px 32px; text-align: center; border-top: 1px solid var(--border-soft); max-width: 1400px; margin: 0 auto;">
+	<div class="eyebrow" style="color: var(--text-muted);">Fin del preview</div>
+	<p style="font-family: var(--font-serif); font-weight: 300; font-size: 15px; color: var(--text-light); line-height: 1.7; max-width: 56ch; margin: 0 auto;">
+		Estas cuatro páginas replican la estructura real del sitio aplicando la paleta refrescada. El contenido textual viene de las fuentes actuales (<span style="font-family: var(--font-code);">src/data/services.js</span>, <span style="font-family: var(--font-code);">src/data/labsProjects.js</span>). Para aplicarlo al código real, seguimos el plan del theme-preview (4 sprints).
+	</p>
+</div>
+
+<script>
+	function applyTheme(theme) {
+		document.documentElement.setAttribute('data-theme', theme);
+		document.getElementById('theme-label').textContent = theme;
+		try { localStorage.setItem('restart-theme-preview', theme); } catch(e) {}
+	}
+	function toggleTheme() {
+		const current = document.documentElement.getAttribute('data-theme') || 'dark';
+		applyTheme(current === 'dark' ? 'light' : 'dark');
+	}
+	(function init() {
+		let saved;
+		try { saved = localStorage.getItem('restart-theme-preview'); } catch(e) {}
+		if (saved) return applyTheme(saved);
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		applyTheme(prefersDark ? 'dark' : 'light');
+	})();
+</script>
+
+</body>
+</html>
