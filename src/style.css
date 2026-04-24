@@ -329,6 +329,17 @@ html[data-theme="dark"] button.bg-primary {
 .btn-text:hover { gap: 12px; }
 
 /* ================================================================
+   LAB PROJECT STATS · dark-mode bg override (deeper than body bg)
+   ================================================================ */
+html[data-theme="dark"] .lab-stats {
+	background: #060A11;
+}
+
+html[data-theme="dark"] .lab-stat {
+	border-right-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ================================================================
    CONTACT FLOATING CARD · theme-aware shadow, no border, minimal radius
    ================================================================ */
 .contact-card {

@@ -26,10 +26,10 @@
 						Nosotros
 					</RouterLink>
 				</li>
-				<li class="relative" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
+				<li class="relative flex items-center" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
 					<RouterLink
 						to="/servicios"
-						class="text-[13px] font-medium transition-colors duration-200 flex items-center gap-1.5 cursor-pointer no-underline"
+						class="text-[13px] font-medium transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer no-underline"
 						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
 						Servicios
@@ -74,7 +74,7 @@
 									</li>
 								</ul>
 								<RouterLink
-									to="/#features"
+									to="/servicios"
 									class="flex items-center justify-between gap-3 mx-3 mt-2 mb-1 py-2 text-xs font-bold uppercase tracking-[0.16em] text-primary hover:text-primary-dark no-underline"
 									@click="servicesOpen = false"
 								>
