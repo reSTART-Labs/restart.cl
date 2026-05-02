@@ -17,10 +17,10 @@
 
 			<!-- Desktop links -->
 			<ul class="hidden lg:flex items-center gap-6 list-none m-0 p-0">
-				<li>
+				<li class="flex items-center">
 					<RouterLink
 						to="/nosotros"
-						class="text-[13px] font-medium no-underline transition-colors duration-200"
+						class="inline-flex items-center text-[13px] font-medium leading-none no-underline transition-colors duration-200"
 						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
 						Nosotros
@@ -29,7 +29,7 @@
 				<li class="relative flex items-center" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
 					<RouterLink
 						to="/servicios"
-						class="text-[13px] font-medium transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer no-underline"
+						class="text-[13px] font-medium leading-none transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer no-underline"
 						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
 						Servicios
@@ -89,7 +89,7 @@
 					<span
 						role="button"
 						tabindex="0"
-						class="text-[13px] font-medium transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer select-none"
+						class="text-[13px] font-medium leading-none transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer select-none"
 						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 						@click="solutionsOpen = !solutionsOpen"
 						@keydown.enter.prevent="solutionsOpen = !solutionsOpen"
@@ -129,19 +129,19 @@
 						</div>
 					</transition>
 				</li>
-				<li>
+				<li class="flex items-center">
 					<RouterLink
 						to="/#startup"
-						class="text-[13px] font-medium no-underline transition-colors duration-200"
+						class="inline-flex items-center text-[13px] font-medium leading-none no-underline transition-colors duration-200"
 						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
 						Startup
 					</RouterLink>
 				</li>
-				<li>
+				<li class="flex items-center">
 					<RouterLink
 						to="/labs"
-						class="text-[13px] font-medium no-underline transition-colors duration-200"
+						class="inline-flex items-center text-[13px] font-medium leading-none no-underline transition-colors duration-200"
 						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
 						Labs
