@@ -56,7 +56,7 @@
 							{{ project.client }}
 						</p>
 						<h3 class="text-lg font-semibold text-text group-hover:text-primary transition-colors duration-200">
-							{{ project.title }} dd
+							{{ project.title }}
 						</h3>
 						<p class="text-sm text-text-light leading-relaxed mt-2">
 							{{ project.description }}

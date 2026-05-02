@@ -79,21 +79,34 @@
 
 		.header-brand {
 			display: flex;
-			align-items: center;
-			gap: 16px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 12px;
 		}
 
 		.header-brand img {
 			height: 36px;
 			width: auto;
+			filter: brightness(0) invert(1);
 		}
 
 		.header-brand .tagline {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
 			font-size: 11px;
-			font-weight: 600;
-			letter-spacing: 0.14em;
+			font-weight: 700;
+			letter-spacing: 0.22em;
 			text-transform: uppercase;
 			color: var(--primary-300);
+		}
+
+		.header-brand .tagline::before {
+			content: "";
+			display: block;
+			width: 20px;
+			height: 1px;
+			background: var(--primary-300);
 		}
 
 		.header-meta {
@@ -131,34 +144,55 @@
 		}
 
 		.quote-title h1 {
-			font-size: clamp(26px, 4vw, 32px);
+			font-size: clamp(30px, 4.5vw, 44px);
 			color: var(--text);
+			max-width: 20ch;
 		}
 
 		.quote-title h1 em {
+			font-family: var(--font-serif);
+			font-style: italic;
+			font-weight: 400;
 			color: var(--primary);
 		}
 
 		.quote-client {
-			font-size: 14px;
+			font-family: var(--font-serif);
+			font-weight: 300;
+			font-size: 15px;
+			line-height: 1.8;
 			color: var(--text-light);
 			padding-bottom: 24px;
 			border-bottom: 1px solid var(--border);
+			margin-top: 18px;
 			margin-bottom: 32px;
 		}
 
 		.quote-client strong {
+			font-family: var(--font-sans);
 			color: var(--text);
-			font-weight: 600;
+			font-weight: 700;
+			letter-spacing: 0.02em;
 		}
 
 		.section-title {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
 			font-size: 11px;
 			font-weight: 700;
-			letter-spacing: 0.16em;
+			letter-spacing: 0.22em;
 			text-transform: uppercase;
 			color: var(--primary);
 			margin-bottom: 20px;
+		}
+
+		.section-title::before {
+			content: "";
+			display: block;
+			width: 20px;
+			height: 1px;
+			background: var(--primary);
 		}
 
 		.service-table {
@@ -198,9 +232,13 @@
 		}
 
 		.service-desc {
+			font-family: var(--font-serif);
+			font-weight: 300;
+			font-style: italic;
 			font-size: 13px;
+			line-height: 1.5;
 			color: var(--text-light);
-			margin-top: 4px;
+			margin-top: 6px;
 		}
 
 		.service-actions {
@@ -278,25 +316,33 @@
 
 		.validity-box {
 			margin-top: 24px;
-			padding: 16px 20px;
-			background: var(--surface-muted);
+			padding: 18px 22px;
+			background: color-mix(in oklab, var(--accent-gold) 8%, var(--surface-muted));
 			border-radius: var(--r-md);
-			border-left: 3px solid var(--primary);
+			border-left: 3px solid var(--accent-gold);
 		}
 
 		.validity-box .title {
 			font-size: 11px;
 			font-weight: 700;
-			letter-spacing: 0.14em;
+			letter-spacing: 0.18em;
 			text-transform: uppercase;
-			color: var(--primary);
-			margin-bottom: 8px;
+			color: var(--accent-gold);
+			margin-bottom: 10px;
 		}
 
 		.validity-box p {
+			font-family: var(--font-serif);
+			font-weight: 300;
 			font-size: 13px;
 			color: var(--text-light);
-			line-height: 1.6;
+			line-height: 1.7;
+		}
+
+		.validity-box p strong {
+			font-family: var(--font-sans);
+			font-weight: 700;
+			color: var(--text);
 		}
 
 		.footer {
@@ -308,15 +354,36 @@
 			align-items: center;
 		}
 
+		.footer-brand {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
 		.footer-brand img {
 			height: 20px;
 			filter: brightness(0) invert(1);
 		}
 
+		.footer-brand .manifesto {
+			font-family: var(--font-serif);
+			font-style: italic;
+			font-weight: 300;
+			font-size: 11px;
+			color: rgba(255, 255, 255, 0.5);
+		}
+
 		.footer-info {
 			text-align: right;
 			font-size: 12px;
-			color: rgba(255,255,255,0.6);
+			color: rgba(255,255,255,0.65);
+			line-height: 1.7;
+		}
+
+		.footer-info .mono {
+			font-family: var(--font-code);
+			font-size: 11px;
+			color: var(--primary-300);
 		}
 
 		.actions {
@@ -494,10 +561,11 @@
 		<footer class="footer">
 			<div class="footer-brand">
 				<img src="/logo@0.5x.png" alt="re/START">
+				<span class="manifesto">Diseño y tecnología para emprendedores.</span>
 			</div>
 			<div class="footer-info">
-				restart.cl · help@restart.cl<br>
-				+56 9 1234 5678
+				<span class="mono">restart.cl</span><br>
+				help@restart.cl · +56 9 1234 5678
 			</div>
 		</footer>
 	</div>

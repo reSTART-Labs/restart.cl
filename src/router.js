@@ -31,6 +31,11 @@ const routes = [
 		component: () => import('./pages/AiSolutionPage.vue'),
 	},
 	{
+		path: '/soluciones/:slug',
+		name: 'solution',
+		component: () => import('./pages/SolutionPage.vue'),
+	},
+	{
 		path: '/labs',
 		name: 'labs',
 		component: () => import('./pages/LabsPage.vue'),
