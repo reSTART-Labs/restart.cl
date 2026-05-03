@@ -97,7 +97,7 @@
 				<div
 					v-for="value in values"
 					:key="value.title"
-					class="bg-white rounded-2xl p-7 border border-border/60"
+					class="bg-surface rounded-2xl p-7 border border-border/60"
 				>
 					<i :class="[value.icon, 'text-primary text-2xl']"></i>
 					<h4 class="text-base font-semibold text-text mt-4 mb-2">{{ value.title }}</h4>
