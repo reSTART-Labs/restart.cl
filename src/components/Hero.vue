@@ -1,5 +1,5 @@
 <template>
-	<section class="hero-bg relative min-h-screen flex items-center overflow-hidden" ref="heroRef">
+	<section id="hero" class="hero-bg relative min-h-screen flex items-center overflow-hidden" ref="heroRef">
 		<div class="hero-overlay absolute inset-0"></div>
 
 		<div
