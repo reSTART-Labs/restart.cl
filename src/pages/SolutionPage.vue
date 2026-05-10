@@ -310,79 +310,13 @@
 						</div>
 
 						<div class="lg:col-span-7">
-							<form @submit.prevent="handleSubmit" class="space-y-5">
-								<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-									<div>
-										<label for="sol-name" class="contact-label">Nombre</label>
-										<input
-											id="sol-name"
-											v-model="form.name"
-											type="text"
-											required
-											placeholder="Tu nombre"
-											class="contact-input"
-										>
-									</div>
-									<div>
-										<label for="sol-company" class="contact-label">Empresa</label>
-										<input
-											id="sol-company"
-											v-model="form.company"
-											type="text"
-											placeholder="Tu empresa"
-											class="contact-input"
-										>
-									</div>
-								</div>
-								<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-									<div>
-										<label for="sol-email" class="contact-label">Email</label>
-										<input
-											id="sol-email"
-											v-model="form.email"
-											type="email"
-											required
-											placeholder="correo@empresa.cl"
-											class="contact-input"
-										>
-									</div>
-									<div>
-										<label for="sol-phone" class="contact-label">Teléfono</label>
-										<input
-											id="sol-phone"
-											v-model="form.phone"
-											type="tel"
-											placeholder="+56 9 ..."
-											class="contact-input"
-										>
-									</div>
-								</div>
-								<div>
-									<label for="sol-message" class="contact-label">Cuéntanos sobre tu operación</label>
-									<textarea
-										id="sol-message"
-										v-model="form.message"
-										required
-										rows="5"
-										placeholder="Procesos a digitalizar, cantidad de usuarios, sistemas existentes..."
-										class="contact-input resize-none"
-									></textarea>
-								</div>
-								<button
-									type="submit"
-									class="btn btn-primary w-full sm:w-auto justify-center"
-									:disabled="submitted"
-								>
-									<template v-if="!submitted">
-										Enviar mensaje
-										<i class="fa fa-paper-plane text-xs"></i>
-									</template>
-									<template v-else>
-										<i class="fa fa-check"></i>
-										Mensaje enviado
-									</template>
-								</button>
-							</form>
+							<ContactForm
+								:source="`solucion-${solution.slug}`"
+								:fields="['name', 'company', 'email', 'phone', 'message']"
+								message-label="Cuéntanos sobre tu operación"
+								message-placeholder="Procesos a digitalizar, cantidad de usuarios, sistemas existentes..."
+								:message-rows="5"
+							/>
 						</div>
 					</div>
 				</div>
@@ -405,29 +339,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { solutions } from '@/data/solutions.js'
+import ContactForm from '@/components/ContactForm.vue'
 
 const route = useRoute()
 const solution = computed(() => solutions.find(s => s.slug === route.params.slug))
-
-const submitted = ref(false)
-const form = ref({
-	name: '',
-	company: '',
-	email: '',
-	phone: '',
-	message: '',
-})
-
-function handleSubmit() {
-	submitted.value = true
-	setTimeout(() => {
-		submitted.value = false
-		form.value = { name: '', company: '', email: '', phone: '', message: '' }
-	}, 3000)
-}
 </script>
 
 <style scoped>

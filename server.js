@@ -3,6 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import express from 'express'
+import { registerApi } from './src/api/index.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const isProduction = process.env.NODE_ENV === 'production'
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3000
 
 async function start() {
 	const app = express()
+	app.set('trust proxy', 1)
 
 	let vite
 	if (!isProduction) {
@@ -24,6 +26,8 @@ async function start() {
 	}
 
 	app.get(/^\/\.well-known\//, (_req, res) => res.status(204).end())
+
+	registerApi(app)
 
 	app.use('*all', async (req, res) => {
 		const url = req.originalUrl

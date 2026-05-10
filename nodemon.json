@@ -1,0 +1,6 @@
+{
+	"watch": ["server.js", "src/api", ".env"],
+	"ext": "js,mjs,json,env",
+	"ignore": ["node_modules", "dist", "dist-ssr", "src/components", "src/pages", "src/composables", "src/data", "src/main.client.js", "src/main.server.js", "src/App.vue", "src/style.css"],
+	"delay": 200
+}
