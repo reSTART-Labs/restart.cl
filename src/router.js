@@ -21,6 +21,11 @@ const routes = [
 		component: () => import('./pages/ServicesPage.vue'),
 	},
 	{
+		path: '/startup',
+		name: 'startup',
+		component: () => import('./pages/StartupPage.vue'),
+	},
+	{
 		path: '/servicios/:slug',
 		name: 'service',
 		component: () => import('./pages/ServicePage.vue'),

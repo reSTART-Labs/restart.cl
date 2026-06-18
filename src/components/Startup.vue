@@ -10,9 +10,15 @@
 					<p class="startup-lede">
 						Podemos ayudarte a crear tu Startup de principio a fin, dando forma a tu idea en aplicaciones web y m&oacute;viles listas para salir al mercado. Enf&oacute;cate en que crezca, nosotros en que funcione.
 					</p>
-					<RouterLink to="/#contact" class="startup-cta">
-						Hablemos
-					</RouterLink>
+					<div class="startup-actions">
+						<RouterLink to="/startup" class="startup-cta">
+							Desarrolla tu MVP en 3 semanas
+						</RouterLink>
+						<RouterLink to="/#contact" class="startup-cta-text">
+							Hablemos
+							<i class="fa fa-arrow-right text-[11px]"></i>
+						</RouterLink>
+					</div>
 				</div>
 
 				<!-- Right column -->
@@ -65,10 +71,17 @@ html[data-theme="dark"] .startup-section {
 	max-width: 56ch;
 }
 
+.startup-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 24px;
+	margin-top: 40px;
+}
+
 .startup-cta {
 	display: inline-flex;
 	align-items: center;
-	margin-top: 40px;
 	padding: 16px 44px;
 	border-radius: 999px;
 	border: 1.5px solid rgba(255, 255, 255, 0.85);
@@ -84,6 +97,22 @@ html[data-theme="dark"] .startup-section {
 	background: #FFFFFF;
 	color: var(--color-dark-graphite);
 	transform: translateY(-1px);
+}
+
+.startup-cta-text {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: rgba(255, 255, 255, 0.85);
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.startup-cta-text:hover {
+	color: #FFFFFF;
+	gap: 12px;
 }
 
 .startup-coinvest-title {

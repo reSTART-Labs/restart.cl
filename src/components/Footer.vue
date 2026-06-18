@@ -8,7 +8,7 @@
 						re/START
 					</RouterLink>
 					<p class="text-sm text-footer-text leading-relaxed mt-4">
-						Agencia digital especializada en dise&ntilde;o de experiencias y desarrollo de productos digitales.
+						Impulsamos el crecimiento de tu empresa con soluciones tecnológicas a medida.
 					</p>
 					<div class="flex items-center gap-4 mt-6">
 						<a

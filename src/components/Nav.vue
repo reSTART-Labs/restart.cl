@@ -131,7 +131,7 @@
 				</li>
 				<li class="flex items-center">
 					<RouterLink
-						to="/#startup"
+						to="/startup"
 						class="inline-flex items-center text-[13px] font-medium leading-none no-underline transition-colors duration-200"
 						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
 					>
@@ -317,7 +317,7 @@
 						</li>
 						<li class="border-b border-white/8">
 							<RouterLink
-								to="/#startup"
+								to="/startup"
 								class="flex items-center justify-between py-5 text-xl font-light text-white/90 hover:text-primary no-underline transition-colors"
 								@click="mobileOpen = false"
 							>
