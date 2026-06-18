@@ -41,7 +41,12 @@ function originAllowed(req) {
 	// No browser context (curl, scripts, server-to-server) → let it through;
 	// rate limit + validation + honeypot still apply.
 	if (!origin) return true
-	return origin.startsWith(allowed)
+	// ALLOWED_ORIGIN acepta una lista separada por comas (p. ej. apex + www).
+	return allowed
+		.split(',')
+		.map((o) => o.trim())
+		.filter(Boolean)
+		.some((o) => origin.startsWith(o))
 }
 
 async function forwardToN8n(payload) {

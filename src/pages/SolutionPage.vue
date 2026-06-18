@@ -258,7 +258,7 @@
 		<!-- ── FINAL CTA ── -->
 		<section class="page-cta is-dark">
 			<div class="container mx-auto px-6 md:px-12 text-center">
-				<h2 class="sp-section-title-inverse mx-auto" style="max-width: 22ch;" v-html="solution.finalCta.title"></h2>
+				<h2 class="sp-section-title-inverse page-cta-title" v-html="solution.finalCta.title"></h2>
 				<p class="page-cta-lede">{{ solution.finalCta.text }}</p>
 				<div class="page-cta-ctas">
 					<a :href="solution.finalCta.primary.href" class="btn btn-primary">
@@ -1011,6 +1011,15 @@ html[data-theme="dark"] .diff-section {
 .page-cta.is-dark {
 	background: var(--color-primary-800);
 	color: #FFFFFF;
+}
+
+/* Centrado del título del CTA: declarado después de .sp-section-title-inverse
+   (que aplica `margin: 0`) para ganar el desempate de especificidad y que el
+   bloque se centre con margin auto en lugar de quedar pegado a la izquierda. */
+.page-cta-title {
+	max-width: 22ch;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .page-cta-lede {
