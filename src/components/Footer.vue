@@ -106,7 +106,7 @@
 			<!-- Bottom -->
 			<div class="flex flex-col md:flex-row items-center justify-between pt-8 gap-4">
 				<p class="text-xs text-white/40">
-					&copy; {{ year }} re/START. Todos los derechos reservados.
+					{{ year }} re/START by <a href="https://minicatalogo.com" target="_blank" class="text-white/40 hover:text-primary no-underline transition-colors">Minicatalogo.com</a>. Todos los derechos reservados.
 				</p>
 				<p class="text-xs text-white/40">
 					help@restart.cl
