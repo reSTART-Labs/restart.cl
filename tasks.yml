@@ -1,0 +1,9 @@
+# Tareas del proyecto — las lee y edita el Hub reSTART (hub.restart.localhost:8500).
+# Convención: menciona el ID en tus commits (ej. "RES-1: agrega endpoint X")
+# para que el hub detecte la integración en el código.
+tasks:
+- id: RES-1
+  title: Revisar y commitear la homologación Boiler
+  status: todo
+  created: '2026-07-04'
+  notes: run.sh/backup.sh, puertos del bloque, dominio *.localhost, datos en ./.data/
