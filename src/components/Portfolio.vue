@@ -141,4 +141,88 @@ const filtered = computed(() => {
 	transform: translateY(-4px);
 	border-color: var(--color-border-strong);
 }
+
+@media (max-width: 1919px) {
+	.portfolio-title {
+		font-size: 43px;
+		line-height: 1.12;
+	}
+
+	.portfolio-lede {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+}
+
+@media (max-width: 1439px) {
+	.portfolio-title {
+		font-size: 40px;
+		line-height: 1.14;
+	}
+
+	.portfolio-lede {
+		font-size: 16px;
+		line-height: 1.60;
+	}
+}
+
+@media (max-width: 1199px) {
+	.portfolio-title {
+		font-size: 36px;
+		line-height: 1.15;
+	}
+
+	.portfolio-lede {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+}
+
+@media (max-width: 1079px) {
+	.portfolio-title {
+		font-size: 33px;
+		line-height: 1.17;
+	}
+
+	.portfolio-lede {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+}
+
+@media (max-width: 991px) {
+	.portfolio-title {
+		font-size: 29px;
+		line-height: 1.19;
+	}
+
+	.portfolio-lede {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+}
+
+@media (max-width: 768px) {
+	.portfolio-title {
+		font-size: 27px;
+		line-height: 1.21;
+	}
+
+	.portfolio-lede {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+}
+
+@media (max-width: 575px) {
+	.portfolio-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+
+	.portfolio-lede {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+}
 </style>

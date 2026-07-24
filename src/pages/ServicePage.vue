@@ -796,4 +796,138 @@ const processSteps = [
 	transform: translateY(-4px);
 	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
 }
+
+/* ── RESPONSIVE TYPE SCALE ── */
+@media (max-width: 1919px) {
+	.hero-title { font-size: 66px; line-height: 1.06; }
+	.hero-lede { font-size: 17px; line-height: 1.62; }
+	.items-strip-item i { font-size: 17px; line-height: 1.62; }
+	.sp-section-title { font-size: 39px; line-height: 1.12; }
+	.sp-lede { font-size: 15px; line-height: 1.62; }
+	.sp-section-title-inverse { font-size: 38px; line-height: 1.12; }
+	.sp-lede-inverse { font-size: 16px; line-height: 1.62; }
+	.sp-feature-num { font-size: 16px; line-height: 1.62; }
+	.sp-feature-title { font-size: 17px; line-height: 1.62; }
+	.sp-feature-desc { font-size: 14px; line-height: 1.62; }
+	.process-step-num { font-size: 14px; line-height: 1.62; }
+	.process-step-title { font-size: 15px; line-height: 1.62; }
+	.benefit-item p { font-size: 14px; line-height: 1.62; }
+	.related-card-icon { font-size: 17px; line-height: 1.62; }
+	.related-card-title { font-size: 16px; line-height: 1.62; }
+	.page-cta-lede { font-size: 16px; line-height: 1.62; }
+}
+
+@media (max-width: 1439px) {
+	.hero-title { font-size: 59px; line-height: 1.07; }
+	.hero-lede { font-size: 17px; line-height: 1.60; }
+	.items-strip-item i { font-size: 17px; line-height: 1.60; }
+	.sp-section-title { font-size: 36px; line-height: 1.14; }
+	.sp-lede { font-size: 14px; line-height: 1.61; }
+	.sp-section-title-inverse { font-size: 34px; line-height: 1.14; }
+	.sp-lede-inverse { font-size: 15px; line-height: 1.61; }
+	.sp-feature-num { font-size: 15px; line-height: 1.61; }
+	.sp-feature-title { font-size: 17px; line-height: 1.60; }
+	.sp-feature-desc { font-size: 14px; line-height: 1.61; }
+	.process-step-num { font-size: 14px; line-height: 1.61; }
+	.process-step-title { font-size: 14px; line-height: 1.61; }
+	.benefit-item p { font-size: 14px; line-height: 1.61; }
+	.related-card-icon { font-size: 17px; line-height: 1.60; }
+	.related-card-title { font-size: 15px; line-height: 1.61; }
+	.page-cta-lede { font-size: 15px; line-height: 1.61; }
+}
+
+@media (max-width: 1199px) {
+	.hero-title { font-size: 52px; line-height: 1.08; }
+	.hero-lede { font-size: 16px; line-height: 1.58; }
+	.items-strip-item i { font-size: 16px; line-height: 1.58; }
+	.sp-section-title { font-size: 33px; line-height: 1.15; }
+	.sp-lede { font-size: 14px; line-height: 1.60; }
+	.sp-section-title-inverse { font-size: 31px; line-height: 1.15; }
+	.sp-lede-inverse { font-size: 15px; line-height: 1.60; }
+	.sp-feature-num { font-size: 15px; line-height: 1.60; }
+	.sp-feature-title { font-size: 16px; line-height: 1.58; }
+	.sp-feature-desc { font-size: 14px; line-height: 1.60; }
+	.process-step-num { font-size: 14px; line-height: 1.60; }
+	.process-step-title { font-size: 14px; line-height: 1.60; }
+	.benefit-item p { font-size: 14px; line-height: 1.60; }
+	.related-card-icon { font-size: 16px; line-height: 1.58; }
+	.related-card-title { font-size: 15px; line-height: 1.60; }
+	.page-cta-lede { font-size: 15px; line-height: 1.60; }
+}
+
+@media (max-width: 1079px) {
+	.hero-title { font-size: 46px; line-height: 1.10; }
+	.hero-lede { font-size: 15px; line-height: 1.56; }
+	.items-strip-item i { font-size: 15px; line-height: 1.56; }
+	.sp-section-title { font-size: 30px; line-height: 1.17; }
+	.sp-lede { font-size: 14px; line-height: 1.58; }
+	.sp-section-title-inverse { font-size: 28px; line-height: 1.17; }
+	.sp-lede-inverse { font-size: 15px; line-height: 1.58; }
+	.sp-feature-num { font-size: 15px; line-height: 1.58; }
+	.sp-feature-title { font-size: 15px; line-height: 1.56; }
+	.sp-feature-desc { font-size: 14px; line-height: 1.58; }
+	.process-step-num { font-size: 14px; line-height: 1.58; }
+	.process-step-title { font-size: 14px; line-height: 1.58; }
+	.benefit-item p { font-size: 14px; line-height: 1.58; }
+	.related-card-icon { font-size: 15px; line-height: 1.56; }
+	.related-card-title { font-size: 15px; line-height: 1.58; }
+	.page-cta-lede { font-size: 15px; line-height: 1.58; }
+}
+
+@media (max-width: 991px) {
+	.hero-title { font-size: 41px; line-height: 1.12; }
+	.hero-lede { font-size: 15px; line-height: 1.54; }
+	.items-strip-item i { font-size: 15px; line-height: 1.54; }
+	.sp-section-title { font-size: 27px; line-height: 1.19; }
+	.sp-lede { font-size: 14px; line-height: 1.57; }
+	.sp-section-title-inverse { font-size: 26px; line-height: 1.19; }
+	.sp-lede-inverse { font-size: 15px; line-height: 1.57; }
+	.sp-feature-num { font-size: 15px; line-height: 1.57; }
+	.sp-feature-title { font-size: 15px; line-height: 1.54; }
+	.sp-feature-desc { font-size: 14px; line-height: 1.57; }
+	.process-step-num { font-size: 14px; line-height: 1.57; }
+	.process-step-title { font-size: 14px; line-height: 1.57; }
+	.benefit-item p { font-size: 14px; line-height: 1.57; }
+	.related-card-icon { font-size: 15px; line-height: 1.54; }
+	.related-card-title { font-size: 15px; line-height: 1.57; }
+	.page-cta-lede { font-size: 15px; line-height: 1.57; }
+}
+
+@media (max-width: 768px) {
+	.hero-title { font-size: 36px; line-height: 1.14; }
+	.hero-lede { font-size: 15px; line-height: 1.52; }
+	.items-strip-item i { font-size: 15px; line-height: 1.52; }
+	.sp-section-title { font-size: 26px; line-height: 1.21; }
+	.sp-lede { font-size: 14px; line-height: 1.55; }
+	.sp-section-title-inverse { font-size: 26px; line-height: 1.21; }
+	.sp-lede-inverse { font-size: 14px; line-height: 1.55; }
+	.sp-feature-num { font-size: 14px; line-height: 1.55; }
+	.sp-feature-title { font-size: 15px; line-height: 1.52; }
+	.sp-feature-desc { font-size: 14px; line-height: 1.55; }
+	.process-step-num { font-size: 14px; line-height: 1.55; }
+	.process-step-title { font-size: 14px; line-height: 1.55; }
+	.benefit-item p { font-size: 14px; line-height: 1.55; }
+	.related-card-icon { font-size: 15px; line-height: 1.52; }
+	.related-card-title { font-size: 14px; line-height: 1.55; }
+	.page-cta-lede { font-size: 14px; line-height: 1.55; }
+}
+
+@media (max-width: 575px) {
+	.hero-title { font-size: 32px; line-height: 1.16; }
+	.hero-lede { font-size: 15px; line-height: 1.50; }
+	.items-strip-item i { font-size: 15px; line-height: 1.50; }
+	.sp-section-title { font-size: 26px; line-height: 1.22; }
+	.sp-lede { font-size: 14px; line-height: 1.55; }
+	.sp-section-title-inverse { font-size: 26px; line-height: 1.22; }
+	.sp-lede-inverse { font-size: 14px; line-height: 1.55; }
+	.sp-feature-num { font-size: 14px; line-height: 1.55; }
+	.sp-feature-title { font-size: 15px; line-height: 1.50; }
+	.sp-feature-desc { font-size: 14px; line-height: 1.55; }
+	.process-step-num { font-size: 14px; line-height: 1.55; }
+	.process-step-title { font-size: 14px; line-height: 1.55; }
+	.benefit-item p { font-size: 14px; line-height: 1.55; }
+	.related-card-icon { font-size: 15px; line-height: 1.50; }
+	.related-card-title { font-size: 14px; line-height: 1.55; }
+	.page-cta-lede { font-size: 14px; line-height: 1.55; }
+}
 </style>

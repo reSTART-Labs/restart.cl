@@ -1061,4 +1061,504 @@ function relatedOverlayStyle(related) {
 		grid-template-columns: 1fr;
 	}
 }
+
+/* ========================================================================
+   RESPONSIVE TYPE SCALE
+   ======================================================================== */
+@media (max-width: 1919px) {
+	.lab-hero-title {
+		font-size: 63px;
+		line-height: 1.06;
+	}
+	.lab-hero-tagline {
+		font-size: 21px;
+		line-height: 1.26;
+	}
+	.lab-hero-desc {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+	.lab-stat-value {
+		font-size: 38px;
+		line-height: 1.12;
+	}
+	.lab-ps-col h3 {
+		font-size: 14px;
+		line-height: 1.62;
+	}
+	.lab-ps-col p {
+		font-size: 17px;
+		line-height: 1.62;
+	}
+	.lab-section-title {
+		font-size: 39px;
+		line-height: 1.12;
+	}
+	.lab-section-title-inverse {
+		font-size: 39px;
+		line-height: 1.12;
+	}
+	.lf-icon {
+		font-size: 17px;
+		line-height: 1.62;
+	}
+	.lf-card h4 {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+	.lab-shots-caption {
+		font-size: 14px;
+		line-height: 1.62;
+	}
+	.lab-tech-title {
+		font-size: 30px;
+		line-height: 1.26;
+	}
+	.lab-highlight-item p {
+		font-size: 14px;
+		line-height: 1.62;
+	}
+	.lab-related-body h3 {
+		font-size: 17px;
+		line-height: 1.62;
+	}
+	.lab-cta-icon {
+		font-size: 38px;
+		line-height: 1.12;
+	}
+	.cta-title {
+		font-size: 39px;
+		line-height: 1.12;
+	}
+	.cta-lede {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+}
+
+@media (max-width: 1439px) {
+	.lab-hero-title {
+		font-size: 56px;
+		line-height: 1.07;
+	}
+	.lab-hero-tagline {
+		font-size: 20px;
+		line-height: 1.28;
+	}
+	.lab-hero-desc {
+		font-size: 15px;
+		line-height: 1.61;
+	}
+	.lab-stat-value {
+		font-size: 34px;
+		line-height: 1.14;
+	}
+	.lab-ps-col h3 {
+		font-size: 14px;
+		line-height: 1.61;
+	}
+	.lab-ps-col p {
+		font-size: 17px;
+		line-height: 1.60;
+	}
+	.lab-section-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+	.lab-section-title-inverse {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+	.lf-icon {
+		font-size: 17px;
+		line-height: 1.60;
+	}
+	.lf-card h4 {
+		font-size: 15px;
+		line-height: 1.61;
+	}
+	.lab-shots-caption {
+		font-size: 14px;
+		line-height: 1.61;
+	}
+	.lab-tech-title {
+		font-size: 28px;
+		line-height: 1.28;
+	}
+	.lab-highlight-item p {
+		font-size: 14px;
+		line-height: 1.61;
+	}
+	.lab-related-body h3 {
+		font-size: 17px;
+		line-height: 1.60;
+	}
+	.lab-cta-icon {
+		font-size: 34px;
+		line-height: 1.14;
+	}
+	.cta-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.61;
+	}
+}
+
+@media (max-width: 1199px) {
+	.lab-hero-title {
+		font-size: 49px;
+		line-height: 1.08;
+	}
+	.lab-hero-tagline {
+		font-size: 18px;
+		line-height: 1.30;
+	}
+	.lab-hero-desc {
+		font-size: 15px;
+		line-height: 1.60;
+	}
+	.lab-stat-value {
+		font-size: 31px;
+		line-height: 1.15;
+	}
+	.lab-ps-col h3 {
+		font-size: 14px;
+		line-height: 1.60;
+	}
+	.lab-ps-col p {
+		font-size: 16px;
+		line-height: 1.58;
+	}
+	.lab-section-title {
+		font-size: 33px;
+		line-height: 1.15;
+	}
+	.lab-section-title-inverse {
+		font-size: 33px;
+		line-height: 1.15;
+	}
+	.lf-icon {
+		font-size: 16px;
+		line-height: 1.58;
+	}
+	.lf-card h4 {
+		font-size: 15px;
+		line-height: 1.60;
+	}
+	.lab-shots-caption {
+		font-size: 14px;
+		line-height: 1.60;
+	}
+	.lab-tech-title {
+		font-size: 27px;
+		line-height: 1.30;
+	}
+	.lab-highlight-item p {
+		font-size: 14px;
+		line-height: 1.60;
+	}
+	.lab-related-body h3 {
+		font-size: 16px;
+		line-height: 1.58;
+	}
+	.lab-cta-icon {
+		font-size: 31px;
+		line-height: 1.15;
+	}
+	.cta-title {
+		font-size: 33px;
+		line-height: 1.15;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.60;
+	}
+}
+
+@media (max-width: 1079px) {
+	.lab-hero-title {
+		font-size: 44px;
+		line-height: 1.10;
+	}
+	.lab-hero-tagline {
+		font-size: 18px;
+		line-height: 1.32;
+	}
+	.lab-hero-desc {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+	.lab-stat-value {
+		font-size: 28px;
+		line-height: 1.17;
+	}
+	.lab-ps-col h3 {
+		font-size: 14px;
+		line-height: 1.58;
+	}
+	.lab-ps-col p {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+	.lab-section-title {
+		font-size: 30px;
+		line-height: 1.17;
+	}
+	.lab-section-title-inverse {
+		font-size: 30px;
+		line-height: 1.17;
+	}
+	.lf-icon {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+	.lf-card h4 {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+	.lab-shots-caption {
+		font-size: 14px;
+		line-height: 1.58;
+	}
+	.lab-tech-title {
+		font-size: 25px;
+		line-height: 1.32;
+	}
+	.lab-highlight-item p {
+		font-size: 14px;
+		line-height: 1.58;
+	}
+	.lab-related-body h3 {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+	.lab-cta-icon {
+		font-size: 28px;
+		line-height: 1.17;
+	}
+	.cta-title {
+		font-size: 30px;
+		line-height: 1.17;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+}
+
+@media (max-width: 991px) {
+	.lab-hero-title {
+		font-size: 39px;
+		line-height: 1.12;
+	}
+	.lab-hero-tagline {
+		font-size: 18px;
+		line-height: 1.33;
+	}
+	.lab-hero-desc {
+		font-size: 15px;
+		line-height: 1.57;
+	}
+	.lab-stat-value {
+		font-size: 26px;
+		line-height: 1.19;
+	}
+	.lab-ps-col h3 {
+		font-size: 14px;
+		line-height: 1.57;
+	}
+	.lab-ps-col p {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+	.lab-section-title {
+		font-size: 27px;
+		line-height: 1.19;
+	}
+	.lab-section-title-inverse {
+		font-size: 27px;
+		line-height: 1.19;
+	}
+	.lf-icon {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+	.lf-card h4 {
+		font-size: 15px;
+		line-height: 1.57;
+	}
+	.lab-shots-caption {
+		font-size: 14px;
+		line-height: 1.57;
+	}
+	.lab-tech-title {
+		font-size: 23px;
+		line-height: 1.33;
+	}
+	.lab-highlight-item p {
+		font-size: 14px;
+		line-height: 1.57;
+	}
+	.lab-related-body h3 {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+	.lab-cta-icon {
+		font-size: 26px;
+		line-height: 1.19;
+	}
+	.cta-title {
+		font-size: 27px;
+		line-height: 1.19;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.57;
+	}
+}
+
+@media (max-width: 768px) {
+	.lab-hero-title {
+		font-size: 34px;
+		line-height: 1.14;
+	}
+	.lab-hero-tagline {
+		font-size: 18px;
+		line-height: 1.34;
+	}
+	.lab-hero-desc {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-stat-value {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+	.lab-ps-col h3 {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-ps-col p {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+	.lab-section-title {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+	.lab-section-title-inverse {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+	.lf-icon {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+	.lf-card h4 {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-shots-caption {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-tech-title {
+		font-size: 21px;
+		line-height: 1.34;
+	}
+	.lab-highlight-item p {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-related-body h3 {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+	.lab-cta-icon {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+	.cta-title {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+	.cta-lede {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
+
+@media (max-width: 575px) {
+	.lab-hero-title {
+		font-size: 30px;
+		line-height: 1.16;
+	}
+	.lab-hero-tagline {
+		font-size: 18px;
+		line-height: 1.35;
+	}
+	.lab-hero-desc {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-stat-value {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.lab-ps-col h3 {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-ps-col p {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+	.lab-section-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.lab-section-title-inverse {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.lf-icon {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+	.lf-card h4 {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-shots-caption {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-tech-title {
+		font-size: 20px;
+		line-height: 1.35;
+	}
+	.lab-highlight-item p {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.lab-related-body h3 {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+	.lab-cta-icon {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.cta-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.cta-lede {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
 </style>

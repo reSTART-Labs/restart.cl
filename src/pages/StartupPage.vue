@@ -1015,4 +1015,194 @@ html[data-theme="light"] .su-faq-bg {
 		padding: 48px;
 	}
 }
+
+/* ── Responsive typographic scale ── */
+@media (max-width: 1919px) {
+	.su-hero-title { font-size: 64px; line-height: 1.06; }
+	.su-stat strong { font-size: 41px; line-height: 1.12; }
+	.su-section-title { font-size: 45px; line-height: 1.12; }
+	.su-step-num { font-size: 49px; line-height: 1.12; }
+	.su-faq-title { font-size: 45px; line-height: 1.12; }
+	.su-step-title { font-size: 25px; line-height: 1.26; }
+	.su-build-title { font-size: 21px; line-height: 1.26; }
+	.su-plan-name { font-size: 19px; line-height: 1.26; }
+	.su-plan-price-now { font-size: 30px; line-height: 1.26; }
+	.su-audience-icon { font-size: 19px; line-height: 1.26; }
+	.su-hero-lede { font-size: 17px; line-height: 1.62; }
+	.su-section-lede { font-size: 16px; line-height: 1.62; }
+	.su-build-foot { font-size: 16px; line-height: 1.62; }
+	.su-plan-price-old { font-size: 17px; line-height: 1.62; }
+	.su-audience-title { font-size: 18px; line-height: 1.62; }
+	.su-step-desc { font-size: 16px; line-height: 1.62; }
+	.su-step-result { font-size: 15px; line-height: 1.62; }
+	.su-build-desc { font-size: 15px; line-height: 1.62; }
+	.su-build-list li { font-size: 15px; line-height: 1.62; }
+	.su-build-arrow { font-size: 14px; line-height: 1.62; }
+	.su-plan-desc { font-size: 14px; line-height: 1.62; }
+	.su-plan-features li { font-size: 14px; line-height: 1.62; }
+	.su-pricing-foot p { font-size: 16px; line-height: 1.62; }
+	.su-audience-desc { font-size: 15px; line-height: 1.62; }
+}
+
+@media (max-width: 1439px) {
+	.su-hero-title { font-size: 57px; line-height: 1.07; }
+	.su-stat strong { font-size: 38px; line-height: 1.14; }
+	.su-section-title { font-size: 41px; line-height: 1.14; }
+	.su-step-num { font-size: 45px; line-height: 1.14; }
+	.su-faq-title { font-size: 41px; line-height: 1.14; }
+	.su-step-title { font-size: 23px; line-height: 1.28; }
+	.su-build-title { font-size: 20px; line-height: 1.28; }
+	.su-plan-name { font-size: 18px; line-height: 1.28; }
+	.su-plan-price-now { font-size: 28px; line-height: 1.28; }
+	.su-audience-icon { font-size: 18px; line-height: 1.28; }
+	.su-hero-lede { font-size: 17px; line-height: 1.60; }
+	.su-section-lede { font-size: 16px; line-height: 1.60; }
+	.su-build-foot { font-size: 16px; line-height: 1.60; }
+	.su-plan-price-old { font-size: 17px; line-height: 1.60; }
+	.su-audience-title { font-size: 18px; line-height: 1.60; }
+	.su-step-desc { font-size: 15px; line-height: 1.61; }
+	.su-step-result { font-size: 14px; line-height: 1.61; }
+	.su-build-desc { font-size: 14px; line-height: 1.61; }
+	.su-build-list li { font-size: 14px; line-height: 1.61; }
+	.su-build-arrow { font-size: 14px; line-height: 1.61; }
+	.su-plan-desc { font-size: 14px; line-height: 1.61; }
+	.su-plan-features li { font-size: 14px; line-height: 1.61; }
+	.su-pricing-foot p { font-size: 15px; line-height: 1.61; }
+	.su-audience-desc { font-size: 14px; line-height: 1.61; }
+}
+
+@media (max-width: 1199px) {
+	.su-hero-title { font-size: 50px; line-height: 1.08; }
+	.su-stat strong { font-size: 34px; line-height: 1.15; }
+	.su-section-title { font-size: 37px; line-height: 1.15; }
+	.su-step-num { font-size: 41px; line-height: 1.15; }
+	.su-faq-title { font-size: 37px; line-height: 1.15; }
+	.su-step-title { font-size: 22px; line-height: 1.30; }
+	.su-build-title { font-size: 18px; line-height: 1.30; }
+	.su-plan-name { font-size: 18px; line-height: 1.30; }
+	.su-plan-price-now { font-size: 27px; line-height: 1.30; }
+	.su-audience-icon { font-size: 18px; line-height: 1.30; }
+	.su-hero-lede { font-size: 16px; line-height: 1.58; }
+	.su-section-lede { font-size: 15px; line-height: 1.58; }
+	.su-build-foot { font-size: 15px; line-height: 1.58; }
+	.su-plan-price-old { font-size: 16px; line-height: 1.58; }
+	.su-audience-title { font-size: 17px; line-height: 1.58; }
+	.su-step-desc { font-size: 15px; line-height: 1.60; }
+	.su-step-result { font-size: 14px; line-height: 1.60; }
+	.su-build-desc { font-size: 14px; line-height: 1.60; }
+	.su-build-list li { font-size: 14px; line-height: 1.60; }
+	.su-build-arrow { font-size: 14px; line-height: 1.60; }
+	.su-plan-desc { font-size: 14px; line-height: 1.60; }
+	.su-plan-features li { font-size: 14px; line-height: 1.60; }
+	.su-pricing-foot p { font-size: 15px; line-height: 1.60; }
+	.su-audience-desc { font-size: 14px; line-height: 1.60; }
+}
+
+@media (max-width: 1079px) {
+	.su-hero-title { font-size: 45px; line-height: 1.10; }
+	.su-stat strong { font-size: 31px; line-height: 1.17; }
+	.su-section-title { font-size: 34px; line-height: 1.17; }
+	.su-step-num { font-size: 37px; line-height: 1.17; }
+	.su-faq-title { font-size: 34px; line-height: 1.17; }
+	.su-step-title { font-size: 20px; line-height: 1.32; }
+	.su-build-title { font-size: 18px; line-height: 1.32; }
+	.su-plan-name { font-size: 18px; line-height: 1.32; }
+	.su-plan-price-now { font-size: 25px; line-height: 1.32; }
+	.su-audience-icon { font-size: 18px; line-height: 1.32; }
+	.su-hero-lede { font-size: 15px; line-height: 1.56; }
+	.su-section-lede { font-size: 15px; line-height: 1.56; }
+	.su-build-foot { font-size: 15px; line-height: 1.56; }
+	.su-plan-price-old { font-size: 15px; line-height: 1.56; }
+	.su-audience-title { font-size: 16px; line-height: 1.56; }
+	.su-step-desc { font-size: 15px; line-height: 1.58; }
+	.su-step-result { font-size: 14px; line-height: 1.58; }
+	.su-build-desc { font-size: 14px; line-height: 1.58; }
+	.su-build-list li { font-size: 14px; line-height: 1.58; }
+	.su-build-arrow { font-size: 14px; line-height: 1.58; }
+	.su-plan-desc { font-size: 14px; line-height: 1.58; }
+	.su-plan-features li { font-size: 14px; line-height: 1.58; }
+	.su-pricing-foot p { font-size: 15px; line-height: 1.58; }
+	.su-audience-desc { font-size: 14px; line-height: 1.58; }
+}
+
+@media (max-width: 991px) {
+	.su-hero-title { font-size: 40px; line-height: 1.12; }
+	.su-stat strong { font-size: 28px; line-height: 1.19; }
+	.su-section-title { font-size: 31px; line-height: 1.19; }
+	.su-step-num { font-size: 33px; line-height: 1.19; }
+	.su-faq-title { font-size: 31px; line-height: 1.19; }
+	.su-step-title { font-size: 19px; line-height: 1.33; }
+	.su-build-title { font-size: 18px; line-height: 1.33; }
+	.su-plan-name { font-size: 18px; line-height: 1.33; }
+	.su-plan-price-now { font-size: 23px; line-height: 1.33; }
+	.su-audience-icon { font-size: 18px; line-height: 1.33; }
+	.su-hero-lede { font-size: 15px; line-height: 1.54; }
+	.su-section-lede { font-size: 15px; line-height: 1.54; }
+	.su-build-foot { font-size: 15px; line-height: 1.54; }
+	.su-plan-price-old { font-size: 15px; line-height: 1.54; }
+	.su-audience-title { font-size: 16px; line-height: 1.54; }
+	.su-step-desc { font-size: 15px; line-height: 1.57; }
+	.su-step-result { font-size: 14px; line-height: 1.57; }
+	.su-build-desc { font-size: 14px; line-height: 1.57; }
+	.su-build-list li { font-size: 14px; line-height: 1.57; }
+	.su-build-arrow { font-size: 14px; line-height: 1.57; }
+	.su-plan-desc { font-size: 14px; line-height: 1.57; }
+	.su-plan-features li { font-size: 14px; line-height: 1.57; }
+	.su-pricing-foot p { font-size: 15px; line-height: 1.57; }
+	.su-audience-desc { font-size: 14px; line-height: 1.57; }
+}
+
+@media (max-width: 768px) {
+	.su-hero-title { font-size: 35px; line-height: 1.14; }
+	.su-stat strong { font-size: 26px; line-height: 1.21; }
+	.su-section-title { font-size: 28px; line-height: 1.21; }
+	.su-step-num { font-size: 30px; line-height: 1.21; }
+	.su-faq-title { font-size: 28px; line-height: 1.21; }
+	.su-step-title { font-size: 18px; line-height: 1.34; }
+	.su-build-title { font-size: 18px; line-height: 1.34; }
+	.su-plan-name { font-size: 18px; line-height: 1.34; }
+	.su-plan-price-now { font-size: 21px; line-height: 1.34; }
+	.su-audience-icon { font-size: 18px; line-height: 1.34; }
+	.su-hero-lede { font-size: 15px; line-height: 1.52; }
+	.su-section-lede { font-size: 15px; line-height: 1.52; }
+	.su-build-foot { font-size: 15px; line-height: 1.52; }
+	.su-plan-price-old { font-size: 15px; line-height: 1.52; }
+	.su-audience-title { font-size: 15px; line-height: 1.52; }
+	.su-step-desc { font-size: 14px; line-height: 1.55; }
+	.su-step-result { font-size: 14px; line-height: 1.55; }
+	.su-build-desc { font-size: 14px; line-height: 1.55; }
+	.su-build-list li { font-size: 14px; line-height: 1.55; }
+	.su-build-arrow { font-size: 14px; line-height: 1.55; }
+	.su-plan-desc { font-size: 14px; line-height: 1.55; }
+	.su-plan-features li { font-size: 14px; line-height: 1.55; }
+	.su-pricing-foot p { font-size: 14px; line-height: 1.55; }
+	.su-audience-desc { font-size: 14px; line-height: 1.55; }
+}
+
+@media (max-width: 575px) {
+	.su-hero-title { font-size: 31px; line-height: 1.16; }
+	.su-stat strong { font-size: 26px; line-height: 1.22; }
+	.su-section-title { font-size: 26px; line-height: 1.22; }
+	.su-step-num { font-size: 28px; line-height: 1.22; }
+	.su-faq-title { font-size: 26px; line-height: 1.22; }
+	.su-step-title { font-size: 18px; line-height: 1.35; }
+	.su-build-title { font-size: 18px; line-height: 1.35; }
+	.su-plan-name { font-size: 18px; line-height: 1.35; }
+	.su-plan-price-now { font-size: 20px; line-height: 1.35; }
+	.su-audience-icon { font-size: 18px; line-height: 1.35; }
+	.su-hero-lede { font-size: 15px; line-height: 1.50; }
+	.su-section-lede { font-size: 15px; line-height: 1.50; }
+	.su-build-foot { font-size: 15px; line-height: 1.50; }
+	.su-plan-price-old { font-size: 15px; line-height: 1.50; }
+	.su-audience-title { font-size: 15px; line-height: 1.50; }
+	.su-step-desc { font-size: 14px; line-height: 1.55; }
+	.su-step-result { font-size: 14px; line-height: 1.55; }
+	.su-build-desc { font-size: 14px; line-height: 1.55; }
+	.su-build-list li { font-size: 14px; line-height: 1.55; }
+	.su-build-arrow { font-size: 14px; line-height: 1.55; }
+	.su-plan-desc { font-size: 14px; line-height: 1.55; }
+	.su-plan-features li { font-size: 14px; line-height: 1.55; }
+	.su-pricing-foot p { font-size: 14px; line-height: 1.55; }
+	.su-audience-desc { font-size: 14px; line-height: 1.55; }
+}
 </style>

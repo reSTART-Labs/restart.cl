@@ -63,4 +63,53 @@ const techs = [
 	font-weight: 400;
 	color: var(--color-primary);
 }
+
+@media (max-width: 1919px) {
+	.tech-title {
+		font-size: 39px;
+		line-height: 1.12;
+	}
+}
+
+@media (max-width: 1439px) {
+	.tech-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+}
+
+@media (max-width: 1199px) {
+	.tech-title {
+		font-size: 33px;
+		line-height: 1.15;
+	}
+}
+
+@media (max-width: 1079px) {
+	.tech-title {
+		font-size: 30px;
+		line-height: 1.17;
+	}
+}
+
+@media (max-width: 991px) {
+	.tech-title {
+		font-size: 27px;
+		line-height: 1.19;
+	}
+}
+
+@media (max-width: 768px) {
+	.tech-title {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+}
+
+@media (max-width: 575px) {
+	.tech-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+}
 </style>

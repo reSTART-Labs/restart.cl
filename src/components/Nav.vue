@@ -20,8 +20,8 @@
 				<li class="flex items-center">
 					<RouterLink
 						to="/nosotros"
-						class="inline-flex items-center text-[13px] font-medium leading-none no-underline transition-colors duration-200"
-						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
+						class="inline-flex items-center text-[13px] leading-none no-underline transition-colors duration-200"
+						:class="deskClass(active.nosotros)"
 					>
 						Nosotros
 					</RouterLink>
@@ -29,8 +29,8 @@
 				<li class="relative flex items-center" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
 					<RouterLink
 						to="/servicios"
-						class="text-[13px] font-medium leading-none transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer no-underline"
-						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
+						class="text-[13px] leading-none transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer no-underline"
+						:class="deskClass(active.servicios)"
 					>
 						Servicios
 						<i class="fa fa-angle-down text-[10px] transition-transform duration-200" :class="servicesOpen ? 'rotate-180' : ''"></i>
@@ -52,7 +52,8 @@
 									<li v-for="service in services" :key="service.slug">
 										<RouterLink
 											:to="`/servicios/${service.slug}`"
-											class="group flex items-start gap-4 p-3 rounded-xl text-text-soft hover:bg-features-bg no-underline transition-colors"
+											class="group flex items-start gap-4 p-3 rounded-xl text-text-soft no-underline transition-colors"
+											:class="isCurrent(`/servicios/${service.slug}`) ? 'bg-primary-pastel' : 'hover:bg-features-bg'"
 											@click="servicesOpen = false"
 										>
 											<span
@@ -89,8 +90,8 @@
 					<span
 						role="button"
 						tabindex="0"
-						class="text-[13px] font-medium leading-none transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer select-none"
-						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
+						class="text-[13px] leading-none transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer select-none"
+						:class="deskClass(active.soluciones)"
 						@click="solutionsOpen = !solutionsOpen"
 						@keydown.enter.prevent="solutionsOpen = !solutionsOpen"
 						@keydown.space.prevent="solutionsOpen = !solutionsOpen"
@@ -115,7 +116,8 @@
 									<li v-for="solution in solutions" :key="solution.slug">
 										<RouterLink
 											:to="`/soluciones/${solution.slug}`"
-											class="group flex items-center gap-3 p-3 rounded-xl text-text-soft hover:bg-features-bg no-underline transition-colors"
+											class="group flex items-center gap-3 p-3 rounded-xl text-text-soft no-underline transition-colors"
+											:class="isCurrent(`/soluciones/${solution.slug}`) ? 'bg-primary-pastel' : 'hover:bg-features-bg'"
 											@click="solutionsOpen = false"
 										>
 											<span class="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center bg-primary-pastel text-primary transition-transform duration-200 group-hover:scale-110">
@@ -132,8 +134,8 @@
 				<li class="flex items-center">
 					<RouterLink
 						to="/startup"
-						class="inline-flex items-center text-[13px] font-medium leading-none no-underline transition-colors duration-200"
-						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
+						class="inline-flex items-center text-[13px] leading-none no-underline transition-colors duration-200"
+						:class="deskClass(active.startup)"
 					>
 						Startup
 					</RouterLink>
@@ -141,8 +143,8 @@
 				<li class="flex items-center">
 					<RouterLink
 						to="/labs"
-						class="inline-flex items-center text-[13px] font-medium leading-none no-underline transition-colors duration-200"
-						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
+						class="inline-flex items-center text-[13px] leading-none no-underline transition-colors duration-200"
+						:class="deskClass(active.labs)"
 					>
 						Labs
 					</RouterLink>
@@ -232,7 +234,8 @@
 						<li class="border-b border-white/8">
 							<RouterLink
 								to="/"
-								class="flex items-center justify-between py-5 text-xl font-light text-white/90 hover:text-primary no-underline transition-colors"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.home)"
 								@click="mobileOpen = false"
 							>
 								Inicio
@@ -242,7 +245,8 @@
 						<li class="border-b border-white/8">
 							<RouterLink
 								to="/nosotros"
-								class="flex items-center justify-between py-5 text-xl font-light text-white/90 hover:text-primary no-underline transition-colors"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.nosotros)"
 								@click="mobileOpen = false"
 							>
 								Nosotros
@@ -251,7 +255,8 @@
 						</li>
 						<li class="border-b border-white/8">
 							<button
-								class="flex items-center justify-between w-full py-5 text-xl font-light text-white/90 hover:text-primary transition-colors cursor-pointer"
+								class="flex items-center justify-between w-full py-5 text-xl font-light transition-colors cursor-pointer"
+								:class="mobileClass(active.servicios)"
 								@click="mobileServicesOpen = !mobileServicesOpen"
 							>
 								Servicios
@@ -272,7 +277,8 @@
 									<li v-for="service in services" :key="service.slug">
 										<RouterLink
 											:to="`/servicios/${service.slug}`"
-											class="flex items-center gap-3 py-3 pl-4 text-base text-white/50 hover:text-primary no-underline transition-colors"
+											class="flex items-center gap-3 py-3 pl-4 text-base no-underline transition-colors"
+											:class="isCurrent(`/servicios/${service.slug}`) ? 'text-primary' : 'text-white/50 hover:text-primary'"
 											@click="mobileOpen = false"
 										>
 											<i :class="[service.icon, 'text-primary/60 w-5 text-center text-sm']"></i>
@@ -284,7 +290,8 @@
 						</li>
 						<li class="border-b border-white/8">
 							<button
-								class="flex items-center justify-between w-full py-5 text-xl font-light text-white/90 hover:text-primary transition-colors cursor-pointer"
+								class="flex items-center justify-between w-full py-5 text-xl font-light transition-colors cursor-pointer"
+								:class="mobileClass(active.soluciones)"
 								@click="mobileSolutionsOpen = !mobileSolutionsOpen"
 							>
 								Soluciones
@@ -305,7 +312,8 @@
 									<li v-for="solution in solutions" :key="solution.slug">
 										<RouterLink
 											:to="`/soluciones/${solution.slug}`"
-											class="flex items-center gap-3 py-3 pl-4 text-base text-white/50 hover:text-primary no-underline transition-colors"
+											class="flex items-center gap-3 py-3 pl-4 text-base no-underline transition-colors"
+											:class="isCurrent(`/soluciones/${solution.slug}`) ? 'text-primary' : 'text-white/50 hover:text-primary'"
 											@click="mobileOpen = false"
 										>
 											<i :class="[solution.icon, 'text-primary/60 w-5 text-center text-sm']"></i>
@@ -318,7 +326,8 @@
 						<li class="border-b border-white/8">
 							<RouterLink
 								to="/startup"
-								class="flex items-center justify-between py-5 text-xl font-light text-white/90 hover:text-primary no-underline transition-colors"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.startup)"
 								@click="mobileOpen = false"
 							>
 								Startup
@@ -328,7 +337,8 @@
 						<li>
 							<RouterLink
 								to="/labs"
-								class="flex items-center justify-between py-5 text-xl font-light text-white/90 hover:text-primary no-underline transition-colors"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.labs)"
 								@click="mobileOpen = false"
 							>
 								Labs
@@ -352,11 +362,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { services } from '@/data/services.js'
 import { useTheme } from '@/composables/useTheme'
 
 const { theme, toggle } = useTheme()
+const route = useRoute()
 
 const solutions = [
 	{ slug: 'mineria', title: 'Minería', icon: 'ion-ios-cog-outline' },
@@ -371,6 +383,28 @@ const solutionsOpen = ref(false)
 const mobileServicesOpen = ref(false)
 const mobileSolutionsOpen = ref(false)
 const isMounted = ref(false)
+
+// --- Marcado de ruta activa: resalta la página o su sección padre ---
+const matches = (base) => route.path === base || route.path.startsWith(base + '/')
+
+const active = computed(() => ({
+	home: route.path === '/',
+	nosotros: matches('/nosotros'),
+	servicios: matches('/servicios') || matches('/inteligencia-artificial'),
+	soluciones: matches('/soluciones'),
+	startup: matches('/startup'),
+	labs: matches('/labs'),
+}))
+
+const isCurrent = (path) => route.path === path
+
+// Color/peso de los enlaces de escritorio según scroll + estado activo
+const deskClass = (isActive) => scrolled.value
+	? (isActive ? 'text-primary font-semibold' : 'text-text-soft font-medium hover:text-primary')
+	: (isActive ? 'text-white font-semibold' : 'text-white/80 font-medium hover:text-white')
+
+// Color de los enlaces del menú móvil según estado activo
+const mobileClass = (isActive) => isActive ? 'text-primary' : 'text-white/90 hover:text-primary'
 
 function onScroll() {
 	scrolled.value = window.scrollY > 50

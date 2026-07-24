@@ -389,4 +389,138 @@ function cardSizeClass(index) {
 	flex-wrap: wrap;
 	justify-content: center;
 }
+
+/* ── Escala tipográfica responsiva ── */
+@media (max-width: 1919px) {
+	.labs-hero-title {
+		font-size: 66px;
+		line-height: 1.06;
+	}
+	.cta-title {
+		font-size: 39px;
+		line-height: 1.12;
+	}
+	.labs-hero-lede {
+		font-size: 17px;
+		line-height: 1.62;
+	}
+	.cta-lede {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+}
+
+@media (max-width: 1439px) {
+	.labs-hero-title {
+		font-size: 59px;
+		line-height: 1.07;
+	}
+	.cta-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+	.labs-hero-lede {
+		font-size: 17px;
+		line-height: 1.60;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.61;
+	}
+}
+
+@media (max-width: 1199px) {
+	.labs-hero-title {
+		font-size: 52px;
+		line-height: 1.08;
+	}
+	.cta-title {
+		font-size: 33px;
+		line-height: 1.15;
+	}
+	.labs-hero-lede {
+		font-size: 16px;
+		line-height: 1.58;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.60;
+	}
+}
+
+@media (max-width: 1079px) {
+	.labs-hero-title {
+		font-size: 46px;
+		line-height: 1.10;
+	}
+	.cta-title {
+		font-size: 30px;
+		line-height: 1.17;
+	}
+	.labs-hero-lede {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+}
+
+@media (max-width: 991px) {
+	.labs-hero-title {
+		font-size: 41px;
+		line-height: 1.12;
+	}
+	.cta-title {
+		font-size: 27px;
+		line-height: 1.19;
+	}
+	.labs-hero-lede {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.57;
+	}
+}
+
+@media (max-width: 768px) {
+	.labs-hero-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+	.cta-title {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+	.labs-hero-lede {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+	.cta-lede {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
+
+@media (max-width: 575px) {
+	.labs-hero-title {
+		font-size: 32px;
+		line-height: 1.16;
+	}
+	.cta-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.labs-hero-lede {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+	.cta-lede {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
 </style>

@@ -143,4 +143,39 @@ const heroContentStyle = computed(() => {
 	background: rgba(255, 255, 255, 0.1);
 	border-color: rgba(255, 255, 255, 0.6);
 }
+
+@media (max-width: 1919px) {
+	.hero-title { font-size: 77px; line-height: 1.06; }
+	.hero-lede { font-size: 18px; line-height: 1.62; }
+}
+
+@media (max-width: 1439px) {
+	.hero-title { font-size: 69px; line-height: 1.07; }
+	.hero-lede { font-size: 18px; line-height: 1.60; }
+}
+
+@media (max-width: 1199px) {
+	.hero-title { font-size: 60px; line-height: 1.08; }
+	.hero-lede { font-size: 17px; line-height: 1.58; }
+}
+
+@media (max-width: 1079px) {
+	.hero-title { font-size: 54px; line-height: 1.10; }
+	.hero-lede { font-size: 16px; line-height: 1.56; }
+}
+
+@media (max-width: 991px) {
+	.hero-title { font-size: 48px; line-height: 1.12; }
+	.hero-lede { font-size: 16px; line-height: 1.54; }
+}
+
+@media (max-width: 768px) {
+	.hero-title { font-size: 42px; line-height: 1.14; }
+	.hero-lede { font-size: 15px; line-height: 1.52; }
+}
+
+@media (max-width: 575px) {
+	.hero-title { font-size: 37px; line-height: 1.16; }
+	.hero-lede { font-size: 15px; line-height: 1.50; }
+}
 </style>

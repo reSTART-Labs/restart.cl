@@ -134,4 +134,193 @@ html[data-theme="dark"] .startup-section {
 	margin-top: 20px;
 	max-width: 48ch;
 }
+
+@media (max-width: 1919px) {
+	.startup-title {
+		font-size: 51px;
+		line-height: 1.12;
+	}
+	.startup-lede {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+	.startup-cta {
+		font-size: 14px;
+		line-height: 1.62;
+	}
+	.startup-cta-text {
+		font-size: 14px;
+		line-height: 1.62;
+	}
+	.startup-coinvest-title {
+		font-size: 23px;
+		line-height: 1.26;
+	}
+	.startup-coinvest-text {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+}
+
+@media (max-width: 1439px) {
+	.startup-title {
+		font-size: 46px;
+		line-height: 1.14;
+	}
+	.startup-lede {
+		font-size: 16px;
+		line-height: 1.60;
+	}
+	.startup-cta {
+		font-size: 14px;
+		line-height: 1.61;
+	}
+	.startup-cta-text {
+		font-size: 14px;
+		line-height: 1.61;
+	}
+	.startup-coinvest-title {
+		font-size: 21px;
+		line-height: 1.28;
+	}
+	.startup-coinvest-text {
+		font-size: 15px;
+		line-height: 1.61;
+	}
+}
+
+@media (max-width: 1199px) {
+	.startup-title {
+		font-size: 42px;
+		line-height: 1.15;
+	}
+	.startup-lede {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+	.startup-cta {
+		font-size: 14px;
+		line-height: 1.60;
+	}
+	.startup-cta-text {
+		font-size: 14px;
+		line-height: 1.60;
+	}
+	.startup-coinvest-title {
+		font-size: 20px;
+		line-height: 1.30;
+	}
+	.startup-coinvest-text {
+		font-size: 15px;
+		line-height: 1.60;
+	}
+}
+
+@media (max-width: 1079px) {
+	.startup-title {
+		font-size: 38px;
+		line-height: 1.17;
+	}
+	.startup-lede {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+	.startup-cta {
+		font-size: 14px;
+		line-height: 1.58;
+	}
+	.startup-cta-text {
+		font-size: 14px;
+		line-height: 1.58;
+	}
+	.startup-coinvest-title {
+		font-size: 18px;
+		line-height: 1.32;
+	}
+	.startup-coinvest-text {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+}
+
+@media (max-width: 991px) {
+	.startup-title {
+		font-size: 35px;
+		line-height: 1.19;
+	}
+	.startup-lede {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+	.startup-cta {
+		font-size: 14px;
+		line-height: 1.57;
+	}
+	.startup-cta-text {
+		font-size: 14px;
+		line-height: 1.57;
+	}
+	.startup-coinvest-title {
+		font-size: 18px;
+		line-height: 1.33;
+	}
+	.startup-coinvest-text {
+		font-size: 15px;
+		line-height: 1.57;
+	}
+}
+
+@media (max-width: 768px) {
+	.startup-title {
+		font-size: 31px;
+		line-height: 1.21;
+	}
+	.startup-lede {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+	.startup-cta {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.startup-cta-text {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.startup-coinvest-title {
+		font-size: 18px;
+		line-height: 1.34;
+	}
+	.startup-coinvest-text {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
+
+@media (max-width: 575px) {
+	.startup-title {
+		font-size: 29px;
+		line-height: 1.22;
+	}
+	.startup-lede {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+	.startup-cta {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.startup-cta-text {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.startup-coinvest-title {
+		font-size: 18px;
+		line-height: 1.35;
+	}
+	.startup-coinvest-text {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
 </style>

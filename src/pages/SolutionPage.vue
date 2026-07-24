@@ -1158,4 +1158,215 @@ html[data-theme="dark"] .diff-section {
 .contact-input::placeholder {
 	color: var(--color-text-muted);
 }
+
+/* ── ESCALA TIPOGRÁFICA RESPONSIVA ── */
+@media (max-width: 1919px) {
+	.hero-title { font-size: 70px; line-height: 1.06; }
+	.hero-lede { font-size: 17px; line-height: 1.62; }
+	.sp-section-title { font-size: 41px; line-height: 1.12; }
+	.sp-lede { font-size: 16px; line-height: 1.62; }
+	.sp-section-title-inverse { font-size: 39px; line-height: 1.12; }
+	.sp-lede-inverse { font-size: 16px; line-height: 1.62; }
+	.problem-paragraph { font-size: 17px; line-height: 1.62; }
+	.problem-benefits li { font-size: 14px; line-height: 1.62; }
+	.credential-title { font-size: 39px; line-height: 1.12; }
+	.ba-side p { font-size: 14px; line-height: 1.62; }
+	.area-card-head h3 { font-size: 16px; line-height: 1.62; }
+	.area-card p { font-size: 14px; line-height: 1.62; }
+	.service-card-icon { font-size: 23px; line-height: 1.26; }
+	.service-card-title { font-size: 17px; line-height: 1.62; }
+	.service-card-desc { font-size: 14px; line-height: 1.62; }
+	.audience-item-icon { font-size: 17px; line-height: 1.62; }
+	.audience-item span { font-size: 14px; line-height: 1.62; }
+	.usecase-num { font-size: 14px; line-height: 1.62; }
+	.usecase-card p { font-size: 15px; line-height: 1.62; }
+	.diff-item p { font-size: 15px; line-height: 1.62; }
+	.method-step-num { font-size: 14px; line-height: 1.62; }
+	.method-step-title { font-size: 16px; line-height: 1.62; }
+	.page-cta-lede { font-size: 16px; line-height: 1.62; }
+	.whatsapp-link i { font-size: 25px; line-height: 1.26; }
+	.whatsapp-link strong { font-size: 15px; line-height: 1.62; }
+	.contact-info ul li { font-size: 14px; line-height: 1.62; }
+	.contact-input { font-size: 14px; line-height: 1.62; }
+}
+
+@media (max-width: 1439px) {
+	.hero-title { font-size: 62px; line-height: 1.07; }
+	.hero-lede { font-size: 17px; line-height: 1.60; }
+	.sp-section-title { font-size: 38px; line-height: 1.14; }
+	.sp-lede { font-size: 15px; line-height: 1.61; }
+	.sp-section-title-inverse { font-size: 36px; line-height: 1.14; }
+	.sp-lede-inverse { font-size: 15px; line-height: 1.61; }
+	.problem-paragraph { font-size: 17px; line-height: 1.60; }
+	.problem-benefits li { font-size: 14px; line-height: 1.61; }
+	.credential-title { font-size: 36px; line-height: 1.14; }
+	.ba-side p { font-size: 14px; line-height: 1.61; }
+	.area-card-head h3 { font-size: 16px; line-height: 1.60; }
+	.area-card p { font-size: 14px; line-height: 1.61; }
+	.service-card-icon { font-size: 21px; line-height: 1.28; }
+	.service-card-title { font-size: 17px; line-height: 1.60; }
+	.service-card-desc { font-size: 14px; line-height: 1.61; }
+	.audience-item-icon { font-size: 17px; line-height: 1.60; }
+	.audience-item span { font-size: 14px; line-height: 1.61; }
+	.usecase-num { font-size: 14px; line-height: 1.61; }
+	.usecase-card p { font-size: 14px; line-height: 1.61; }
+	.diff-item p { font-size: 14px; line-height: 1.61; }
+	.method-step-num { font-size: 14px; line-height: 1.61; }
+	.method-step-title { font-size: 15px; line-height: 1.61; }
+	.page-cta-lede { font-size: 15px; line-height: 1.61; }
+	.whatsapp-link i { font-size: 23px; line-height: 1.28; }
+	.whatsapp-link strong { font-size: 14px; line-height: 1.61; }
+	.contact-info ul li { font-size: 14px; line-height: 1.61; }
+	.contact-input { font-size: 14px; line-height: 1.61; }
+}
+
+@media (max-width: 1199px) {
+	.hero-title { font-size: 55px; line-height: 1.08; }
+	.hero-lede { font-size: 16px; line-height: 1.58; }
+	.sp-section-title { font-size: 34px; line-height: 1.15; }
+	.sp-lede { font-size: 15px; line-height: 1.60; }
+	.sp-section-title-inverse { font-size: 33px; line-height: 1.15; }
+	.sp-lede-inverse { font-size: 15px; line-height: 1.60; }
+	.problem-paragraph { font-size: 16px; line-height: 1.58; }
+	.problem-benefits li { font-size: 14px; line-height: 1.60; }
+	.credential-title { font-size: 33px; line-height: 1.15; }
+	.ba-side p { font-size: 14px; line-height: 1.60; }
+	.area-card-head h3 { font-size: 15px; line-height: 1.58; }
+	.area-card p { font-size: 14px; line-height: 1.60; }
+	.service-card-icon { font-size: 20px; line-height: 1.30; }
+	.service-card-title { font-size: 16px; line-height: 1.58; }
+	.service-card-desc { font-size: 14px; line-height: 1.60; }
+	.audience-item-icon { font-size: 16px; line-height: 1.58; }
+	.audience-item span { font-size: 14px; line-height: 1.60; }
+	.usecase-num { font-size: 14px; line-height: 1.60; }
+	.usecase-card p { font-size: 14px; line-height: 1.60; }
+	.diff-item p { font-size: 14px; line-height: 1.60; }
+	.method-step-num { font-size: 14px; line-height: 1.60; }
+	.method-step-title { font-size: 15px; line-height: 1.60; }
+	.page-cta-lede { font-size: 15px; line-height: 1.60; }
+	.whatsapp-link i { font-size: 22px; line-height: 1.30; }
+	.whatsapp-link strong { font-size: 14px; line-height: 1.60; }
+	.contact-info ul li { font-size: 14px; line-height: 1.60; }
+	.contact-input { font-size: 14px; line-height: 1.60; }
+}
+
+@media (max-width: 1079px) {
+	.hero-title { font-size: 49px; line-height: 1.10; }
+	.hero-lede { font-size: 15px; line-height: 1.56; }
+	.sp-section-title { font-size: 31px; line-height: 1.17; }
+	.sp-lede { font-size: 15px; line-height: 1.58; }
+	.sp-section-title-inverse { font-size: 30px; line-height: 1.17; }
+	.sp-lede-inverse { font-size: 15px; line-height: 1.58; }
+	.problem-paragraph { font-size: 15px; line-height: 1.56; }
+	.problem-benefits li { font-size: 14px; line-height: 1.58; }
+	.credential-title { font-size: 30px; line-height: 1.17; }
+	.ba-side p { font-size: 14px; line-height: 1.58; }
+	.area-card-head h3 { font-size: 15px; line-height: 1.56; }
+	.area-card p { font-size: 14px; line-height: 1.58; }
+	.service-card-icon { font-size: 18px; line-height: 1.32; }
+	.service-card-title { font-size: 15px; line-height: 1.56; }
+	.service-card-desc { font-size: 14px; line-height: 1.58; }
+	.audience-item-icon { font-size: 15px; line-height: 1.56; }
+	.audience-item span { font-size: 14px; line-height: 1.58; }
+	.usecase-num { font-size: 14px; line-height: 1.58; }
+	.usecase-card p { font-size: 14px; line-height: 1.58; }
+	.diff-item p { font-size: 14px; line-height: 1.58; }
+	.method-step-num { font-size: 14px; line-height: 1.58; }
+	.method-step-title { font-size: 15px; line-height: 1.58; }
+	.page-cta-lede { font-size: 15px; line-height: 1.58; }
+	.whatsapp-link i { font-size: 20px; line-height: 1.32; }
+	.whatsapp-link strong { font-size: 14px; line-height: 1.58; }
+	.contact-info ul li { font-size: 14px; line-height: 1.58; }
+	.contact-input { font-size: 14px; line-height: 1.58; }
+}
+
+@media (max-width: 991px) {
+	.hero-title { font-size: 43px; line-height: 1.12; }
+	.hero-lede { font-size: 15px; line-height: 1.54; }
+	.sp-section-title { font-size: 28px; line-height: 1.19; }
+	.sp-lede { font-size: 15px; line-height: 1.57; }
+	.sp-section-title-inverse { font-size: 27px; line-height: 1.19; }
+	.sp-lede-inverse { font-size: 15px; line-height: 1.57; }
+	.problem-paragraph { font-size: 15px; line-height: 1.54; }
+	.problem-benefits li { font-size: 14px; line-height: 1.57; }
+	.credential-title { font-size: 27px; line-height: 1.19; }
+	.ba-side p { font-size: 14px; line-height: 1.57; }
+	.area-card-head h3 { font-size: 15px; line-height: 1.54; }
+	.area-card p { font-size: 14px; line-height: 1.57; }
+	.service-card-icon { font-size: 18px; line-height: 1.33; }
+	.service-card-title { font-size: 15px; line-height: 1.54; }
+	.service-card-desc { font-size: 14px; line-height: 1.57; }
+	.audience-item-icon { font-size: 15px; line-height: 1.54; }
+	.audience-item span { font-size: 14px; line-height: 1.57; }
+	.usecase-num { font-size: 14px; line-height: 1.57; }
+	.usecase-card p { font-size: 14px; line-height: 1.57; }
+	.diff-item p { font-size: 14px; line-height: 1.57; }
+	.method-step-num { font-size: 14px; line-height: 1.57; }
+	.method-step-title { font-size: 15px; line-height: 1.57; }
+	.page-cta-lede { font-size: 15px; line-height: 1.57; }
+	.whatsapp-link i { font-size: 19px; line-height: 1.33; }
+	.whatsapp-link strong { font-size: 14px; line-height: 1.57; }
+	.contact-info ul li { font-size: 14px; line-height: 1.57; }
+	.contact-input { font-size: 14px; line-height: 1.57; }
+}
+
+@media (max-width: 768px) {
+	.hero-title { font-size: 38px; line-height: 1.14; }
+	.hero-lede { font-size: 15px; line-height: 1.52; }
+	.sp-section-title { font-size: 26px; line-height: 1.21; }
+	.sp-lede { font-size: 14px; line-height: 1.55; }
+	.sp-section-title-inverse { font-size: 26px; line-height: 1.21; }
+	.sp-lede-inverse { font-size: 14px; line-height: 1.55; }
+	.problem-paragraph { font-size: 15px; line-height: 1.52; }
+	.problem-benefits li { font-size: 14px; line-height: 1.55; }
+	.credential-title { font-size: 26px; line-height: 1.21; }
+	.ba-side p { font-size: 14px; line-height: 1.55; }
+	.area-card-head h3 { font-size: 15px; line-height: 1.52; }
+	.area-card p { font-size: 14px; line-height: 1.55; }
+	.service-card-icon { font-size: 18px; line-height: 1.34; }
+	.service-card-title { font-size: 15px; line-height: 1.52; }
+	.service-card-desc { font-size: 14px; line-height: 1.55; }
+	.audience-item-icon { font-size: 15px; line-height: 1.52; }
+	.audience-item span { font-size: 14px; line-height: 1.55; }
+	.usecase-num { font-size: 14px; line-height: 1.55; }
+	.usecase-card p { font-size: 14px; line-height: 1.55; }
+	.diff-item p { font-size: 14px; line-height: 1.55; }
+	.method-step-num { font-size: 14px; line-height: 1.55; }
+	.method-step-title { font-size: 14px; line-height: 1.55; }
+	.page-cta-lede { font-size: 14px; line-height: 1.55; }
+	.whatsapp-link i { font-size: 18px; line-height: 1.34; }
+	.whatsapp-link strong { font-size: 14px; line-height: 1.55; }
+	.contact-info ul li { font-size: 14px; line-height: 1.55; }
+	.contact-input { font-size: 14px; line-height: 1.55; }
+}
+
+@media (max-width: 575px) {
+	.hero-title { font-size: 33px; line-height: 1.16; }
+	.hero-lede { font-size: 15px; line-height: 1.50; }
+	.sp-section-title { font-size: 26px; line-height: 1.22; }
+	.sp-lede { font-size: 14px; line-height: 1.55; }
+	.sp-section-title-inverse { font-size: 26px; line-height: 1.22; }
+	.sp-lede-inverse { font-size: 14px; line-height: 1.55; }
+	.problem-paragraph { font-size: 15px; line-height: 1.50; }
+	.problem-benefits li { font-size: 14px; line-height: 1.55; }
+	.credential-title { font-size: 26px; line-height: 1.22; }
+	.ba-side p { font-size: 14px; line-height: 1.55; }
+	.area-card-head h3 { font-size: 15px; line-height: 1.50; }
+	.area-card p { font-size: 14px; line-height: 1.55; }
+	.service-card-icon { font-size: 18px; line-height: 1.35; }
+	.service-card-title { font-size: 15px; line-height: 1.50; }
+	.service-card-desc { font-size: 14px; line-height: 1.55; }
+	.audience-item-icon { font-size: 15px; line-height: 1.50; }
+	.audience-item span { font-size: 14px; line-height: 1.55; }
+	.usecase-num { font-size: 14px; line-height: 1.55; }
+	.usecase-card p { font-size: 14px; line-height: 1.55; }
+	.diff-item p { font-size: 14px; line-height: 1.55; }
+	.method-step-num { font-size: 14px; line-height: 1.55; }
+	.method-step-title { font-size: 14px; line-height: 1.55; }
+	.page-cta-lede { font-size: 14px; line-height: 1.55; }
+	.whatsapp-link i { font-size: 18px; line-height: 1.35; }
+	.whatsapp-link strong { font-size: 14px; line-height: 1.55; }
+	.contact-info ul li { font-size: 14px; line-height: 1.55; }
+	.contact-input { font-size: 14px; line-height: 1.55; }
+}
 </style>

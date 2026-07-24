@@ -280,4 +280,193 @@ html[data-theme="dark"] .solutions-card-content {
 .solutions-swiper :deep(.swiper-slide) {
 	height: auto;
 }
+
+@media (max-width: 1919px) {
+	.solutions-title {
+		font-size: 45px;
+		line-height: 1.12;
+	}
+	.solutions-lede {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+	.solutions-tab {
+		font-size: 21px;
+		line-height: 1.26;
+	}
+	.solutions-card-title {
+		font-size: 32px;
+		line-height: 1.12;
+	}
+	.solutions-card-desc {
+		font-size: 15px;
+		line-height: 1.62;
+	}
+	.solutions-card-link {
+		font-size: 14px;
+		line-height: 1.62;
+	}
+}
+
+@media (max-width: 1439px) {
+	.solutions-title {
+		font-size: 41px;
+		line-height: 1.14;
+	}
+	.solutions-lede {
+		font-size: 16px;
+		line-height: 1.60;
+	}
+	.solutions-tab {
+		font-size: 20px;
+		line-height: 1.28;
+	}
+	.solutions-card-title {
+		font-size: 29px;
+		line-height: 1.14;
+	}
+	.solutions-card-desc {
+		font-size: 14px;
+		line-height: 1.61;
+	}
+	.solutions-card-link {
+		font-size: 14px;
+		line-height: 1.61;
+	}
+}
+
+@media (max-width: 1199px) {
+	.solutions-title {
+		font-size: 37px;
+		line-height: 1.15;
+	}
+	.solutions-lede {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+	.solutions-tab {
+		font-size: 18px;
+		line-height: 1.30;
+	}
+	.solutions-card-title {
+		font-size: 27px;
+		line-height: 1.15;
+	}
+	.solutions-card-desc {
+		font-size: 14px;
+		line-height: 1.60;
+	}
+	.solutions-card-link {
+		font-size: 14px;
+		line-height: 1.60;
+	}
+}
+
+@media (max-width: 1079px) {
+	.solutions-title {
+		font-size: 34px;
+		line-height: 1.17;
+	}
+	.solutions-lede {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+	.solutions-tab {
+		font-size: 18px;
+		line-height: 1.32;
+	}
+	.solutions-card-title {
+		font-size: 26px;
+		line-height: 1.17;
+	}
+	.solutions-card-desc {
+		font-size: 14px;
+		line-height: 1.58;
+	}
+	.solutions-card-link {
+		font-size: 14px;
+		line-height: 1.58;
+	}
+}
+
+@media (max-width: 991px) {
+	.solutions-title {
+		font-size: 31px;
+		line-height: 1.19;
+	}
+	.solutions-lede {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+	.solutions-tab {
+		font-size: 18px;
+		line-height: 1.33;
+	}
+	.solutions-card-title {
+		font-size: 26px;
+		line-height: 1.19;
+	}
+	.solutions-card-desc {
+		font-size: 14px;
+		line-height: 1.57;
+	}
+	.solutions-card-link {
+		font-size: 14px;
+		line-height: 1.57;
+	}
+}
+
+@media (max-width: 768px) {
+	.solutions-title {
+		font-size: 28px;
+		line-height: 1.21;
+	}
+	.solutions-lede {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+	.solutions-tab {
+		font-size: 18px;
+		line-height: 1.34;
+	}
+	.solutions-card-title {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+	.solutions-card-desc {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.solutions-card-link {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
+
+@media (max-width: 575px) {
+	.solutions-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.solutions-lede {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+	.solutions-tab {
+		font-size: 18px;
+		line-height: 1.35;
+	}
+	.solutions-card-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.solutions-card-desc {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+	.solutions-card-link {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
 </style>

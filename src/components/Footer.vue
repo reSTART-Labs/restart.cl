@@ -34,7 +34,8 @@
 						<li v-for="service in services" :key="service.slug">
 							<RouterLink
 								:to="`/servicios/${service.slug}`"
-								class="text-sm text-footer-text hover:text-primary no-underline transition-colors"
+								class="text-sm no-underline transition-colors"
+								:class="linkClass(isCurrent(`/servicios/${service.slug}`))"
 							>
 								{{ service.title }}
 							</RouterLink>
@@ -47,7 +48,7 @@
 					<h4 class="text-white text-sm font-semibold uppercase tracking-wide mb-5">Empresa</h4>
 					<ul class="list-none m-0 p-0 flex flex-col gap-2.5">
 						<li>
-							<RouterLink to="/nosotros" class="text-sm text-footer-text hover:text-primary no-underline transition-colors">
+							<RouterLink to="/nosotros" class="text-sm no-underline transition-colors" :class="linkClass(isCurrent('/nosotros'))">
 								Nosotros
 							</RouterLink>
 						</li>
@@ -67,7 +68,7 @@
 				<!-- Laboratorio -->
 				<div>
 					<h4 class="text-white text-sm font-semibold uppercase tracking-wide mb-5">
-						<RouterLink to="/labs" class="text-white no-underline hover:text-primary transition-colors">
+						<RouterLink to="/labs" class="no-underline transition-colors" :class="matches('/labs') ? 'text-primary' : 'text-white hover:text-primary'">
 							Laboratorio
 						</RouterLink>
 					</h4>
@@ -76,7 +77,8 @@
 							<RouterLink
 								v-if="!lab.external"
 								:to="`/labs/${lab.slug}`"
-								class="text-sm text-footer-text hover:text-primary no-underline transition-colors"
+								class="text-sm no-underline transition-colors"
+								:class="linkClass(isCurrent(`/labs/${lab.slug}`))"
 							>
 								{{ lab.name }}
 							</RouterLink>
@@ -117,10 +119,17 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router'
 import { services } from '@/data/services.js'
 import { labsProjects } from '@/data/labsProjects.js'
 
+const route = useRoute()
 const year = new Date().getFullYear()
+
+// Marcado de ruta activa (misma lógica que el nav)
+const isCurrent = (path) => route.path === path
+const matches = (base) => route.path === base || route.path.startsWith(base + '/')
+const linkClass = (isActive) => isActive ? 'text-primary font-semibold' : 'text-footer-text hover:text-primary'
 </script>
 
 <style scoped>

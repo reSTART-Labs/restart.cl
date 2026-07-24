@@ -437,4 +437,299 @@ function categoryLabel(slug) {
 		font-size: clamp(22px, 4vw, 28px);
 	}
 }
+
+/* ── Escala tipográfica responsiva ── */
+@media (max-width: 1919px) {
+	.services-hero-title {
+		font-size: 66px;
+		line-height: 1.06;
+	}
+
+	.services-hero-lede {
+		font-size: 17px;
+		line-height: 1.62;
+	}
+
+	.service-row-icon {
+		font-size: 21px;
+		line-height: 1.26;
+	}
+
+	.service-row-title {
+		font-size: 38px;
+		line-height: 1.12;
+	}
+
+	.service-row-desc {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+
+	.service-row-cta {
+		font-size: 14px;
+		line-height: 1.62;
+	}
+
+	.cta-title {
+		font-size: 39px;
+		line-height: 1.12;
+	}
+
+	.cta-lede {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+}
+
+@media (max-width: 1439px) {
+	.services-hero-title {
+		font-size: 59px;
+		line-height: 1.07;
+	}
+
+	.services-hero-lede {
+		font-size: 17px;
+		line-height: 1.60;
+	}
+
+	.service-row-icon {
+		font-size: 20px;
+		line-height: 1.28;
+	}
+
+	.service-row-title {
+		font-size: 34px;
+		line-height: 1.14;
+	}
+
+	.service-row-desc {
+		font-size: 15px;
+		line-height: 1.61;
+	}
+
+	.service-row-cta {
+		font-size: 14px;
+		line-height: 1.61;
+	}
+
+	.cta-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.61;
+	}
+}
+
+@media (max-width: 1199px) {
+	.services-hero-title {
+		font-size: 52px;
+		line-height: 1.08;
+	}
+
+	.services-hero-lede {
+		font-size: 16px;
+		line-height: 1.58;
+	}
+
+	.service-row-icon {
+		font-size: 18px;
+		line-height: 1.30;
+	}
+
+	.service-row-title {
+		font-size: 31px;
+		line-height: 1.15;
+	}
+
+	.service-row-desc {
+		font-size: 15px;
+		line-height: 1.60;
+	}
+
+	.service-row-cta {
+		font-size: 14px;
+		line-height: 1.60;
+	}
+
+	.cta-title {
+		font-size: 33px;
+		line-height: 1.15;
+	}
+
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.60;
+	}
+}
+
+@media (max-width: 1079px) {
+	.services-hero-title {
+		font-size: 46px;
+		line-height: 1.10;
+	}
+
+	.services-hero-lede {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+
+	.service-row-icon {
+		font-size: 18px;
+		line-height: 1.32;
+	}
+
+	.service-row-title {
+		font-size: 28px;
+		line-height: 1.17;
+	}
+
+	.service-row-desc {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+
+	.service-row-cta {
+		font-size: 14px;
+		line-height: 1.58;
+	}
+
+	.cta-title {
+		font-size: 30px;
+		line-height: 1.17;
+	}
+
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+}
+
+@media (max-width: 991px) {
+	.services-hero-title {
+		font-size: 41px;
+		line-height: 1.12;
+	}
+
+	.services-hero-lede {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+
+	.service-row-icon {
+		font-size: 18px;
+		line-height: 1.33;
+	}
+
+	.service-row-title {
+		font-size: 26px;
+		line-height: 1.19;
+	}
+
+	.service-row-desc {
+		font-size: 15px;
+		line-height: 1.57;
+	}
+
+	.service-row-cta {
+		font-size: 14px;
+		line-height: 1.57;
+	}
+
+	.cta-title {
+		font-size: 27px;
+		line-height: 1.19;
+	}
+
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.57;
+	}
+}
+
+@media (max-width: 768px) {
+	.services-hero-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+
+	.services-hero-lede {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+
+	.service-row-icon {
+		font-size: 18px;
+		line-height: 1.34;
+	}
+
+	.service-row-title {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+
+	.service-row-desc {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+
+	.service-row-cta {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+
+	.cta-title {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+
+	.cta-lede {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
+
+@media (max-width: 575px) {
+	.services-hero-title {
+		font-size: 32px;
+		line-height: 1.16;
+	}
+
+	.services-hero-lede {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+
+	.service-row-icon {
+		font-size: 18px;
+		line-height: 1.35;
+	}
+
+	.service-row-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+
+	.service-row-desc {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+
+	.service-row-cta {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+
+	.cta-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+
+	.cta-lede {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
 </style>

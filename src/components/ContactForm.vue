@@ -379,4 +379,53 @@ select.contact-input {
 	height: 1px;
 	overflow: hidden;
 }
+
+@media (max-width: 1919px) {
+	.contact-input { font-size: 14px; line-height: 1.62; }
+	.contact-success-icon { font-size: 21px; line-height: 1.26; }
+	.contact-success-title { font-size: 21px; line-height: 1.26; }
+	.contact-success-body { font-size: 14px; line-height: 1.62; }
+}
+
+@media (max-width: 1439px) {
+	.contact-input { font-size: 14px; line-height: 1.61; }
+	.contact-success-icon { font-size: 20px; line-height: 1.28; }
+	.contact-success-title { font-size: 20px; line-height: 1.28; }
+	.contact-success-body { font-size: 14px; line-height: 1.61; }
+}
+
+@media (max-width: 1199px) {
+	.contact-input { font-size: 14px; line-height: 1.60; }
+	.contact-success-icon { font-size: 18px; line-height: 1.30; }
+	.contact-success-title { font-size: 18px; line-height: 1.30; }
+	.contact-success-body { font-size: 14px; line-height: 1.60; }
+}
+
+@media (max-width: 1079px) {
+	.contact-input { font-size: 14px; line-height: 1.58; }
+	.contact-success-icon { font-size: 18px; line-height: 1.32; }
+	.contact-success-title { font-size: 18px; line-height: 1.32; }
+	.contact-success-body { font-size: 14px; line-height: 1.58; }
+}
+
+@media (max-width: 991px) {
+	.contact-input { font-size: 14px; line-height: 1.57; }
+	.contact-success-icon { font-size: 18px; line-height: 1.33; }
+	.contact-success-title { font-size: 18px; line-height: 1.33; }
+	.contact-success-body { font-size: 14px; line-height: 1.57; }
+}
+
+@media (max-width: 768px) {
+	.contact-input { font-size: 14px; line-height: 1.55; }
+	.contact-success-icon { font-size: 18px; line-height: 1.34; }
+	.contact-success-title { font-size: 18px; line-height: 1.34; }
+	.contact-success-body { font-size: 14px; line-height: 1.55; }
+}
+
+@media (max-width: 575px) {
+	.contact-input { font-size: 14px; line-height: 1.55; }
+	.contact-success-icon { font-size: 18px; line-height: 1.35; }
+	.contact-success-title { font-size: 18px; line-height: 1.35; }
+	.contact-success-body { font-size: 14px; line-height: 1.55; }
+}
 </style>
