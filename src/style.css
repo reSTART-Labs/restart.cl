@@ -418,17 +418,20 @@ html[data-theme="dark"] .nav-logo-solid img {
 	--loader-min: 800ms;
 	--loader-timeout: 3000ms;
 	--loader-fallback-delay: 3200ms;
-	--sphere-fade: 300ms;
+	--sphere-exit: 420ms;
 
 	--curtain-stagger: 150ms;
 	--curtain-duration: 700ms;
 	--curtain-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
-	--reveal-nav-delay: 800ms;
+	--reveal-nav-delay: 400ms;
 	--reveal-nav-duration: 800ms;
 	--reveal-nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-	--reveal-hero-delay: 1200ms;
+	/* La referencia usa 1200ms acá, pero deja el header sin texto casi un segundo y
+	   medio. Se acortó a 250ms: el contenido ya está puesto cuando cada columna de la
+	   cortina lo descubre, en vez de aparecer después. */
+	--reveal-hero-delay: 250ms;
 	--reveal-hero-duration: 600ms;
 	--reveal-stagger-step: 90ms;
 
@@ -517,6 +520,14 @@ html.loader-js .curtain-open .curtain-slat {
 	height: 300px;
 	margin: -150px 0 0 -150px;
 	transform-style: preserve-3d;
+}
+
+/* Capa interior: solo gira. El colapso vive en la capa de arriba porque dos
+   animaciones sobre transform no se componen. */
+.loader-sphere-spin {
+	width: 100%;
+	height: 100%;
+	transform-style: preserve-3d;
 	animation: sphere-spin 4s linear infinite;
 }
 
@@ -527,14 +538,32 @@ html.loader-js .curtain-open .curtain-slat {
 	to   { transform: rotate3d(1, 1, 1, 360deg); }
 }
 
-@keyframes sphere-out {
-	to { opacity: 0; }
+/* Salida: cada punto viaja por su propio radio hasta el centro. Lo que se anima es
+   la altura del li, que ES el radio, en vez de escalar la esfera: así los puntos
+   conservan su tamaño y el gesto se lee como que se juntan, no como un zoom out.
+   Medido más barato que animar el transform de los 648 puntos — en un árbol
+   preserve-3d esos transforms no se pueden componer por separado, así que no hay
+   ganancia de compositor y sí 648 animaciones más que tickear.
+   La curva acelera hacia adentro: implosión, no desvanecido. */
+@keyframes sphere-implode {
+	to { height: 0; }
 }
 
+/* La opacidad aguanta hasta el 72% para que se vea el viaje y no un fade. */
+@keyframes sphere-implode-fade {
+	0%, 72% { opacity: 1; }
+	100%    { opacity: 0; }
+}
+
+.loader-sphere-leaving .loader-plane li {
+	animation: sphere-implode var(--sphere-exit) cubic-bezier(0.7, 0, 0.84, 0) both;
+}
+
+/* El fade va en la capa exterior y no junto al giro: redeclarar la animación de
+   giro para acompañarla lo reiniciaría en 0°, y la esfera daría un salto visible
+   justo al empezar a salir. */
 .loader-sphere-leaving {
-	animation:
-		sphere-spin 4s linear infinite,
-		sphere-out var(--sphere-fade) ease-out both;
+	animation: sphere-implode-fade var(--sphere-exit) linear both;
 }
 
 .loader-plane {

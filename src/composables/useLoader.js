@@ -115,7 +115,7 @@ function openCurtain() {
 
 function open() {
 	phase.value = PHASE_OPENING
-	setTimeout(openCurtain, readMs('--sphere-fade', 300))
+	setTimeout(openCurtain, readMs('--sphere-exit', 420))
 }
 
 /* Llamado desde SiteLoader.onMounted: que la clase loader-js se ponga acá y no en
@@ -169,7 +169,11 @@ export function installLoader(router) {
 
 	router.afterEach((to, from) => {
 		if (!from.name) return // navegación inicial: la maneja start()
-		if (to.name === from.name) return // solo cambió el hash
+
+		/* Compara el path y no el nombre de la ruta: dos secciones hermanas comparten
+		   nombre y solo difieren en el param (/soluciones/mineria → /soluciones/industria),
+		   así que comparar por nombre las descartaba como si fueran un salto de hash. */
+		if (to.path === from.path) return // solo cambió el hash
 
 		isHardLoad.value = false
 

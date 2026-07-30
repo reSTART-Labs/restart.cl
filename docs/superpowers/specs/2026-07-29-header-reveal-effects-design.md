@@ -208,6 +208,28 @@ monta y el contenido se ve de inmediato con fades de 200 ms.
 
 **Perf de 648 nodos en móvil:** densidad reducida bajo `md`.
 
+## Ajustes tras la primera revisión
+
+- **Salida de la esfera**: el fade se reemplazó por una implosión — cada punto viaja por su
+  propio radio hasta el centro. Se anima la altura del `li`, que *es* el radio, en vez de
+  escalar la esfera: así los puntos conservan su tamaño y el gesto se lee como que se juntan y
+  no como un zoom out. Se probó también moverlos con `transform` (que no toca layout) y salió
+  **peor**: 74.8 ms de peor frame contra 41.6 ms, porque en un árbol `preserve-3d` esos 648
+  transforms no se pueden componer por separado, así que no hay ganancia de compositor y sí
+  648 animaciones más que tickear. `--sphere-exit` pasó de 300 ms a 420 ms para que el viaje
+  se alcance a leer.
+- **El giro va en una capa aparte** (`.loader-sphere-spin`). Acompañar el fade en el mismo nodo
+  obligaba a redeclarar la animación de giro, lo que la reiniciaba en 0°: la esfera daba un
+  salto visible justo al empezar a salir.
+- **Ritmo del texto**: `--reveal-hero-delay` bajó de 1200 ms a **250 ms** y
+  `--reveal-nav-delay` de 800 ms a 400 ms. Los 1200 ms de la referencia dejaban el header sin
+  texto demasiado tiempo; ahora el contenido ya está puesto cuando cada columna de la cortina
+  lo descubre. El texto aparece a ~1.6 s de la carga en vez de ~2.8 s.
+- **Bug de rutas hermanas**: la guarda que ignora los saltos de solo-hash comparaba el
+  *nombre* de la ruta, y dos secciones hermanas comparten nombre y difieren solo en el param
+  (`/soluciones/mineria` → `/soluciones/industria`), así que el efecto se descartaba. Ahora
+  compara `to.path === from.path`.
+
 ## Notas de implementación
 
 Diferencias entre el diseño y lo construido:
