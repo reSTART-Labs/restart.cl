@@ -404,3 +404,344 @@ html[data-theme="dark"] .nav-logo-solid img {
 .marquee-item:hover {
 	color: var(--color-primary);
 }
+
+/* ================================================================
+   SECUENCIA DE ENTRADA · loader → cortina → header
+   Referencia medida de team-work.cl; ver
+   docs/superpowers/specs/2026-07-29-header-reveal-effects-design.md
+
+   Estos tokens son la única fuente de verdad: useLoader.js los lee con
+   getComputedStyle, así que comprimir la secuencia completa se hace
+   editando solo estos valores.
+   ================================================================ */
+:root {
+	--loader-min: 800ms;
+	--loader-timeout: 3000ms;
+	--loader-fallback-delay: 3200ms;
+	--sphere-fade: 300ms;
+
+	--curtain-stagger: 150ms;
+	--curtain-duration: 700ms;
+	--curtain-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+	--reveal-nav-delay: 800ms;
+	--reveal-nav-duration: 800ms;
+	--reveal-nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+	--reveal-hero-delay: 1200ms;
+	--reveal-hero-duration: 600ms;
+	--reveal-stagger-step: 90ms;
+
+	--hero-zoom-duration: 700ms;
+
+	--scroll-reveal-duration: 600ms;
+	--scroll-reveal-ease: cubic-bezier(0.44, 0, 0.56, 1);
+}
+
+/* ── Overlay ─────────────────────────────────────────────────── */
+.site-loader {
+	position: fixed;
+	inset: 0;
+	z-index: 60; /* por encima del nav (z-50) */
+	overflow: hidden;
+	pointer-events: none;
+}
+
+/* Bloquea el scroll solo mientras carga; al abrir la cortina se libera y el
+   sitio ya es usable aunque las persianas no hayan terminado. */
+html.is-loading {
+	overflow: hidden;
+}
+
+html.is-loading .site-loader {
+	pointer-events: auto;
+}
+
+/* ── Cortina de persianas ────────────────────────────────────── */
+.curtain {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.curtain-half {
+	flex: 1 0 0;
+	display: flex;
+}
+
+.curtain-slat {
+	flex: 1 0 0;
+	background: var(--color-bg);
+	will-change: transform;
+}
+
+/* La mitad de arriba se retrae hacia arriba y la de abajo hacia abajo: la
+   cortina se abre desde la línea media, como en la referencia. */
+.curtain-top .curtain-slat { transform-origin: top; }
+.curtain-bottom .curtain-slat { transform-origin: bottom; }
+
+.curtain-slat:nth-child(1) { --slat-index: 0; }
+.curtain-slat:nth-child(2) { --slat-index: 1; }
+.curtain-slat:nth-child(3) { --slat-index: 2; }
+.curtain-slat:nth-child(4) { --slat-index: 3; }
+.curtain-slat:nth-child(5) { --slat-index: 4; }
+
+@keyframes curtain-slat-out {
+	to { transform: scaleY(0); }
+}
+
+/* Fallback sin JS: si el bundle nunca corre, la cortina se abre sola en vez de
+   dejar el sitio tapado para siempre. */
+.curtain-slat {
+	animation: curtain-slat-out var(--curtain-duration) var(--curtain-ease) both;
+	animation-delay: calc(var(--loader-fallback-delay) + var(--slat-index, 0) * var(--curtain-stagger));
+}
+
+/* SiteLoader montado: el gating de assets toma el control y desarma el fallback. */
+html.loader-js .curtain-slat {
+	animation: none;
+}
+
+html.loader-js .curtain-open .curtain-slat {
+	animation: curtain-slat-out var(--curtain-duration) var(--curtain-ease) both;
+	animation-delay: calc(var(--slat-index, 0) * var(--curtain-stagger));
+}
+
+/* ── Esfera del loader ───────────────────────────────────────── */
+.loader-sphere {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 300px;
+	height: 300px;
+	margin: -150px 0 0 -150px;
+	transform-style: preserve-3d;
+	animation: sphere-spin 4s linear infinite;
+}
+
+/* Eje explícito: el CodePen de referencia interpola hacia rotate3d(0,0,0,360deg),
+   que es un vector de eje nulo inválido y solo funciona por accidente. */
+@keyframes sphere-spin {
+	from { transform: rotate3d(1, 1, 1, 0deg); }
+	to   { transform: rotate3d(1, 1, 1, 360deg); }
+}
+
+@keyframes sphere-out {
+	to { opacity: 0; }
+}
+
+.loader-sphere-leaving {
+	animation:
+		sphere-spin 4s linear infinite,
+		sphere-out var(--sphere-fade) ease-out both;
+}
+
+.loader-plane {
+	position: absolute;
+	inset: 0;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	list-style: none;
+	transform-style: preserve-3d;
+}
+
+.loader-plane li {
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: auto;
+	width: 0;
+	height: 50%;
+	box-sizing: border-box;
+	transform-origin: bottom;
+	transform-style: preserve-3d;
+}
+
+.loader-plane li::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--color-primary);
+	transform: translateX(-50%) rotateX(90deg);
+}
+
+/* Los 36 ángulos de plano y los 18 de punto viven acá y no en atributos style:
+   con 648 nodos, inline costarían ~26 KB de HTML en cada respuesta SSR. */
+.loader-plane:nth-child(1)  { transform: rotateY(10deg); }
+.loader-plane:nth-child(2)  { transform: rotateY(20deg); }
+.loader-plane:nth-child(3)  { transform: rotateY(30deg); }
+.loader-plane:nth-child(4)  { transform: rotateY(40deg); }
+.loader-plane:nth-child(5)  { transform: rotateY(50deg); }
+.loader-plane:nth-child(6)  { transform: rotateY(60deg); }
+.loader-plane:nth-child(7)  { transform: rotateY(70deg); }
+.loader-plane:nth-child(8)  { transform: rotateY(80deg); }
+.loader-plane:nth-child(9)  { transform: rotateY(90deg); }
+.loader-plane:nth-child(10) { transform: rotateY(100deg); }
+.loader-plane:nth-child(11) { transform: rotateY(110deg); }
+.loader-plane:nth-child(12) { transform: rotateY(120deg); }
+.loader-plane:nth-child(13) { transform: rotateY(130deg); }
+.loader-plane:nth-child(14) { transform: rotateY(140deg); }
+.loader-plane:nth-child(15) { transform: rotateY(150deg); }
+.loader-plane:nth-child(16) { transform: rotateY(160deg); }
+.loader-plane:nth-child(17) { transform: rotateY(170deg); }
+.loader-plane:nth-child(18) { transform: rotateY(180deg); }
+.loader-plane:nth-child(19) { transform: rotateY(190deg); }
+.loader-plane:nth-child(20) { transform: rotateY(200deg); }
+.loader-plane:nth-child(21) { transform: rotateY(210deg); }
+.loader-plane:nth-child(22) { transform: rotateY(220deg); }
+.loader-plane:nth-child(23) { transform: rotateY(230deg); }
+.loader-plane:nth-child(24) { transform: rotateY(240deg); }
+.loader-plane:nth-child(25) { transform: rotateY(250deg); }
+.loader-plane:nth-child(26) { transform: rotateY(260deg); }
+.loader-plane:nth-child(27) { transform: rotateY(270deg); }
+.loader-plane:nth-child(28) { transform: rotateY(280deg); }
+.loader-plane:nth-child(29) { transform: rotateY(290deg); }
+.loader-plane:nth-child(30) { transform: rotateY(300deg); }
+.loader-plane:nth-child(31) { transform: rotateY(310deg); }
+.loader-plane:nth-child(32) { transform: rotateY(320deg); }
+.loader-plane:nth-child(33) { transform: rotateY(330deg); }
+.loader-plane:nth-child(34) { transform: rotateY(340deg); }
+.loader-plane:nth-child(35) { transform: rotateY(350deg); }
+.loader-plane:nth-child(36) { transform: rotateY(360deg); }
+
+.loader-plane li:nth-child(1)  { transform: rotate(10deg); }
+.loader-plane li:nth-child(2)  { transform: rotate(20deg); }
+.loader-plane li:nth-child(3)  { transform: rotate(30deg); }
+.loader-plane li:nth-child(4)  { transform: rotate(40deg); }
+.loader-plane li:nth-child(5)  { transform: rotate(50deg); }
+.loader-plane li:nth-child(6)  { transform: rotate(60deg); }
+.loader-plane li:nth-child(7)  { transform: rotate(70deg); }
+.loader-plane li:nth-child(8)  { transform: rotate(80deg); }
+.loader-plane li:nth-child(9)  { transform: rotate(90deg); }
+.loader-plane li:nth-child(10) { transform: rotate(100deg); }
+.loader-plane li:nth-child(11) { transform: rotate(110deg); }
+.loader-plane li:nth-child(12) { transform: rotate(120deg); }
+.loader-plane li:nth-child(13) { transform: rotate(130deg); }
+.loader-plane li:nth-child(14) { transform: rotate(140deg); }
+.loader-plane li:nth-child(15) { transform: rotate(150deg); }
+.loader-plane li:nth-child(16) { transform: rotate(160deg); }
+.loader-plane li:nth-child(17) { transform: rotate(170deg); }
+.loader-plane li:nth-child(18) { transform: rotate(180deg); }
+
+/* Densidad reducida en móvil: 648 puntos en un árbol preserve-3d es riesgoso en
+   gama baja, así que se pinta la mitad de los planos y la mitad de los puntos. */
+@media (max-width: 767px) {
+	.loader-sphere {
+		width: 220px;
+		height: 220px;
+		margin: -110px 0 0 -110px;
+	}
+
+	.loader-plane:nth-child(even),
+	.loader-plane li:nth-child(even) {
+		display: none;
+	}
+
+	.loader-plane li::after {
+		width: 8px;
+		height: 8px;
+	}
+}
+
+/* ── Reveals del header ──────────────────────────────────────── */
+@keyframes reveal-fade {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+@keyframes reveal-up {
+	from { opacity: 0; transform: translateY(40px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes nav-in {
+	from { opacity: 0; transform: translateY(60px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Sin JS ninguna de estas clases oculta nada: el contenido se ve siempre y solo
+   se pierde la animación. Los estados ocultos cuelgan de clases que pone el
+   cliente (is-loading / hero-reveal / reveal-ready). */
+html.is-loading .reveal-hero,
+html.is-loading .reveal-stagger > * {
+	opacity: 0;
+}
+
+html.hero-reveal .reveal-hero {
+	animation: reveal-fade var(--reveal-hero-duration) var(--curtain-ease) var(--reveal-hero-delay) both;
+}
+
+html.hero-reveal .reveal-stagger > * {
+	animation: reveal-up var(--reveal-hero-duration) var(--curtain-ease) both;
+	animation-delay: calc(var(--reveal-hero-delay) + var(--reveal-index, 0) * var(--reveal-stagger-step));
+}
+
+.reveal-stagger > *:nth-child(1) { --reveal-index: 0; }
+.reveal-stagger > *:nth-child(2) { --reveal-index: 1; }
+.reveal-stagger > *:nth-child(3) { --reveal-index: 2; }
+.reveal-stagger > *:nth-child(4) { --reveal-index: 3; }
+.reveal-stagger > *:nth-child(5) { --reveal-index: 4; }
+.reveal-stagger > *:nth-child(6) { --reveal-index: 5; }
+
+.nav-enter {
+	animation: nav-in var(--reveal-nav-duration) var(--reveal-nav-ease) var(--reveal-nav-delay) both;
+}
+
+/* Zoom-out del fondo del hero. El contenedor ya recorta con overflow-hidden. */
+@keyframes hero-zoom-out {
+	from { transform: scale(1.2); }
+	to   { transform: scale(1); }
+}
+
+.hero-zoom {
+	will-change: transform;
+}
+
+html.hero-reveal .hero-zoom {
+	animation: hero-zoom-out var(--hero-zoom-duration) var(--curtain-ease) both;
+}
+
+/* ── Reveal por scroll ───────────────────────────────────────── */
+html.reveal-ready [data-reveal] {
+	opacity: 0;
+}
+
+html.reveal-ready [data-reveal].is-revealed {
+	animation: reveal-up var(--scroll-reveal-duration) var(--scroll-reveal-ease) both;
+	animation-delay: var(--reveal-delay, 0ms);
+}
+
+/* ── prefers-reduced-motion ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+	.site-loader {
+		display: none !important;
+	}
+
+	html.is-loading {
+		overflow: auto !important;
+	}
+
+	html.is-loading .reveal-hero,
+	html.is-loading .reveal-stagger > *,
+	html.reveal-ready [data-reveal] {
+		opacity: 1 !important;
+	}
+
+	html.hero-reveal .reveal-hero,
+	html.hero-reveal .reveal-stagger > *,
+	html.reveal-ready [data-reveal].is-revealed {
+		animation: reveal-fade 200ms ease both !important;
+	}
+
+	html.hero-reveal .hero-zoom,
+	.nav-enter {
+		animation: none !important;
+	}
+}

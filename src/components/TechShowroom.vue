@@ -1,6 +1,6 @@
 <template>
 	<section class="py-20 bg-features-bg overflow-hidden">
-		<div class="container mx-auto px-6 md:px-12 text-center mb-12">
+		<div class="container mx-auto px-6 md:px-12 text-center mb-12" data-reveal>
 			<p class="tech-eyebrow">Tecnolog&iacute;as</p>
 			<h2 class="tech-title">
 				Stack que <em>utilizamos</em>

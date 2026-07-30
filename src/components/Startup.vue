@@ -3,7 +3,7 @@
 		<div class="container mx-auto">
 			<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
 				<!-- Left column -->
-				<div class="lg:col-span-7">
+				<div class="lg:col-span-7" data-reveal>
 					<h2 class="startup-title">
 						Servicios para la <em>innovaci&oacute;n</em> desde cero
 					</h2>

@@ -1,7 +1,7 @@
 <template>
 	<section id="portfolio" class="py-24 px-6 md:px-12">
 		<div class="container mx-auto">
-			<div class="text-center mb-16">
+			<div class="text-center mb-16" data-reveal>
 				<p class="portfolio-eyebrow">Portafolio</p>
 				<h2 class="portfolio-title">
 					Proyectos que hablan <em>por s&iacute; solos</em>

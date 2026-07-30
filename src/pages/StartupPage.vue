@@ -1,7 +1,7 @@
 <template>
 	<!-- ── HERO ── -->
 	<section class="su-hero relative overflow-hidden">
-		<div class="relative z-10 container mx-auto px-6 md:px-12 py-36 max-md:py-28">
+		<div class="relative z-10 container mx-auto px-6 md:px-12 py-36 max-md:py-28 reveal-stagger">
 			<p class="page-hero-kicker">re/START &middot; MVP en 3 semanas</p>
 			<h1 class="su-hero-title">
 				Desarrollamos el MVP de tu <em>Startup</em> en 3 semanas.

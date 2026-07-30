@@ -38,6 +38,12 @@
 				}
 			})();
 		</script>
+
+		<!-- Sin JS el overlay del loader no tiene quien lo abra: se oculta de entrada.
+		     (El fallback CSS de style.css cubre el caso de un bundle que falla a medio camino.) -->
+		<noscript>
+			<style>.site-loader { display: none !important; }</style>
+		</noscript>
 	</head>
 	<body>
 		<!-- Google Tag Manager (noscript) -->

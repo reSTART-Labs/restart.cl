@@ -1,12 +1,12 @@
 <template>
 	<!-- Hero -->
 	<section class="services-hero relative overflow-hidden">
-		<div class="services-hero-bg">
-			<img src="/img/office.jpg" alt="">
+		<div class="services-hero-bg hero-zoom">
+			<img src="/img/office.jpg" alt="" data-critical>
 		</div>
 		<div class="services-hero-overlay"></div>
 
-		<div class="relative z-10 container mx-auto px-6 md:px-12 py-36">
+		<div class="relative z-10 container mx-auto px-6 md:px-12 py-36 reveal-hero">
 			<div class="page-hero-kicker">Servicios &middot; Cat&aacute;logo completo</div>
 			<h1 class="services-hero-title">
 				Cinco frentes donde <em>empujamos</em> tu negocio

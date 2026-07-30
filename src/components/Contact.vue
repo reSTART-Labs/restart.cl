@@ -1,7 +1,7 @@
 <template>
 	<section id="contact" class="bg-contact-bg pt-0">
 		<div class="contact-card relative -top-12 bg-surface mx-4 md:mx-12 p-6 md:p-10 lg:p-14 max-md:top-0 max-md:mb-10">
-			<div class="text-center mb-10">
+			<div class="text-center mb-10" data-reveal>
 				<h3 class="text-2xl md:text-3xl font-light uppercase tracking-wide text-text mt-0">
 					&iexcl;Tom&eacute;monos un caf&eacute;!
 				</h3>

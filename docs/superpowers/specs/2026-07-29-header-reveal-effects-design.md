@@ -208,6 +208,27 @@ monta y el contenido se ve de inmediato con fades de 200 ms.
 
 **Perf de 648 nodos en móvil:** densidad reducida bajo `md`.
 
+## Notas de implementación
+
+Diferencias entre el diseño y lo construido:
+
+- **Contrato de `useLoader`**: además de `phase` / `isHardLoad` / `playCurtain()` expone
+  `curtainOpen` y `hasSphere`. El diseño trataba «esfera desapareciendo» y «cortina
+  abriéndose» como una sola fase `opening`, pero están separados por los 300 ms del fade de
+  la esfera: `SiteLoader` necesita distinguirlos y `Nav` engancha su entrada a `curtainOpen`.
+- **Color de los puntos**: `var(--color-primary)` en lugar de `--color-primary-500` fijo. Es
+  primary-500 en claro y primary-400 en oscuro, siguiendo la convención del repo para
+  mantener contraste en ambos temas.
+- **Densidad móvil**: se ocultan los planos y los puntos pares, quedando 18 × 9 = 162 puntos
+  pintados (el diseño estimaba ~216). Ocultar la mitad de forma regular se lee mejor que
+  recortar a un número exacto, y el patrón queda parejo.
+- **`is-loading` se libera al abrir la cortina**, no al empezar el fade de la esfera. Con lo
+  segundo, el header quedaba 300 ms sin regla que lo ocultara y su animación arrancaba desde
+  un estado ya visible. Detectado al cronometrar la secuencia.
+- **`data-reveal` en el home**: los bloques de título de `Features`, `Solutions`, `Portfolio`,
+  `TechShowroom`, `Faq` y `Contact`; en `About` y `Startup` no hay un contenedor de título
+  aparte, así que el reveal aplica a la columna de texto completa.
+
 ## Verificación
 
 El repo no tiene suite de tests. La verificación es manual y por capturas:

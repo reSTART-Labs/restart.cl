@@ -2,7 +2,7 @@
 	<section id="soluciones" class="py-24 px-6 md:px-12">
 		<div class="container mx-auto">
 			<!-- Header -->
-			<div class="text-center max-w-3xl mx-auto mb-12">
+			<div class="text-center max-w-3xl mx-auto mb-12" data-reveal>
 				<h2 class="solutions-title">
 					Soluciones de <em>digitalizaci&oacute;n</em>
 				</h2>

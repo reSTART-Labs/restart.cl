@@ -2,7 +2,7 @@
 	<!-- Hero statement -->
 	<section class="relative bg-primary-ocean py-32 px-6 md:px-12 max-md:py-24">
 		<div class="absolute inset-0 bg-gradient-to-br from-primary-ocean to-dark opacity-90"></div>
-		<div class="relative z-10 container mx-auto max-w-4xl">
+		<div class="relative z-10 container mx-auto max-w-4xl reveal-stagger">
 			<h1 class="text-white text-3xl md:text-4xl lg:text-5xl font-light leading-tight">
 				En re/START creemos en construir tecnolog&iacute;a con prop&oacute;sito, trabajar junto a quienes se atreven a emprender y crear soluciones que abren camino a nuevas oportunidades.
 			</h1>

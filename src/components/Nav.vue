@@ -1,5 +1,8 @@
 <template>
-	<header class="fixed top-0 left-0 right-0 z-50 px-4 pt-4 flex justify-center">
+	<header
+		class="fixed top-0 left-0 right-0 z-50 px-4 pt-4 flex justify-center"
+		:class="{ 'nav-enter': navEnter }"
+	>
 		<nav
 			class="nav-pill w-full max-w-5xl flex items-center justify-between px-5 md:px-6 h-14 rounded-full transition-all duration-300 border"
 			:class="scrolled
@@ -362,13 +365,27 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { services } from '@/data/services.js'
 import { useTheme } from '@/composables/useTheme'
+import { useLoader } from '@/composables/useLoader'
 
 const { theme, toggle } = useTheme()
 const route = useRoute()
+
+/*
+ * El nav entra desde abajo encadenado a la apertura de la cortina, y solo en carga
+ * dura: en navegación SPA persiste montado y no se re-anima (igual que la referencia).
+ * La clase se engancha una vez y se queda, para no cortar la animación cuando la
+ * cortina termina. Sin JS nunca se añade y el nav simplemente se ve.
+ */
+const { curtainOpen, isHardLoad } = useLoader()
+const navEnter = ref(false)
+
+watch(curtainOpen, (open) => {
+	if (open && isHardLoad.value) navEnter.value = true
+}, { immediate: true })
 
 const solutions = [
 	{ slug: 'mineria', title: 'Minería', icon: 'ion-ios-cog-outline' },

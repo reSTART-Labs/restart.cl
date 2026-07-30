@@ -4,7 +4,7 @@
 			<!-- Hero -->
 			<section class="lab-hero">
 				<div class="container mx-auto px-6 md:px-12 py-28 md:py-32">
-					<div class="lab-hero-grid">
+					<div class="lab-hero-grid reveal-stagger">
 						<div class="lab-hero-left">
 							<!-- <RouterLink to="/labs" class="lab-hero-breadcrumb">
 								<i class="fa fa-arrow-left text-[10px]"></i>

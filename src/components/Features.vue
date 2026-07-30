@@ -1,7 +1,7 @@
 <template>
 	<section id="features" class="py-24 md:px-6 lg:px-12">
 		<div class="container mx-auto">
-			<div class="section-head text-center mb-16 px-6 md:px-0">
+			<div class="section-head text-center mb-16 px-6 md:px-0" data-reveal>
 				<p class="features-eyebrow">Nuestros servicios</p>
 				<h2 class="features-title">
 					Impulsa el crecimiento de tu <em>negocio</em>

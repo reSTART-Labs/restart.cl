@@ -1,7 +1,7 @@
 <template>
 	<section id="faq" class="py-24 px-6 md:px-12 faq-bg">
 		<div class="container mx-auto max-w-3xl">
-			<div class="text-center mb-16">
+			<div class="text-center mb-16" data-reveal>
 				<p class="faq-eyebrow">FAQ</p>
 				<h2 class="faq-title">
 					Preguntas <em>frecuentes</em>

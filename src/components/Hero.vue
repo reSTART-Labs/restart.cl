@@ -1,24 +1,31 @@
 <template>
-	<section id="hero" class="hero-bg relative min-h-screen flex items-center overflow-hidden" ref="heroRef">
+	<section
+		id="hero"
+		class="hero-bg relative min-h-screen flex items-center overflow-hidden"
+		ref="heroRef"
+		data-critical-src="/img/hero.jpg"
+	>
 		<div class="hero-overlay absolute inset-0"></div>
 
+		<!-- El parallax vive en el contenedor y el reveal en sus hijos: si compartieran
+		     elemento, la animación pisaría el transform del parallax al terminar. -->
 		<div
-			class="relative z-10 container mx-auto px-6 md:px-12"
+			class="relative z-10 container mx-auto px-6 md:px-12 reveal-stagger"
 			:style="heroContentStyle"
 		>
-			<p class="hero-kicker animate-fade-in-up animation-delay-100">
+			<p class="hero-kicker">
 				Creatividad, Experiencia y Tecnolog&iacute;a
 			</p>
 
-			<h1 class="hero-title animate-fade-in-up animation-delay-200">
+			<h1 class="hero-title">
 				Dise&ntilde;amos <em>experiencias</em> y productos digitales
 			</h1>
 
-			<p class="hero-lede animate-fade-in-up animation-delay-400">
+			<p class="hero-lede">
 				Impulsamos el crecimiento de tu empresa con soluciones tecnol&oacute;gicas a medida.
 			</p>
 
-			<div class="flex flex-wrap items-center gap-4 mt-10 animate-fade-in-up animation-delay-400">
+			<div class="flex flex-wrap items-center gap-4 mt-10">
 				<RouterLink to="/#contact" class="hero-btn hero-btn-primary">
 					Conversemos
 				</RouterLink>

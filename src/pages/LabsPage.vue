@@ -1,7 +1,7 @@
 <template>
 	<!-- Hero -->
 	<section class="labs-hero relative overflow-hidden">
-		<div class="relative z-10 container mx-auto px-6 md:px-12 py-36">
+		<div class="relative z-10 container mx-auto px-6 md:px-12 py-36 reveal-stagger">
 			<p class="page-hero-kicker">re/START Labs</p>
 			<h1 class="labs-hero-title">
 				Laboratorio de productos que <em>exploran</em>, validan y ven la luz.

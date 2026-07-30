@@ -3,7 +3,7 @@
 		<div class="container mx-auto">
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 				<!-- Content -->
-				<div class="about-text">
+				<div class="about-text" data-reveal>
 					<div class="eyebrow">Sobre nosotros</div>
 					<h2 class="about-title">
 						Tecnolog&iacute;a hecha por y para <em>emprendedores</em>

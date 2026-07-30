@@ -5,10 +5,11 @@
 			<img
 				:src="service.image"
 				:alt="service.title"
-				class="absolute inset-0 w-full h-full object-cover"
+				class="absolute inset-0 w-full h-full object-cover hero-zoom"
+				data-critical
 			>
 			<div class="absolute inset-0 service-hero-overlay"></div>
-			<div class="relative z-10 container mx-auto px-6 md:px-12 pb-20 pt-36">
+			<div class="relative z-10 container mx-auto px-6 md:px-12 pb-20 pt-36 reveal-hero">
 				<div class="max-w-2xl">
 					<RouterLink to="/#features" class="hero-kicker">
 						<i class="fa fa-arrow-left text-[9px]"></i>
