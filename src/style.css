@@ -442,11 +442,13 @@ html[data-theme="dark"] .nav-logo-solid img {
 }
 
 /* ── Overlay ─────────────────────────────────────────────────── */
+/* Sin overflow acá a propósito: el recorte lo hace .curtain. Un ancestro que
+   recorta aplana el contexto 3D de la esfera en WebKit, y el loader dejaba de
+   verse como esfera en Safari. El clip vive donde de verdad se necesita. */
 .site-loader {
 	position: fixed;
 	inset: 0;
 	z-index: 60; /* por encima del nav (z-50) */
-	overflow: hidden;
 	pointer-events: none;
 }
 
@@ -464,18 +466,31 @@ html.is-loading .site-loader {
 .curtain {
 	position: absolute;
 	inset: 0;
-	display: flex;
-	flex-direction: column;
+	overflow: hidden;
 }
 
+/* Las mitades se posicionan solas y se solapan 2px en el centro en vez de apenas
+   tocarse. En viewports de alto impar la frontera cae en media coordenada (400.5px)
+   y, como cada persiana tiene su propia capa por will-change, los dos bordes quedan
+   con antialias al 50%: dos capas al 50% no suman opaco y se colaba una línea de la
+   página de atrás cruzando el viewport. El solape la elimina. */
 .curtain-half {
-	flex: 1 0 0;
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: calc(50% + 2px);
 	display: flex;
 }
 
+.curtain-top { top: -1px; }
+.curtain-bottom { bottom: -1px; }
+
+/* Mismo problema en vertical entre columnas: el box-shadow sangra 1px del mismo
+   color a los lados sin tocar el layout, así las columnas contiguas se pisan. */
 .curtain-slat {
 	flex: 1 0 0;
 	background: var(--color-bg);
+	box-shadow: 0 0 0 1px var(--color-bg);
 	will-change: transform;
 }
 
@@ -512,18 +527,20 @@ html.loader-js .curtain-open .curtain-slat {
 }
 
 /* ── Esfera del loader ───────────────────────────────────────── */
+/* Centrada con translate y no con márgenes negativos: la salida anima la altura de
+   este nodo, y un margin-top fijo dejaría el colapso descentrado.
+   Sin preserve-3d acá: el escenario 3D vive en .loader-sphere-spin, y este nodo
+   anima opacidad, que de todos modos aplana su propio contexto 3D. */
 .loader-sphere {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	width: 300px;
 	height: 300px;
-	margin: -150px 0 0 -150px;
-	transform-style: preserve-3d;
+	transform: translate(-50%, -50%);
 }
 
-/* Capa interior: solo gira. El colapso vive en la capa de arriba porque dos
-   animaciones sobre transform no se componen. */
+/* Capa interior: solo gira, y nunca se toca. */
 .loader-sphere-spin {
 	width: 100%;
 	height: 100%;
@@ -538,12 +555,12 @@ html.loader-js .curtain-open .curtain-slat {
 	to   { transform: rotate3d(1, 1, 1, 360deg); }
 }
 
-/* Salida: cada punto viaja por su propio radio hasta el centro. Lo que se anima es
-   la altura del li, que ES el radio, en vez de escalar la esfera: así los puntos
-   conservan su tamaño y el gesto se lee como que se juntan, no como un zoom out.
-   Medido más barato que animar el transform de los 648 puntos — en un árbol
-   preserve-3d esos transforms no se pueden componer por separado, así que no hay
-   ganancia de compositor y sí 648 animaciones más que tickear.
+/* Salida: cada punto viaja por su propio radio hasta el centro, conservando su
+   tamaño — se juntan, no es un zoom out.
+   Se anima la altura de UN nodo, no la de cada punto: el radio de cada punto es el
+   50% de la altura de su plano, que a su vez es el 100% de la altura de la esfera,
+   así que colapsar la esfera arrastra los 288 puntos con una sola animación. Antes
+   había una animación por punto y en móvil se notaba.
    La curva acelera hacia adentro: implosión, no desvanecido. */
 @keyframes sphere-implode {
 	to { height: 0; }
@@ -555,15 +572,13 @@ html.loader-js .curtain-open .curtain-slat {
 	100%    { opacity: 0; }
 }
 
-.loader-sphere-leaving .loader-plane li {
-	animation: sphere-implode var(--sphere-exit) cubic-bezier(0.7, 0, 0.84, 0) both;
-}
-
-/* El fade va en la capa exterior y no junto al giro: redeclarar la animación de
-   giro para acompañarla lo reiniciaría en 0°, y la esfera daría un salto visible
-   justo al empezar a salir. */
+/* Las dos animaciones van juntas en este nodo porque tocan propiedades distintas
+   (altura y opacidad) y sí se componen. El giro queda aparte: redeclararlo acá lo
+   reiniciaría en 0° y la esfera daría un salto justo al empezar a salir. */
 .loader-sphere-leaving {
-	animation: sphere-implode-fade var(--sphere-exit) linear both;
+	animation:
+		sphere-implode var(--sphere-exit) cubic-bezier(0.7, 0, 0.84, 0) both,
+		sphere-implode-fade var(--sphere-exit) linear both;
 }
 
 .loader-plane {
@@ -601,76 +616,58 @@ html.loader-js .curtain-open .curtain-slat {
 	transform: translateX(-50%) rotateX(90deg);
 }
 
-/* Los 36 ángulos de plano y los 18 de punto viven acá y no en atributos style:
-   con 648 nodos, inline costarían ~26 KB de HTML en cada respuesta SSR. */
-.loader-plane:nth-child(1)  { transform: rotateY(10deg); }
-.loader-plane:nth-child(2)  { transform: rotateY(20deg); }
-.loader-plane:nth-child(3)  { transform: rotateY(30deg); }
-.loader-plane:nth-child(4)  { transform: rotateY(40deg); }
-.loader-plane:nth-child(5)  { transform: rotateY(50deg); }
-.loader-plane:nth-child(6)  { transform: rotateY(60deg); }
-.loader-plane:nth-child(7)  { transform: rotateY(70deg); }
-.loader-plane:nth-child(8)  { transform: rotateY(80deg); }
-.loader-plane:nth-child(9)  { transform: rotateY(90deg); }
-.loader-plane:nth-child(10) { transform: rotateY(100deg); }
-.loader-plane:nth-child(11) { transform: rotateY(110deg); }
-.loader-plane:nth-child(12) { transform: rotateY(120deg); }
-.loader-plane:nth-child(13) { transform: rotateY(130deg); }
-.loader-plane:nth-child(14) { transform: rotateY(140deg); }
-.loader-plane:nth-child(15) { transform: rotateY(150deg); }
-.loader-plane:nth-child(16) { transform: rotateY(160deg); }
-.loader-plane:nth-child(17) { transform: rotateY(170deg); }
-.loader-plane:nth-child(18) { transform: rotateY(180deg); }
-.loader-plane:nth-child(19) { transform: rotateY(190deg); }
-.loader-plane:nth-child(20) { transform: rotateY(200deg); }
-.loader-plane:nth-child(21) { transform: rotateY(210deg); }
-.loader-plane:nth-child(22) { transform: rotateY(220deg); }
-.loader-plane:nth-child(23) { transform: rotateY(230deg); }
-.loader-plane:nth-child(24) { transform: rotateY(240deg); }
-.loader-plane:nth-child(25) { transform: rotateY(250deg); }
-.loader-plane:nth-child(26) { transform: rotateY(260deg); }
-.loader-plane:nth-child(27) { transform: rotateY(270deg); }
-.loader-plane:nth-child(28) { transform: rotateY(280deg); }
-.loader-plane:nth-child(29) { transform: rotateY(290deg); }
-.loader-plane:nth-child(30) { transform: rotateY(300deg); }
-.loader-plane:nth-child(31) { transform: rotateY(310deg); }
-.loader-plane:nth-child(32) { transform: rotateY(320deg); }
-.loader-plane:nth-child(33) { transform: rotateY(330deg); }
-.loader-plane:nth-child(34) { transform: rotateY(340deg); }
-.loader-plane:nth-child(35) { transform: rotateY(350deg); }
-.loader-plane:nth-child(36) { transform: rotateY(360deg); }
+/* Los 24 ángulos de plano y los 12 de punto viven acá y no en atributos style:
+   inline costarían HTML extra en cada respuesta SSR por cada uno de los 288 nodos.
+   La densidad bajó de 36x18=648 a 24x12=288 puntos: 648 nodos en un árbol
+   preserve-3d es más de lo que aguanta un móvil, y a 15 grados el patrón se lee
+   igual de denso. */
+.loader-plane:nth-child(1) { transform: rotateY(15deg); }
+.loader-plane:nth-child(2) { transform: rotateY(30deg); }
+.loader-plane:nth-child(3) { transform: rotateY(45deg); }
+.loader-plane:nth-child(4) { transform: rotateY(60deg); }
+.loader-plane:nth-child(5) { transform: rotateY(75deg); }
+.loader-plane:nth-child(6) { transform: rotateY(90deg); }
+.loader-plane:nth-child(7) { transform: rotateY(105deg); }
+.loader-plane:nth-child(8) { transform: rotateY(120deg); }
+.loader-plane:nth-child(9) { transform: rotateY(135deg); }
+.loader-plane:nth-child(10) { transform: rotateY(150deg); }
+.loader-plane:nth-child(11) { transform: rotateY(165deg); }
+.loader-plane:nth-child(12) { transform: rotateY(180deg); }
+.loader-plane:nth-child(13) { transform: rotateY(195deg); }
+.loader-plane:nth-child(14) { transform: rotateY(210deg); }
+.loader-plane:nth-child(15) { transform: rotateY(225deg); }
+.loader-plane:nth-child(16) { transform: rotateY(240deg); }
+.loader-plane:nth-child(17) { transform: rotateY(255deg); }
+.loader-plane:nth-child(18) { transform: rotateY(270deg); }
+.loader-plane:nth-child(19) { transform: rotateY(285deg); }
+.loader-plane:nth-child(20) { transform: rotateY(300deg); }
+.loader-plane:nth-child(21) { transform: rotateY(315deg); }
+.loader-plane:nth-child(22) { transform: rotateY(330deg); }
+.loader-plane:nth-child(23) { transform: rotateY(345deg); }
+.loader-plane:nth-child(24) { transform: rotateY(360deg); }
 
-.loader-plane li:nth-child(1)  { transform: rotate(10deg); }
-.loader-plane li:nth-child(2)  { transform: rotate(20deg); }
-.loader-plane li:nth-child(3)  { transform: rotate(30deg); }
-.loader-plane li:nth-child(4)  { transform: rotate(40deg); }
-.loader-plane li:nth-child(5)  { transform: rotate(50deg); }
-.loader-plane li:nth-child(6)  { transform: rotate(60deg); }
-.loader-plane li:nth-child(7)  { transform: rotate(70deg); }
-.loader-plane li:nth-child(8)  { transform: rotate(80deg); }
-.loader-plane li:nth-child(9)  { transform: rotate(90deg); }
-.loader-plane li:nth-child(10) { transform: rotate(100deg); }
-.loader-plane li:nth-child(11) { transform: rotate(110deg); }
-.loader-plane li:nth-child(12) { transform: rotate(120deg); }
-.loader-plane li:nth-child(13) { transform: rotate(130deg); }
-.loader-plane li:nth-child(14) { transform: rotate(140deg); }
-.loader-plane li:nth-child(15) { transform: rotate(150deg); }
-.loader-plane li:nth-child(16) { transform: rotate(160deg); }
-.loader-plane li:nth-child(17) { transform: rotate(170deg); }
-.loader-plane li:nth-child(18) { transform: rotate(180deg); }
+.loader-plane li:nth-child(1) { transform: rotate(15deg); }
+.loader-plane li:nth-child(2) { transform: rotate(30deg); }
+.loader-plane li:nth-child(3) { transform: rotate(45deg); }
+.loader-plane li:nth-child(4) { transform: rotate(60deg); }
+.loader-plane li:nth-child(5) { transform: rotate(75deg); }
+.loader-plane li:nth-child(6) { transform: rotate(90deg); }
+.loader-plane li:nth-child(7) { transform: rotate(105deg); }
+.loader-plane li:nth-child(8) { transform: rotate(120deg); }
+.loader-plane li:nth-child(9) { transform: rotate(135deg); }
+.loader-plane li:nth-child(10) { transform: rotate(150deg); }
+.loader-plane li:nth-child(11) { transform: rotate(165deg); }
+.loader-plane li:nth-child(12) { transform: rotate(180deg); }
 
-/* Densidad reducida en móvil: 648 puntos en un árbol preserve-3d es riesgoso en
-   gama baja, así que se pinta la mitad de los planos y la mitad de los puntos. */
+/* En móvil baja el tamaño, no la densidad: se midió pintar los 288 puntos con CPU a
+   1/4 y da 0 frames largos, así que ralear el patrón no compraba nada y sí empobrecía
+   el dibujo. Lo que costaba era animar punto por punto, no dibujarlos.
+   El centrado lo hace translate(-50%, -50%): un margen negativo se sumaría al
+   translate y descentraría la esfera. */
 @media (max-width: 767px) {
 	.loader-sphere {
 		width: 220px;
 		height: 220px;
-		margin: -110px 0 0 -110px;
-	}
-
-	.loader-plane:nth-child(even),
-	.loader-plane li:nth-child(even) {
-		display: none;
 	}
 
 	.loader-plane li::after {

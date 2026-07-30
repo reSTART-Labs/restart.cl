@@ -230,6 +230,40 @@ monta y el contenido se ve de inmediato con fades de 200 ms.
   (`/soluciones/mineria` → `/soluciones/industria`), así que el efecto se descartaba. Ahora
   compara `to.path === from.path`.
 
+## Ajustes tras verlo en producción
+
+Reportado: una línea cruzando el viewport durante la carga, y en Safari/móvil poco fluido.
+
+- **La línea era una costura de compositing.** En viewports de alto o ancho impar las
+  fronteras entre mitades y columnas caen en media coordenada (400.5 px, 256.195 px) y, como
+  cada persiana tiene su propia capa por `will-change: transform`, los dos bordes contiguos
+  quedan con antialias al 50%: dos capas al 50% no suman opaco y se colaba la página de atrás.
+  Reproducida a 1281x801 y verificada con un detector de píxeles. Las mitades ahora se
+  posicionan en absoluto y **se solapan 2 px**, y las columnas sangran 1 px del mismo color con
+  `box-shadow`. Cero costuras en 1281x801, 1280x800, 1367x769, 391x845, 1440x900 y 1920x1081.
+- **`overflow: hidden` salió del overlay.** Un ancestro que recorta aplana el contexto 3D de
+  los descendientes en WebKit, lo que explicaría que el loader no se viera bien en Safari. El
+  clip ahora vive en `.curtain`, que es donde de verdad se necesita.
+- **La implosión pasó de 648 animaciones a 1.** El radio de cada punto es el 50% de la altura
+  de su plano, que es el 100% de la altura de la esfera: animar la altura de un solo nodo
+  arrastra todos los puntos. En perfil móvil con CPU a 1/4, la implosión pasó de picos por
+  animación-por-punto a **0 frames largos**.
+- **Densidad de 648 a 288 puntos** (24 planos x 12 puntos, pasos de 15°). El giro en móvil
+  bajó de 83.5 ms de pico con 2 frames largos a 9.4 ms con 0.
+- **Se eliminó la reducción de densidad en móvil.** Medido: pintar los 288 puntos da 0 frames
+  largos igual, así que ralear a 72 no compraba nada y empobrecía el dibujo. Lo que costaba era
+  animar punto por punto, no dibujarlos. En móvil solo cambia el tamaño (220 px, punto de 8 px).
+- **Centrado con `translate(-50%, -50%)`** en vez de márgenes negativos: la salida anima la
+  altura, y un margen fijo dejaba el colapso descentrado.
+
+**Safari no se pudo verificar de punta a punta**: no hay WebKit disponible en el entorno de
+desarrollo. Se corrigió el riesgo concreto y documentado de WebKit (el aplanado del contexto 3D
+por un ancestro que recorta) y se bajó el costo de render, pero conviene confirmarlo en un
+dispositivo real.
+
+Dato corregido: **producción sí comprime** (HTML en 10.4 KB con gzip). La nota anterior sobre
+7 KB en crudo por la esfera venía de una medición con `HEAD` sin `Accept-Encoding`.
+
 ## Notas de implementación
 
 Diferencias entre el diseño y lo construido:
