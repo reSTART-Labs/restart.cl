@@ -12,13 +12,31 @@ import { ref, readonly } from 'vue'
  * verdad y permite recomprimir toda la secuencia sin tocar este archivo.
  */
 
+/*
+ * Interruptor del loader. En false no se monta el overlay: no hay esfera ni cortina,
+ * y el contenido que ya venía en el HTML del SSR se ve de inmediato.
+ *
+ * Se apagó porque el loader retrasaba a propósito algo que ya estaba listo: exigía un
+ * mínimo de 800 ms más la espera de los assets del hero (hasta 3 s de tope) antes de
+ * descubrir la página, y el HTML completo pesa ~10 KB comprimido. En móvil eso se
+ * percibe como que el sitio carga lento.
+ *
+ * Con el loader apagado, la carga dura no anima el header: el contenido del SSR ya está
+ * pintado, así que ocultarlo para volver a mostrarlo sería un parpadeo. Los efectos sí
+ * corren al cambiar de sección por SPA, donde el elemento nace oculto.
+ *
+ * Para volver a encenderlo basta poner esto en true: la esfera, la cortina y todo su
+ * encadenamiento siguen intactos.
+ */
+const LOADER_ENABLED = false
+
 const PHASE_LOADING = 'loading'
 const PHASE_OPENING = 'opening'
 const PHASE_DONE = 'done'
 
 const isBrowser = typeof window !== 'undefined'
 
-const phase = ref(PHASE_LOADING)
+const phase = ref(LOADER_ENABLED ? PHASE_LOADING : PHASE_DONE)
 const curtainOpen = ref(false)
 const hasSphere = ref(true)
 const isHardLoad = ref(true)
@@ -125,6 +143,10 @@ function start() {
 	if (!isBrowser || started) return
 	started = true
 
+	/* Loader apagado: no hay nada que abrir y el contenido del SSR ya se ve. Tampoco se
+	   dispara el reveal, porque animarlo ahora sería esconder algo ya pintado. */
+	if (!LOADER_ENABLED) return
+
 	document.documentElement.classList.add('loader-js')
 
 	if (prefersReducedMotion()) {
@@ -146,7 +168,7 @@ function start() {
 function playCurtain() {
 	if (!isBrowser) return
 
-	if (prefersReducedMotion()) {
+	if (!LOADER_ENABLED || prefersReducedMotion()) {
 		triggerHeroReveal()
 		return
 	}

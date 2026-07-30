@@ -264,6 +264,26 @@ dispositivo real.
 Dato corregido: **producción sí comprime** (HTML en 10.4 KB con gzip). La nota anterior sobre
 7 KB en crudo por la esfera venía de una medición con `HEAD` sin `Accept-Encoding`.
 
+## Estado actual: loader apagado
+
+`LOADER_ENABLED = false` en `src/composables/useLoader.js`. El overlay no se monta: no hay
+esfera ni cortina, y el contenido que ya venía en el HTML del SSR se ve de inmediato.
+
+**Por qué.** Los arreglos de render dejaron el costo de dibujo en nada (0 frames largos con CPU
+a 1/4), pero quedaba algo que no era un bug sino el diseño mismo: el loader retrasaba a
+propósito lo que ya estaba listo — mínimo 800 ms más la espera de los assets del hero, hasta 3 s
+de tope — cuando el HTML completo pesa ~10 KB comprimido. En móvil eso se percibe como lentitud.
+Además el árbol `preserve-3d` es justo lo que peor lleva WebKit, y eso no se pudo descartar.
+
+**Qué se conserva.** En carga dura el header no anima: el contenido del SSR ya está pintado, así
+que ocultarlo para volver a mostrarlo sería un parpadeo (medido: sin el overlay que lo tapaba, el
+contenido se pinta visible y la animación lo esconde ~250 ms). Al cambiar de sección por SPA sí
+corren el zoom-out del hero y el fade-up escalonado, porque ahí el elemento nace oculto. El
+reveal por scroll de los títulos sigue igual en todas las páginas.
+
+**Cómo volver a encenderlo.** Poner `LOADER_ENABLED = true`. La esfera, la cortina, el gating de
+assets y todo el encadenamiento siguen intactos y verificados; nada se borró.
+
 ## Notas de implementación
 
 Diferencias entre el diseño y lo construido:
