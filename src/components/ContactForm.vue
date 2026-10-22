@@ -277,7 +277,7 @@ select.contact-input {
 	font-weight: 700;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	color: #FFFFFF;
+	color: var(--color-primary-on);
 	background: var(--color-primary);
 	border: 1px solid var(--color-primary);
 	border-radius: 999px;

@@ -220,7 +220,7 @@ onUnmounted(() => {
 }
 
 html[data-theme="dark"] .solutions-card-content {
-	background: #1A2230;
+	background: #111616;
 }
 
 .solutions-card-title {

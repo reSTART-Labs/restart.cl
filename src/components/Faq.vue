@@ -58,7 +58,7 @@
 
 <style scoped>
 .faq-bg {
-	background: #060A11;
+	background: #000000;
 }
 
 html[data-theme="light"] .faq-bg {

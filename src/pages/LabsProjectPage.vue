@@ -334,7 +334,7 @@ function relatedOverlayStyle(related) {
 	overflow: hidden;
 	background:
 		radial-gradient(ellipse 60% 60% at 20% 10%, color-mix(in oklab, var(--brand) 18%, transparent), transparent 55%),
-		radial-gradient(ellipse 50% 50% at 85% 90%, rgba(50, 191, 212, 0.14), transparent 55%),
+		radial-gradient(ellipse 50% 50% at 85% 90%, rgba(111, 224, 237, 0.14), transparent 55%),
 		var(--color-primary-900);
 }
 

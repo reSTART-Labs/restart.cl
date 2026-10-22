@@ -126,8 +126,8 @@ function categoryLabel(slug) {
 	inset: 0;
 	z-index: 1;
 	background: linear-gradient(180deg,
-		rgba(4, 23, 30, 0.6) 0%,
-		rgba(4, 23, 30, 0.88) 65%,
+		rgba(0, 0, 0, 0.6) 0%,
+		rgba(0, 0, 0, 0.88) 65%,
 		var(--color-primary-900) 100%);
 }
 

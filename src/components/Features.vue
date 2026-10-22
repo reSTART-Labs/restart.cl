@@ -202,7 +202,7 @@ onUnmounted(() => {
 }
 
 .acordeon-item:hover {
-	box-shadow: 0 24px 60px rgba(4, 23, 30, 0.4);
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
 }
 
 .acordeon-item:hover::before {
@@ -260,7 +260,7 @@ onUnmounted(() => {
 }
 
 .sc-lab .acordeon-tag {
-	color: #C8C0FF;
+	color: #A9EEF5;
 	background: rgba(79, 61, 245, 0.24);
 	border-color: rgba(200, 192, 255, 0.28);
 }
@@ -271,7 +271,7 @@ onUnmounted(() => {
 	line-height: 1.15;
 	letter-spacing: -0.01em;
 	color: #FFFFFF;
-	text-shadow: 0 1px 20px rgba(4, 23, 30, 0.35);
+	text-shadow: 0 1px 20px rgba(0, 0, 0, 0.35);
 	margin: 0;
 }
 
@@ -602,7 +602,7 @@ onUnmounted(() => {
 	padding: 14px 28px;
 	border-radius: 999px;
 	background: var(--color-primary);
-	color: #FFFFFF;
+	color: var(--color-primary-on);
 	margin-top: 32px;
 	text-decoration: none;
 	transition: all 0.2s ease;

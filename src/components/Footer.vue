@@ -14,13 +14,13 @@
 						<a
 							href="//twitter.com/restart_cl"
 							target="_blank"
-							class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-white transition-all duration-200 no-underline"
+							class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-primary-on transition-all duration-200 no-underline"
 						>
 							<i class="ion-social-twitter text-sm"></i>
 						</a>
 						<a
 							href="#"
-							class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-white transition-all duration-200 no-underline"
+							class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-primary-on transition-all duration-200 no-underline"
 						>
 							<i class="ion-social-facebook text-sm"></i>
 						</a>
@@ -29,7 +29,7 @@
 
 				<!-- Servicios -->
 				<div>
-					<h4 class="text-white text-sm font-semibold uppercase tracking-wide mb-5">Servicios</h4>
+					<h4 class="text-white text-sm font-black uppercase tracking-wide mb-5">Servicios</h4>
 					<ul class="list-none m-0 p-0 flex flex-col gap-2.5">
 						<li v-for="service in services" :key="service.slug">
 							<RouterLink
@@ -45,7 +45,7 @@
 
 				<!-- Empresa -->
 				<div>
-					<h4 class="text-white text-sm font-semibold uppercase tracking-wide mb-5">Empresa</h4>
+					<h4 class="text-white text-sm font-black uppercase tracking-wide mb-5">Empresa</h4>
 					<ul class="list-none m-0 p-0 flex flex-col gap-2.5">
 						<li>
 							<RouterLink to="/nosotros" class="text-sm no-underline transition-colors" :class="linkClass(isCurrent('/nosotros'))">
@@ -67,8 +67,8 @@
 
 				<!-- Laboratorio -->
 				<div>
-					<h4 class="text-white text-sm font-semibold uppercase tracking-wide mb-5">
-						<RouterLink to="/labs" class="no-underline transition-colors" :class="matches('/labs') ? 'text-primary' : 'text-white hover:text-primary'">
+					<h4 class="text-white text-sm font-black uppercase tracking-wide mb-5">
+						<RouterLink to="/labs" class="text-white hover:text-primary no-underline transition-colors">
 							Laboratorio
 						</RouterLink>
 					</h4>
@@ -107,10 +107,10 @@
 
 			<!-- Bottom -->
 			<div class="flex flex-col md:flex-row items-center justify-between pt-8 gap-4">
-				<p class="text-xs text-white/40">
-					{{ year }} re/START by <a href="https://minicatalogo.com" target="_blank" class="text-white/40 hover:text-primary no-underline transition-colors">Minicatalogo.com</a>. Todos los derechos reservados.
+				<p class="text-xs text-footer-text">
+					{{ year }} re/START by <a href="https://minicatalogo.com" target="_blank" class="text-footer-text hover:text-primary no-underline transition-colors">Minicatalogo.com</a>. Todos los derechos reservados.
 				</p>
-				<p class="text-xs text-white/40">
+				<p class="text-xs text-footer-text">
 					help@restart.cl
 				</p>
 			</div>
@@ -128,7 +128,6 @@ const year = new Date().getFullYear()
 
 // Marcado de ruta activa (misma lógica que el nav)
 const isCurrent = (path) => route.path === path
-const matches = (base) => route.path === base || route.path.startsWith(base + '/')
 const linkClass = (isActive) => isActive ? 'text-primary font-semibold' : 'text-footer-text hover:text-primary'
 </script>
 
@@ -136,6 +135,11 @@ const linkClass = (isActive) => isActive ? 'text-primary font-semibold' : 'text-
 .site-footer {
 	position: relative;
 	background: var(--color-footer-bg);
+	/* El footer es negro en ambos temas: el acento siempre es el cian claro,
+	   no el teal profundo del tema claro (que no contrasta sobre negro). */
+	--color-primary: var(--color-primary-300);
+	--color-primary-dark: var(--color-primary-200);
+	--color-primary-on: #000000;
 	box-shadow:
 		inset 0 60px 80px -60px rgba(0, 0, 0, 0.4),
 		0 -20px 40px -20px rgba(0, 0, 0, 0.12);

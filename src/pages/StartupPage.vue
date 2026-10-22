@@ -468,7 +468,7 @@ function toggleFaq(index) {
 .su-hero {
 	background:
 		radial-gradient(ellipse 50% 50% at 15% 10%, rgba(79, 61, 245, 0.22), transparent 55%),
-		radial-gradient(ellipse 50% 50% at 85% 90%, rgba(50, 191, 212, 0.2), transparent 55%),
+		radial-gradient(ellipse 50% 50% at 85% 90%, rgba(111, 224, 237, 0.2), transparent 55%),
 		radial-gradient(ellipse 60% 60% at 50% 50%, rgba(245, 159, 36, 0.06), transparent 60%),
 		var(--color-primary-900);
 }
@@ -968,7 +968,7 @@ function toggleFaq(index) {
 
 /* ── FAQ ── */
 .su-faq-bg {
-	background: #060A11;
+	background: #000000;
 }
 
 html[data-theme="light"] .su-faq-bg {

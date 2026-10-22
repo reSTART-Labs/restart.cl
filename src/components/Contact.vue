@@ -61,7 +61,7 @@ const calContainer = ref(null)
 useCalEmbed(calContainer, {
 	calLink: 'restart/asesoria-gratuita',
 	layout: 'month_view',
-	brandColor: '#0EA5BD',
+	brandColor: '#104B55',
 })
 </script>
 

@@ -314,8 +314,8 @@ const processSteps = [
 /* ── HERO ── */
 .service-hero-overlay {
 	background: linear-gradient(180deg,
-		rgba(4, 23, 30, 0.6) 0%,
-		rgba(4, 23, 30, 0.88) 65%,
+		rgba(0, 0, 0, 0.6) 0%,
+		rgba(0, 0, 0, 0.88) 65%,
 		var(--color-primary-900) 100%);
 }
 
@@ -642,7 +642,7 @@ const processSteps = [
 	width: 28px;
 	height: 28px;
 	border-radius: 999px;
-	background: rgba(50, 191, 212, 0.2);
+	background: rgba(111, 224, 237, 0.2);
 	color: var(--color-primary-300);
 	display: inline-flex;
 	align-items: center;

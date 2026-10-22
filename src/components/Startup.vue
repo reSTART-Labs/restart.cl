@@ -40,7 +40,7 @@
 }
 
 html[data-theme="dark"] .startup-section {
-	background: #0F141D;
+	background: #0A0D0D;
 }
 
 .startup-title {

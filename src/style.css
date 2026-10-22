@@ -5,35 +5,36 @@
 	   PALETA REFRESCADA · turquesa refinada + 2 acentos narrativos
 	   ============================================================ */
 
-	/* Rampa primaria · turquesa con 10 pasos */
-	--color-primary-50:  #E6F7FA;
-	--color-primary-100: #C2EBF1;
-	--color-primary-200: #8DD9E3;
-	--color-primary-300: #67D7E4;
-	--color-primary-400: #32BFD4;
-	--color-primary-500: #0EA5BD;
-	--color-primary-600: #08798C;
-	--color-primary-700: #0A5366;
-	--color-primary-800: #082C38;
-	--color-primary-900: #04171E;
+	/* Rampa primaria · cian monocromático (acento #6FE0ED, teal profundo #104B55) */
+	--color-primary-50:  #EEFBFD;
+	--color-primary-100: #D3F6FA;
+	--color-primary-200: #A9EEF5;
+	--color-primary-300: #6FE0ED;
+	--color-primary-400: #3FC9DA;
+	--color-primary-500: #1A8E9E;
+	--color-primary-600: #146C79;
+	--color-primary-700: #104B55;
+	--color-primary-800: #0B3239;
+	--color-primary-900: #061C20;
 
 	/* Aliases de marca (compatibilidad) */
-	--color-primary:        var(--color-primary-500);
-	--color-primary-dark:   var(--color-primary-600);
+	--color-primary:        var(--color-primary-700);
+	--color-primary-dark:   var(--color-primary-800);
 	--color-primary-deep:   var(--color-primary-700);
 	--color-primary-ocean:  var(--color-primary-800);
 	--color-primary-sky:    var(--color-primary-300);
-	--color-primary-pastel: var(--color-primary-50);
-	--color-primary-light:  #F2FCFE;
+	--color-primary-pastel: #E3F4F5;
+	--color-primary-light:  #F2FBFC;
 
 	/* Text color on top of primary backgrounds (adapts per theme) */
-	--color-primary-on: #FFFFFF;
+	--color-primary-on: #F4F5F5;
 
-	/* Acentos · reducidos a 2 roles narrativos */
-	--color-accent-electric: #4F3DF5;
-	--color-accent-electric-hover: #3A28DE;
-	--color-accent-gold:     #F59F24;
-	--color-accent-gold-hover: #D8830F;
+	/* Acentos · la paleta tiene un solo acento (cian); los roles narrativos
+	   se resuelven con el azul pizarra y el teal profundo */
+	--color-accent-electric: #4D5B7C;
+	--color-accent-electric-hover: #3B4762;
+	--color-accent-gold:     #104B55;
+	--color-accent-gold-hover: #0B3239;
 
 	/* Signals funcionales (feedback) */
 	--color-signal-success: #10B981;
@@ -50,34 +51,34 @@
 	   TOKENS SEMÁNTICOS · resuelven según [data-theme]
 	   ============================================================ */
 
-	/* Defaults = light theme */
-	--color-bg: #FAFAF7;
+	/* Defaults = light theme · crema + casi negro, grises verdosos */
+	--color-bg: #FAF9F5;
 	--color-surface: #FFFFFF;
-	--color-surface-muted: #F3F2EC;
+	--color-surface-muted: #F4F5F5;
 	--color-surface-raised: #FFFFFF;
 
-	--color-text: #0D1117;
-	--color-text-soft: #2E3440;
-	--color-text-light: #4E5563;
-	--color-text-muted: #8A8F99;
+	--color-text: #141413;
+	--color-text-soft: #2A3332;
+	--color-text-light: #4A5E5B;
+	--color-text-muted: #6F908C;
 
-	--color-border: #E8E6DC;
-	--color-border-soft: #EFEDE4;
-	--color-border-strong: #D6D2C3;
+	--color-border: #E5ECEB;
+	--color-border-soft: #EEF2F1;
+	--color-border-strong: #CBD8D6;
 
-	--color-dark: #0B0E14;
-	--color-dark-soft: #131820;
-	--color-dark-slate: #3D3D3D;
-	--color-dark-graphite: #06202B;
-	--color-dark-smoke: #494651;
+	--color-dark: #000000;
+	--color-dark-soft: #0A0D0D;
+	--color-dark-slate: #2A3332;
+	--color-dark-graphite: #061C20;
+	--color-dark-smoke: #4D5B7C;
 
 	/* Legacy aliases usadas en componentes */
-	--color-gray-light: #DBDBDB;
-	--color-gray-soft: #BDBDBD;
+	--color-gray-light: #E5ECEB;
+	--color-gray-soft: #B9C8C6;
 	--color-features-bg: var(--color-surface-muted);
-	--color-contact-bg: var(--color-primary-800);
-	--color-footer-bg: #07090E;
-	--color-footer-text: #8A8F99;
+	--color-contact-bg: var(--color-primary-700);
+	--color-footer-bg: #000000;
+	--color-footer-text: #E5ECEB;
 
 	/* ============================================================
 	   TIPOGRAFÍA · Lato display/sans + Merriweather serif
@@ -92,33 +93,36 @@
    DARK THEME · overrides
    ================================================================ */
 html[data-theme="dark"] {
-	--color-bg: #0B0E14;
-	--color-surface: #121722;
-	--color-surface-muted: #0F141D;
-	--color-surface-raised: #1A202C;
+	/* Negro casi monocromático · texto blanco verdoso · un único acento cian */
+	--color-bg: #000000;
+	--color-surface: #0A0D0D;
+	--color-surface-muted: #050707;
+	--color-surface-raised: #111616;
 
-	--color-text: #EDEFF3;
-	--color-text-soft: #D0D4DE;
-	--color-text-light: #B5BAC5;
-	--color-text-muted: #7A8192;
+	--color-text: #E5ECEB;
+	--color-text-soft: #F4F5F5;
+	--color-text-light: #B4C4C2;
+	--color-text-muted: #6F908C;
 
-	--color-border: #232935;
-	--color-border-soft: #1A202C;
-	--color-border-strong: #323847;
+	--color-border: #1A2323;
+	--color-border-soft: #111616;
+	--color-border-strong: #2A3838;
 
-	--color-primary: var(--color-primary-400);
-	--color-primary-dark: var(--color-primary-300);
-	--color-primary-on: var(--color-primary-900);
-	--color-primary-pastel: rgba(50, 191, 212, 0.14);
+	--color-primary: var(--color-primary-300);
+	--color-primary-dark: var(--color-primary-200);
+	--color-primary-on: #000000;
+	--color-primary-pastel: rgba(111, 224, 237, 0.12);
 
-	/* Electric accent brighter in dark for contrast on dark surfaces */
-	--color-accent-electric: #8577FF;
-	--color-accent-electric-hover: #A29AFF;
+	/* Acentos narrativos colapsan al cian en oscuro */
+	--color-accent-electric: #6FE0ED;
+	--color-accent-electric-hover: #A9EEF5;
+	--color-accent-gold: #6FE0ED;
+	--color-accent-gold-hover: #A9EEF5;
 
 	--color-features-bg: var(--color-surface-muted);
-	--color-contact-bg: #06202B;
-	--color-footer-bg: #07090E;
-	--color-footer-text: #7A8192;
+	--color-contact-bg: #104B55;
+	--color-footer-bg: #000000;
+	--color-footer-text: #E5ECEB;
 }
 
 /* ================================================================
@@ -184,7 +188,7 @@ h1 em, h2 em, h3 em, h4 em {
 .hero-overlay {
 	background: linear-gradient(135deg,
 		color-mix(in oklab, var(--color-primary-800) 92%, transparent),
-		color-mix(in oklab, #0B0E14 88%, transparent));
+		color-mix(in oklab, #000000 88%, transparent));
 }
 
 /* ================================================================
@@ -332,7 +336,7 @@ html[data-theme="dark"] button.bg-primary {
    LAB PROJECT STATS · dark-mode bg override (deeper than body bg)
    ================================================================ */
 html[data-theme="dark"] .lab-stats {
-	background: #060A11;
+	background: #000000;
 }
 
 html[data-theme="dark"] .lab-stat {
@@ -344,7 +348,7 @@ html[data-theme="dark"] .lab-stat {
    ================================================================ */
 .contact-card {
 	border-radius: 2px;
-	box-shadow: 0 20px 80px rgba(8, 44, 56, 0.22);
+	box-shadow: 0 20px 80px rgba(16, 75, 85, 0.22);
 }
 
 html[data-theme="dark"] .contact-card {

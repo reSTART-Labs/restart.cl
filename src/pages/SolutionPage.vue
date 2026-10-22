@@ -353,8 +353,8 @@ const solution = computed(() => solutions.find(s => s.slug === route.params.slug
 /* ── HERO ── */
 .sol-hero-overlay {
 	background: linear-gradient(180deg,
-		rgba(4, 23, 30, 0.55) 0%,
-		rgba(4, 23, 30, 0.85) 65%,
+		rgba(0, 0, 0, 0.55) 0%,
+		rgba(0, 0, 0, 0.85) 65%,
 		var(--color-primary-900) 100%);
 }
 
@@ -921,7 +921,7 @@ const solution = computed(() => solutions.find(s => s.slug === route.params.slug
 }
 
 html[data-theme="dark"] .diff-section {
-	background: #0F141D;
+	background: #0A0D0D;
 }
 
 .diff-item {
@@ -944,7 +944,7 @@ html[data-theme="dark"] .diff-section {
 	width: 32px;
 	height: 32px;
 	border-radius: 999px;
-	background: rgba(50, 191, 212, 0.2);
+	background: rgba(111, 224, 237, 0.2);
 	color: var(--color-primary-300);
 	display: inline-flex;
 	align-items: center;
@@ -1047,7 +1047,7 @@ html[data-theme="dark"] .diff-section {
 	border: 1px solid var(--color-border);
 	border-radius: 24px;
 	padding: clamp(28px, 4vw, 56px);
-	box-shadow: 0 20px 60px rgba(8, 44, 56, 0.08);
+	box-shadow: 0 20px 60px rgba(16, 75, 85, 0.08);
 }
 
 .contact-info {

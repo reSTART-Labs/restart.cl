@@ -130,7 +130,7 @@ const heroContentStyle = computed(() => {
 
 .hero-btn-primary {
 	background: var(--color-primary);
-	color: #FFFFFF;
+	color: var(--color-primary-on);
 	border-color: var(--color-primary);
 }
 

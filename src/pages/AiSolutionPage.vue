@@ -133,7 +133,7 @@
 						></div>
 						<div class="text-center">
 							<span
-								class="relative z-10 inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border-2 border-primary text-primary font-bold text-sm shadow-sm"
+								class="relative z-10 inline-flex items-center justify-center w-12 h-12 rounded-full bg-surface border-2 border-primary text-primary font-bold text-sm shadow-sm"
 							>
 								{{ i + 1 }}
 							</span>
