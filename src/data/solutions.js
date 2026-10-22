@@ -142,8 +142,8 @@ export const solutions = [
 			],
 			whatsapp: {
 				label: 'WhatsApp',
-				value: '+56 9 0000 0000',
-				href: 'https://wa.me/56900000000',
+				value: '+56 9 8414 2604',
+				href: 'https://wa.me/56984142604',
 			},
 		},
 	},
@@ -281,8 +281,8 @@ export const solutions = [
 			],
 			whatsapp: {
 				label: 'WhatsApp',
-				value: '+56 9 0000 0000',
-				href: 'https://wa.me/56900000000',
+				value: '+56 9 8414 2604',
+				href: 'https://wa.me/56984142604',
 			},
 		},
 	},
@@ -413,8 +413,8 @@ export const solutions = [
 			],
 			whatsapp: {
 				label: 'WhatsApp',
-				value: '+56 9 0000 0000',
-				href: 'https://wa.me/56900000000',
+				value: '+56 9 8414 2604',
+				href: 'https://wa.me/56984142604',
 			},
 		},
 	},
