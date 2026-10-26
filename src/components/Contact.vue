@@ -31,6 +31,17 @@
 					<!-- <div ref="calContainer" class="min-h-[400px]"></div> -->
 				</div>
 			</div>
+
+			<!-- Sedes -->
+			<div id="sedes" class="contact-sedes mt-12 pt-10 border-t border-border" data-reveal>
+				<h4 class="text-sm font-bold uppercase tracking-widest text-text-muted mb-2 text-center">
+					D&oacute;nde estamos
+				</h4>
+				<p class="text-text-light text-sm text-center mb-8">
+					Nuestra sede est&aacute; en Valpara&iacute;so, Chile.
+				</p>
+				<DotMap class="max-w-4xl mx-auto" />
+			</div>
 		</div>
 
 		<div class="text-center text-white py-6">
@@ -55,6 +66,7 @@
 import { ref } from 'vue'
 import { useCalEmbed } from '@/composables/useCalEmbed'
 import ContactForm from '@/components/ContactForm.vue'
+import DotMap from '@/components/DotMap.vue'
 
 const calContainer = ref(null)
 
