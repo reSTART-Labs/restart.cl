@@ -22,43 +22,32 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { COLS, ROWS, land, sedes, project } from '@/data/worldDots'
+import { COLS, ROWS, regions, sedes } from '@/data/worldDots'
 
 /*
- * Mapa mundial de puntos en <canvas> 2D sobre el fondo de la tarjeta: aparición
+ * Mapa mundial de puntos en <canvas> 2D, réplica del de nocnocstore.com: aparición
  * escalonada al entrar en pantalla (easeOutBack), pulso de opacidad por región y,
- * en escritorio, los puntos cercanos al mouse crecen, se aclaran y se apartan.
- * Los pins de las sedes son HTML encima, anclados al punto más cercano.
+ * en escritorio, los puntos cercanos al mouse crecen y se apartan. Los valores
+ * son los del script original; los colores salen del tema de re/START.
+ * Los pins de las sedes son HTML encima, centrados en su celda.
  */
 const DOT_SIZE_RATIO = 0.44
-const BASE_SCALE = 0.48
+const BASE_SCALE = 0.45
 const REVEAL_DURATION = 1100
 const REVEAL_STAGGER = 800
 const OVERSHOOT = 1.1
 const HOVER_RADIUS = 190
 const HOVER_MIN = 0.1
-const HOVER_MAX = 0.6
+const HOVER_MAX = 0.5
 const HOVER_LERP = 0.12
-const HOVER_ALPHA = 0.35
-const REPULSE_MAX = 10
+const REPULSE_MAX = 8
 const REPULSE_LERP = 0.14
-const PULSE_MIN = 0.4
-const PULSE_EXTRA = 0.35
-
-/* Bandas de longitud que hacen de "región" para desfasar el pulso. */
-const REGIONS = [
-	{ maxCol: 21, dur: 3500, off: 0.13 }, // Américas
-	{ maxCol: 33, dur: 3000, off: 0.5 },  // Europa y África
-	{ maxCol: COLS, dur: 4000, off: 0.2 }, // Asia y Oceanía
-]
+const PULSE_MIN = 0.5
+const PULSE_EXTRA = 1
 
 const canvas = ref(null)
 
-/* El pin se ancla al centro de la celda más cercana para quedar sobre un punto. */
-function pinStyle({ lat, lon }) {
-	const p = project(lat, lon)
-	const col = Math.min(COLS - 1, Math.floor(p.col))
-	const row = Math.min(ROWS - 1, Math.floor(p.row))
+function pinStyle({ col, row }) {
 	return {
 		left: `${((col + 0.5) / COLS) * 100}%`,
 		top: `${((row + 0.5) / ROWS) * 100}%`,
@@ -73,18 +62,16 @@ onMounted(() => {
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 	const canHover = window.matchMedia('(min-width: 992px) and (hover: hover)')
 
-	const dots = land.map((idx, i) => {
-		const col = idx % COLS
-		const region = REGIONS.find((r) => col < r.maxCol)
-		return {
-			col,
-			row: Math.floor(idx / COLS),
-			delay: (i / Math.max(1, land.length - 1)) * REVEAL_STAGGER,
-			dur: region.dur,
-			off: region.off + i * 0.017,
-			hs: 0, ox: 0, oy: 0,
-		}
-	})
+	const total = regions.reduce((n, r) => n + r.dots.length, 0)
+	let order = 0
+	const dots = regions.flatMap((region) => region.dots.map((idx, i) => ({
+		col: (idx - 1) % COLS,
+		row: Math.floor((idx - 1) / COLS),
+		delay: (order++ / Math.max(1, total - 1)) * REVEAL_STAGGER,
+		dur: region.pulseDuration,
+		off: region.pulseOffset + i * 0.017,
+		hs: 0, ox: 0, oy: 0,
+	})))
 
 	let color = ''
 	let visible = false
@@ -139,15 +126,13 @@ onMounted(() => {
 			d.oy += (toy - d.oy) * REPULSE_LERP
 
 			let rev = 1
-			let alpha = PULSE_MIN + PULSE_EXTRA / 2
+			let alpha = 1
 			if (!reduceMotion) {
 				const e = visible ? now - revealStart - d.delay : 0
 				rev = e <= 0 ? 0 : e >= REVEAL_DURATION ? 1 : easeOutBack(e / REVEAL_DURATION)
 				const p = ((now + d.off * d.dur) % d.dur) / d.dur
-				alpha = PULSE_MIN + (0.5 + 0.5 * Math.sin(p * Math.PI * 2)) * PULSE_EXTRA
+				alpha = Math.min(1, PULSE_MIN + (0.5 + 0.5 * Math.sin(p * Math.PI * 2)) * PULSE_EXTRA)
 			}
-			// Cerca del mouse los puntos además se aclaran.
-			alpha = Math.min(1, alpha + (d.hs / HOVER_MAX) * HOVER_ALPHA)
 
 			const scale = Math.max(0, rev) * (BASE_SCALE + d.hs)
 			if (scale <= 0.001) continue
