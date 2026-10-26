@@ -7,12 +7,14 @@
 				:key="sede.name"
 				class="dot-map-pin"
 				:style="pinStyle(sede)"
+				tabindex="0"
 			>
-				<span class="dot-map-pin-dot"></span>
-				<span class="dot-map-pin-label">
-					<strong>{{ sede.name }}</strong>
-					<span>{{ sede.country }}</span>
-				</span>
+				<span class="dot-map-pin-glow"></span>
+				<svg class="dot-map-pin-marker" viewBox="0 0 24 32" aria-hidden="true">
+					<path d="M12 0C5.4 0 0 5.3 0 11.9 0 20.8 12 32 12 32s12-11.2 12-20.1C24 5.3 18.6 0 12 0z" />
+					<circle cx="12" cy="11.5" r="4.2" />
+				</svg>
+				<span class="dot-map-pin-label">{{ sede.name }}, {{ sede.country }}</span>
 			</li>
 		</ul>
 	</div>
@@ -23,37 +25,42 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { COLS, ROWS, LAT_NORTH, LAT_SOUTH, land, sedes } from '@/data/worldDots'
 
 /*
- * Mapa mundial de puntos en <canvas> 2D: aparición escalonada al entrar en
- * pantalla (easeOutBack), pulso de opacidad por región y, en escritorio, los
- * puntos crecen y se apartan del mouse. Los pins de las sedes son HTML encima.
+ * Mapa mundial de puntos en <canvas> 2D sobre un panel de color: aparición
+ * escalonada al entrar en pantalla (easeOutBack), pulso de opacidad por región y,
+ * en escritorio, los puntos cercanos al mouse crecen, se aclaran y se apartan.
+ * Los pins de las sedes son HTML encima, anclados al punto más cercano.
  */
 const DOT_SIZE_RATIO = 0.44
-const BASE_SCALE = 0.45
+const BASE_SCALE = 0.48
 const REVEAL_DURATION = 1100
 const REVEAL_STAGGER = 800
 const OVERSHOOT = 1.1
-const HOVER_RADIUS = 160
+const HOVER_RADIUS = 190
 const HOVER_MIN = 0.1
-const HOVER_MAX = 0.85
+const HOVER_MAX = 0.6
 const HOVER_LERP = 0.12
-const REPULSE_MAX = 12
+const HOVER_ALPHA = 0.35
+const REPULSE_MAX = 10
 const REPULSE_LERP = 0.14
-const PULSE_MIN = 0.35
-const PULSE_EXTRA = 0.65
+const PULSE_MIN = 0.3
+const PULSE_EXTRA = 0.3
 
 /* Bandas de longitud que hacen de "región" para desfasar el pulso. */
 const REGIONS = [
-	{ maxCol: 30, dur: 3500, off: 0.13 }, // Américas
-	{ maxCol: 50, dur: 3000, off: 0.5 },  // Europa y África
+	{ maxCol: 22, dur: 3500, off: 0.13 }, // Américas
+	{ maxCol: 37, dur: 3000, off: 0.5 },  // Europa y África
 	{ maxCol: COLS, dur: 4000, off: 0.2 }, // Asia y Oceanía
 ]
 
 const canvas = ref(null)
 
+/* El pin se ancla al centro de la celda más cercana para quedar sobre un punto. */
 function pinStyle({ lat, lon }) {
+	const col = Math.min(COLS - 1, Math.floor(((lon + 180) / 360) * COLS))
+	const row = Math.min(ROWS - 1, Math.floor(((LAT_NORTH - lat) / (LAT_NORTH - LAT_SOUTH)) * ROWS))
 	return {
-		left: `${((lon + 180) / 360) * 100}%`,
-		top: `${((LAT_NORTH - lat) / (LAT_NORTH - LAT_SOUTH)) * 100}%`,
+		left: `${((col + 0.5) / COLS) * 100}%`,
+		top: `${((row + 0.5) / ROWS) * 100}%`,
 	}
 }
 
@@ -131,13 +138,15 @@ onMounted(() => {
 			d.oy += (toy - d.oy) * REPULSE_LERP
 
 			let rev = 1
-			let alpha = 0.7
+			let alpha = PULSE_MIN + PULSE_EXTRA / 2
 			if (!reduceMotion) {
 				const e = visible ? now - revealStart - d.delay : 0
 				rev = e <= 0 ? 0 : e >= REVEAL_DURATION ? 1 : easeOutBack(e / REVEAL_DURATION)
 				const p = ((now + d.off * d.dur) % d.dur) / d.dur
-				alpha = Math.min(1, PULSE_MIN + (0.5 + 0.5 * Math.sin(p * Math.PI * 2)) * PULSE_EXTRA)
+				alpha = PULSE_MIN + (0.5 + 0.5 * Math.sin(p * Math.PI * 2)) * PULSE_EXTRA
 			}
+			// Cerca del mouse los puntos además se aclaran.
+			alpha = Math.min(1, alpha + (d.hs / HOVER_MAX) * HOVER_ALPHA)
 
 			const scale = Math.max(0, rev) * (BASE_SCALE + d.hs)
 			if (scale <= 0.001) continue
@@ -176,6 +185,8 @@ onMounted(() => {
 	})
 	themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
 
+	// Se escucha en el contenedor para que pasar sobre un pin no corte el hover.
+	const wrap = el.parentElement
 	const onEnter = () => { hover = true }
 	const onLeave = () => { hover = false }
 	const onMove = (e) => {
@@ -183,9 +194,9 @@ onMounted(() => {
 		mx = e.clientX - r.left
 		my = e.clientY - r.top
 	}
-	el.addEventListener('mouseenter', onEnter)
-	el.addEventListener('mouseleave', onLeave)
-	el.addEventListener('mousemove', onMove)
+	wrap.addEventListener('mouseenter', onEnter)
+	wrap.addEventListener('mouseleave', onLeave)
+	wrap.addEventListener('mousemove', onMove)
 
 	readColor()
 	resize()
@@ -196,9 +207,9 @@ onMounted(() => {
 		io.disconnect()
 		ro.disconnect()
 		themeObserver.disconnect()
-		el.removeEventListener('mouseenter', onEnter)
-		el.removeEventListener('mouseleave', onLeave)
-		el.removeEventListener('mousemove', onMove)
+		wrap.removeEventListener('mouseenter', onEnter)
+		wrap.removeEventListener('mouseleave', onLeave)
+		wrap.removeEventListener('mousemove', onMove)
 	}
 })
 
@@ -207,24 +218,29 @@ onBeforeUnmount(() => cleanup())
 
 <style scoped>
 .dot-map {
+	--dot-map-bg: var(--color-primary-700);
 	position: relative;
 	width: 100%;
+	padding: clamp(1.25rem, 4vw, 3.5rem);
+	border-radius: 1rem;
+	background: var(--dot-map-bg);
+	overflow: hidden;
+}
+
+:global(html[data-theme="dark"]) .dot-map {
+	--dot-map-bg: var(--color-primary-800);
 }
 
 .dot-map-canvas {
 	display: block;
 	width: 100%;
 	height: auto;
-	color: var(--color-primary-500);
-}
-
-:global(html[data-theme="dark"]) .dot-map-canvas {
-	color: var(--color-primary-300);
+	color: var(--color-primary-200);
 }
 
 .dot-map-pins {
 	position: absolute;
-	inset: 0;
+	inset: clamp(1.25rem, 4vw, 3.5rem);
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -233,70 +249,94 @@ onBeforeUnmount(() => cleanup())
 
 .dot-map-pin {
 	position: absolute;
-	display: flex;
-	align-items: center;
-	gap: 0.6rem;
-	transform: translate(-0.4rem, -50%);
+	width: 0;
+	height: 0;
 	opacity: 0;
 	transition: opacity 0.6s ease 1.4s;
+	pointer-events: auto;
+	outline: none;
 }
 
 .is-visible .dot-map-pin {
 	opacity: 1;
 }
 
-.dot-map-pin-dot {
-	position: relative;
-	flex: none;
-	width: 0.8rem;
-	height: 0.8rem;
+/* Halo en la base del pin: punto cian con ondas que se expanden. */
+.dot-map-pin-glow {
+	position: absolute;
+	left: -0.3rem;
+	top: -0.3rem;
+	width: 0.6rem;
+	height: 0.6rem;
 	border-radius: 50%;
-	background: var(--color-primary-700);
-	box-shadow: 0 0 0 3px var(--color-surface);
+	background: var(--color-primary-300);
+	box-shadow: 0 0 0 0.45rem rgb(111 224 237 / 0.25), 0 0 0 0.9rem rgb(111 224 237 / 0.12);
 }
 
-.dot-map-pin-dot::after {
+.dot-map-pin-glow::after {
 	content: '';
 	position: absolute;
 	inset: 0;
 	border-radius: 50%;
-	background: var(--color-primary-400);
-	animation: dot-map-ping 2s ease-out infinite;
+	background: var(--color-primary-300);
+	animation: dot-map-ping 2.4s ease-out infinite;
 }
 
-:global(html[data-theme="dark"]) .dot-map-pin-dot {
-	background: var(--color-primary-200);
+.dot-map-pin-marker {
+	position: absolute;
+	left: -0.75rem;
+	bottom: 0.15rem;
+	width: 1.5rem;
+	height: 2rem;
+	filter: drop-shadow(0 3px 6px rgb(0 0 0 / 0.25));
+	transition: transform 0.25s ease;
+	transform-origin: 50% 100%;
+}
+
+.dot-map-pin-marker path {
+	fill: #fff;
+}
+
+.dot-map-pin-marker circle {
+	fill: var(--dot-map-bg);
+}
+
+.dot-map-pin:hover .dot-map-pin-marker,
+.dot-map-pin:focus-visible .dot-map-pin-marker {
+	transform: scale(1.15);
 }
 
 .dot-map-pin-label {
-	display: flex;
-	flex-direction: column;
-	padding: 0.35rem 0.7rem;
-	border: 1px solid var(--color-border);
-	border-radius: 0.5rem;
-	background: var(--color-surface-raised);
-	box-shadow: 0 6px 18px rgb(0 0 0 / 0.08);
-	line-height: 1.2;
+	position: absolute;
+	left: 1.1rem;
+	bottom: 1rem;
+	padding: 0.3rem 0.6rem;
+	border-radius: 0.4rem;
+	background: #fff;
+	color: var(--color-primary-800);
+	font-size: 0.75rem;
+	font-weight: 700;
 	white-space: nowrap;
+	box-shadow: 0 6px 18px rgb(0 0 0 / 0.2);
+	opacity: 0;
+	transform: translateY(4px);
+	transition: opacity 0.2s ease, transform 0.2s ease;
+	pointer-events: none;
 }
 
-.dot-map-pin-label strong {
-	font-size: 0.8rem;
-	color: var(--color-text);
-}
-
-.dot-map-pin-label span {
-	font-size: 0.7rem;
-	color: var(--color-text-muted);
+.dot-map-pin:hover .dot-map-pin-label,
+.dot-map-pin:focus-visible .dot-map-pin-label {
+	opacity: 1;
+	transform: none;
 }
 
 @keyframes dot-map-ping {
-	from { transform: scale(1); opacity: 0.7; }
-	to { transform: scale(3); opacity: 0; }
+	from { transform: scale(1); opacity: 0.6; }
+	to { transform: scale(3.5); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.dot-map-pin { transition: none; }
-	.dot-map-pin-dot::after { animation: none; }
+	.dot-map-pin-glow::after { animation: none; }
 }
 </style>
