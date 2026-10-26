@@ -1,6 +1,6 @@
 <template>
 	<div class="dot-map">
-		<canvas ref="canvas" class="dot-map-canvas" aria-hidden="true"></canvas>
+		<canvas ref="canvas" class="dot-map-canvas" :style="{ aspectRatio: `${COLS} / ${ROWS}` }" aria-hidden="true"></canvas>
 		<ul class="dot-map-pins">
 			<li
 				v-for="sede in sedes"
@@ -32,19 +32,19 @@ const BASE_SCALE = 0.45
 const REVEAL_DURATION = 1100
 const REVEAL_STAGGER = 800
 const OVERSHOOT = 1.1
-const HOVER_RADIUS = 190
+const HOVER_RADIUS = 160
 const HOVER_MIN = 0.1
-const HOVER_MAX = 0.5
+const HOVER_MAX = 0.85
 const HOVER_LERP = 0.12
-const REPULSE_MAX = 8
+const REPULSE_MAX = 12
 const REPULSE_LERP = 0.14
 const PULSE_MIN = 0.35
 const PULSE_EXTRA = 0.65
 
 /* Bandas de longitud que hacen de "región" para desfasar el pulso. */
 const REGIONS = [
-	{ maxCol: 20, dur: 3500, off: 0.13 }, // Américas
-	{ maxCol: 34, dur: 3000, off: 0.5 },  // Europa y África
+	{ maxCol: 30, dur: 3500, off: 0.13 }, // Américas
+	{ maxCol: 50, dur: 3000, off: 0.5 },  // Europa y África
 	{ maxCol: COLS, dur: 4000, off: 0.2 }, // Asia y Oceanía
 ]
 
@@ -215,7 +215,6 @@ onBeforeUnmount(() => cleanup())
 	display: block;
 	width: 100%;
 	height: auto;
-	aspect-ratio: 55 / 35;
 	color: var(--color-primary-500);
 }
 

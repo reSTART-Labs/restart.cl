@@ -40,7 +40,7 @@
 				<p class="text-text-light text-sm text-center mb-8">
 					Nuestra sede est&aacute; en Valpara&iacute;so, Chile.
 				</p>
-				<DotMap class="max-w-4xl mx-auto" />
+				<DotMap />
 			</div>
 		</div>
 
