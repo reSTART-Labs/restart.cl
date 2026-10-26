@@ -25,7 +25,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { COLS, ROWS, LAT_NORTH, LAT_SOUTH, land, sedes } from '@/data/worldDots'
 
 /*
- * Mapa mundial de puntos en <canvas> 2D sobre un panel de color: aparición
+ * Mapa mundial de puntos en <canvas> 2D sobre el fondo de la tarjeta: aparición
  * escalonada al entrar en pantalla (easeOutBack), pulso de opacidad por región y,
  * en escritorio, los puntos cercanos al mouse crecen, se aclaran y se apartan.
  * Los pins de las sedes son HTML encima, anclados al punto más cercano.
@@ -42,8 +42,8 @@ const HOVER_LERP = 0.12
 const HOVER_ALPHA = 0.35
 const REPULSE_MAX = 10
 const REPULSE_LERP = 0.14
-const PULSE_MIN = 0.3
-const PULSE_EXTRA = 0.3
+const PULSE_MIN = 0.4
+const PULSE_EXTRA = 0.35
 
 /* Bandas de longitud que hacen de "región" para desfasar el pulso. */
 const REGIONS = [
@@ -218,29 +218,30 @@ onBeforeUnmount(() => cleanup())
 
 <style scoped>
 .dot-map {
-	--dot-map-bg: var(--color-primary-700);
+	--dot-map-bg: var(--color-surface);
+	--dot-map-dot: var(--color-primary-500);
+	--dot-map-pin: var(--color-primary-700);
+	--dot-map-glow: 26 142 158;
 	position: relative;
 	width: 100%;
-	padding: clamp(1.25rem, 4vw, 3.5rem);
-	border-radius: 1rem;
-	background: var(--dot-map-bg);
-	overflow: hidden;
 }
 
-:global(html[data-theme="dark"]) .dot-map {
-	--dot-map-bg: var(--color-primary-800);
+:global(html[data-theme="dark"] .dot-map) {
+	--dot-map-dot: var(--color-primary-300);
+	--dot-map-pin: #fff;
+	--dot-map-glow: 111 224 237;
 }
 
 .dot-map-canvas {
 	display: block;
 	width: 100%;
 	height: auto;
-	color: var(--color-primary-200);
+	color: var(--dot-map-dot);
 }
 
 .dot-map-pins {
 	position: absolute;
-	inset: clamp(1.25rem, 4vw, 3.5rem);
+	inset: 0;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -269,8 +270,8 @@ onBeforeUnmount(() => cleanup())
 	width: 0.6rem;
 	height: 0.6rem;
 	border-radius: 50%;
-	background: var(--color-primary-300);
-	box-shadow: 0 0 0 0.45rem rgb(111 224 237 / 0.25), 0 0 0 0.9rem rgb(111 224 237 / 0.12);
+	background: rgb(var(--dot-map-glow));
+	box-shadow: 0 0 0 0.45rem rgb(var(--dot-map-glow) / 0.25), 0 0 0 0.9rem rgb(var(--dot-map-glow) / 0.12);
 }
 
 .dot-map-pin-glow::after {
@@ -278,7 +279,7 @@ onBeforeUnmount(() => cleanup())
 	position: absolute;
 	inset: 0;
 	border-radius: 50%;
-	background: var(--color-primary-300);
+	background: rgb(var(--dot-map-glow));
 	animation: dot-map-ping 2.4s ease-out infinite;
 }
 
@@ -294,7 +295,7 @@ onBeforeUnmount(() => cleanup())
 }
 
 .dot-map-pin-marker path {
-	fill: #fff;
+	fill: var(--dot-map-pin);
 }
 
 .dot-map-pin-marker circle {
@@ -312,8 +313,8 @@ onBeforeUnmount(() => cleanup())
 	bottom: 1rem;
 	padding: 0.3rem 0.6rem;
 	border-radius: 0.4rem;
-	background: #fff;
-	color: var(--color-primary-800);
+	background: var(--dot-map-pin);
+	color: var(--dot-map-bg);
 	font-size: 0.75rem;
 	font-weight: 700;
 	white-space: nowrap;
