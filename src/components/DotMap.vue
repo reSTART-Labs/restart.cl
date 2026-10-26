@@ -22,7 +22,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { COLS, ROWS, LAT_NORTH, LAT_SOUTH, land, sedes } from '@/data/worldDots'
+import { COLS, ROWS, land, sedes, project } from '@/data/worldDots'
 
 /*
  * Mapa mundial de puntos en <canvas> 2D sobre el fondo de la tarjeta: aparición
@@ -47,8 +47,8 @@ const PULSE_EXTRA = 0.35
 
 /* Bandas de longitud que hacen de "región" para desfasar el pulso. */
 const REGIONS = [
-	{ maxCol: 22, dur: 3500, off: 0.13 }, // Américas
-	{ maxCol: 37, dur: 3000, off: 0.5 },  // Europa y África
+	{ maxCol: 21, dur: 3500, off: 0.13 }, // Américas
+	{ maxCol: 33, dur: 3000, off: 0.5 },  // Europa y África
 	{ maxCol: COLS, dur: 4000, off: 0.2 }, // Asia y Oceanía
 ]
 
@@ -56,8 +56,9 @@ const canvas = ref(null)
 
 /* El pin se ancla al centro de la celda más cercana para quedar sobre un punto. */
 function pinStyle({ lat, lon }) {
-	const col = Math.min(COLS - 1, Math.floor(((lon + 180) / 360) * COLS))
-	const row = Math.min(ROWS - 1, Math.floor(((LAT_NORTH - lat) / (LAT_NORTH - LAT_SOUTH)) * ROWS))
+	const p = project(lat, lon)
+	const col = Math.min(COLS - 1, Math.floor(p.col))
+	const row = Math.min(ROWS - 1, Math.floor(p.row))
 	return {
 		left: `${((col + 0.5) / COLS) * 100}%`,
 		top: `${((row + 0.5) / ROWS) * 100}%`,
