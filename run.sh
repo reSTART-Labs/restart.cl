@@ -3,8 +3,8 @@
 # Re/START — arranque homologado (contrato Boiler §5.1).
 # Sitio Vue 3 + Vite con SSR Express (server.js) + /api de contacto. Sin base de datos.
 #
-# Puertos (bloque 8430+):
-#   8430 → Express SSR + /api  ← ENTRADA: http://restart.localhost:8430
+# Puertos (bloque 3100+):
+#   3100 → Express SSR + /api  ← ENTRADA: http://restart.localhost:3100
 #
 # Uso:
 #   ./run.sh up       dev server SSR con hot-reload (foreground, Ctrl+C detiene)
@@ -19,7 +19,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-APP_PORT=8430
+APP_PORT=3100
 
 case "${1:-up}" in
   up)

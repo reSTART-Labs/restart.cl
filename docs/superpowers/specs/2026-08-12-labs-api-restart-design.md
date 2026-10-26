@@ -1,4 +1,4 @@
-# Labs: api.restart.cl reemplaza a Indicadores del Día
+# Labs: MarketData reemplaza a Indicadores del Día
 
 **Fecha:** 2026-08-12
 **Rama:** `main`
@@ -7,16 +7,19 @@ animación de [suma.cl](https://suma.cl/suma-book-velutti.html)
 
 ## Objetivo
 
-Quitar la página `/labs/indicadores-del-dia` y poner en su lugar el proyecto **api.restart.cl**
-(MarketData Chile), mostrando qué tecnologías usa y qué problemas resolvió.
-indicadoresdeldia.cl no desaparece: pasa a figurar dentro de la nueva página como uno de los
-sitios que consumen la API, que es lo que realmente es.
+Quitar la página `/labs/indicadores-del-dia` y poner en su lugar el proyecto **MarketData**
+(la API que vive en api.restart.cl).
+
+**Ajuste posterior a la primera versión (mismo día, feedback del usuario):** el proyecto se llama
+**MarketData**, no `api.restart.cl` —ese es solo dónde vive—, y la página **no** debe exponer el
+detalle interno del proyecto. El mensaje es *lo que se puede lograr con esto*, no cómo está
+construido por dentro. Ver "Nivel de exposición".
 
 ## Decisiones
 
 | Decisión | Elección |
 |---|---|
-| Qué pasa con indicadoresdeldia.cl | Se fusiona: aparece como cliente de la API |
+| Qué pasa con indicadoresdeldia.cl | Se absorbe. No aparece como cliente: hoy es un redirect a la propia API (ver "Clientes de la API") |
 | Alcance de la animación | GSAP + ScrollTrigger, cargado solo en las páginas de proyecto de Labs |
 | Material visual | Capturas reales de secciones de api.restart.cl, sin diagramas |
 | URL vieja | Redirect 301 a la página nueva |
@@ -68,7 +71,10 @@ dentro.
 ### Animación
 
 `gsap` + `ScrollTrigger` con **`import()` dinámico dentro de `onMounted`**: el chunk no entra al
-bundle principal ni a ninguna otra ruta, y no toca el SSR. ~35 KB gzip, solo en `/labs/:slug`.
+bundle principal ni a ninguna otra ruta, y no toca el SSR. Solo en `/labs/:slug`.
+
+**Peso real medido:** 45 KB gzip (27 de GSAP core + 18 de ScrollTrigger), no los ~35 KB que se
+estimaron al diseñar.
 
 `useProjectMotion.js` implementa el vocabulario que usa suma.cl (que es GSAP + ScrollTrigger con
 `power2.out` y stagger; su Locomotive Scroll está comentado en el código del tema):
@@ -116,6 +122,78 @@ Cifras verificadas en el proyecto y en las capturas: 15 servicios de datos, 21 j
 7 servicios en Docker Compose, 1.920 programas académicos, ~100 M de filas de revisiones.
 
 Marca: `#10b981` (el esmeralda que usa el sitio), sobre fondo oscuro.
+
+## Nivel de exposición
+
+La página es una vitrina de capacidad, no una memoria técnica. Regla: si una frase solo le sirve a
+alguien que va a reimplementar el proyecto, no va.
+
+| Se queda | Se fue |
+|---|---|
+| Los 8 dominios de datos (qué se puede pedir) | El conteo de jobs de scraping y de servicios en Docker |
+| Stack a nivel de nombres, como señal de capacidad | La sección completa de *highlights* técnicos |
+| Cifras de escala de cara al usuario (15 servicios, 100M+ registros) | Los dos motores de BD y su separación por responsabilidad |
+| Fuentes oficiales por nombre (Banco Central, SII, ChileCompra) | Hasheo SHA-256 de las keys, unificación de cuentas OAuth, COPY en streaming, navegador headless de respaldo, migraciones por deploy |
+
+Los `stats` pasaron a ser de cara al usuario: **15 servicios de datos · 100M+ registros
+consultables · 24/7 actualización automática · gratis para empezar**. `highlights` se eliminó del
+dato en vez de reescribirse, porque el encabezado de esa sección en `LabsProjectPage.vue`
+("Destacados técnicos · Decisiones que marcan la diferencia") es compartido con los otros
+proyectos de Labs y es técnico por definición. Al ser `v-if`, la sección simplemente no se
+renderiza.
+
+El stack recortado deja fuera TypeORM, MySQL, Puppeteer, Nginx y Railway: ORM, segundo motor,
+scraping y hosting son "cómo está hecho". Quedan 9 chips.
+
+## Clientes de la API
+
+La sección "Hecho con esto" lista **solo MiPortada.cl**, y está pensada para crecer:
+
+| Sitio | Qué consume |
+|---|---|
+| [MiPortada.cl](https://miportada.cl) | Su bloque "Hoy se conmemora" — calendario y efemérides |
+
+**Por qué indicadoresdeldia.cl no está.** El diseño original lo ponía acá como cliente. Al
+verificarlo en el navegador resultó que ya no es un producto aparte:
+
+- `http://indicadoresdeldia.cl` responde **302 → `https://api.restart.cl/indicadores`**. Es un
+  dominio de vanidad de la propia plataforma, no un sitio que la consuma.
+- Su **HTTPS está caído**: `https://indicadoresdeldia.cl` da `connection refused`. El enlace que
+  íbamos a publicar habría estado roto. (Pendiente de infra, fuera de este repo.)
+- La captura que había en el repo, `public/img/labs/indicadores/home.png`, **es una pantalla de
+  error 522 de Cloudflare** capturada el 2026-04-23, no la portada del sitio. El archivo se dejó
+  porque `public/brand/02-pages.html` todavía lo referencia, pero **no sirve como material**.
+
+Decisión del usuario: dejar solo MiPortada. Listar un redirect como "producto que usa la API"
+sería falso.
+
+La captura de MiPortada se tomó con Playwright a 1440 de ancho y se redujo a 1400 px
+(`public/img/labs/miportada/home.png`). **Nota:** miportada.cl responde **403 a fetch simple**
+(protección de bots), así que para volver a capturarla hay que usar un navegador real, no `curl`.
+Lo que consume de la API se verificó solo desde su portada; si usa más servicios, falta declararlo.
+
+Con una sola tarjeta, el `1fr` del grid la estiraba a todo el ancho y la captura quedaba como una
+franja. Las columnas ahora tienen techo (`minmax(340px, 520px)`) y se centran, así que la tarjeta
+mantiene su medida con uno o con varios clientes.
+
+## Notas de implementación
+
+Cosas que aparecieron al construir y no estaban en el diseño:
+
+- **Conflicto entre los dos sistemas de animación.** El hero de `LabsProjectPage` ya traía
+  `reveal-stagger` del sistema CSS anterior, así que el CSS animaba las columnas y GSAP su
+  contenido: movimiento duplicado y con tiempos distintos. Se quitó `reveal-stagger` de esa
+  página; GSAP es dueño del hero ahí. `LabsPage` (el índice) conserva el suyo, es otra ruta.
+- **El partidor de palabras es propio y no `SplitText`.** GSAP 3.15 ya trae SplitText, pero los
+  títulos del sitio usan `<em>` para el acento en color primario y partir por `textContent` lo
+  destruiría. El partidor recorre los nodos hijos y preserva los elementos inline.
+- **Proyectos cuyo título es un logo.** En BoGy el `h1` contiene solo un `<img>`, así que no hay
+  palabras que partir. Se detecta y se anima el elemento completo, en vez de quedar sin entrada.
+- **`src/data/portfolio.js` también tiene un `slug: 'indicadores-del-dia'`.** Se revisó: el
+  componente lo usa solo como `:key` y enlaza al sitio externo, no a `/labs/`. No genera enlace
+  roto y sigue siendo cierto, así que se dejó intacto.
+- **El redirect no conserva query strings** (`res.redirect(301, destino)`). Para una URL de página
+  sin parámetros no aporta, y agregarlo sería complejidad sin uso.
 
 ## Verificación
 

@@ -18,7 +18,7 @@ const samplePayload = {
 
 const isLocal = process.env.TARGET === 'local'
 const target = isLocal
-	? 'http://localhost:3000/api/contact'
+	? 'http://restart.localhost:3100/api/contact'
 	: process.env.N8N_CONTACT_WEBHOOK
 
 if (!target) {
@@ -29,7 +29,7 @@ if (!target) {
 const headers = { 'Content-Type': 'application/json' }
 if (isLocal) {
 	// Simulate a same-origin browser request so the proxy's origin check passes.
-	headers.Origin = process.env.ALLOWED_ORIGIN || 'http://localhost:3000'
+	headers.Origin = process.env.ALLOWED_ORIGIN || 'http://restart.localhost:3100'
 }
 
 console.log(`→ POST ${target}`)

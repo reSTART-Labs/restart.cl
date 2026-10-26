@@ -115,20 +115,131 @@ export const labsProjects = [
 		cta: 'Visita BoGy',
 	},
 	{
-		slug: 'indicadores-del-dia',
-		name: 'Indicadores del Día',
-		tagline: 'UF, dólar, euro y más, al día',
-		shortDescription: 'Consulta rápida de indicadores económicos de Chile: UF, UTM, dólar, euro, IPC y tasa de desempleo con datos al día.',
-		url: 'https://indicadoresdeldia.cl',
-		external: true,
+		slug: 'api-restart',
+		name: 'MarketData',
+		tagline: 'Los datos públicos de Chile, en una sola API',
+		shortDescription: 'Indicadores económicos, cotizaciones, clima, sismos, mercado público, vehículos y oferta académica en una API REST gratuita, siempre al día y lista para conectar a cualquier producto.',
+		description: 'MarketData toma los datos públicos de Chile —repartidos hoy entre decenas de organismos y formatos— y los entrega como una sola API REST, con documentación y sin pedir autenticación para empezar. Es la pieza que permite levantar un producto con datos reales en días y no en meses.',
+		url: 'https://api.restart.cl',
 		status: 'live',
-		year: 2024,
-		category: 'Herramienta',
-		platforms: ['Web'],
-		brandColor: '#FAA92B',
-		brandDark: '#141218',
-		heroImage: '/img/labs/indicadores/home.png',
-		cta: 'Consultar indicadores',
+		year: 2026,
+		category: 'Plataforma',
+		platforms: ['API REST', 'Web'],
+		brandColor: '#10B981',
+		brandDark: '#0A0F0D',
+		heroImage: '/img/labs/api-restart/home.png',
+		problem: 'Los datos públicos de Chile existen, pero viven repartidos entre el Banco Central, el SII, ChileCompra, el Centro Sismológico y decenas de organismos más, cada uno con su propio formato y su propia disponibilidad. Cualquier producto que los necesite termina gastando su tiempo en ir a buscarlos, en vez de en lo que quería construir.',
+		solution: 'Una sola API REST que entrega todo eso ya normalizado y al día, con un formato estable y documentación clara. Nosotros nos hacemos cargo de las fuentes; el producto que la consume parte directo desde el dato listo para usar.',
+		features: [
+			{
+				icon: 'ion-ios-analytics-outline',
+				title: 'Indicadores económicos',
+				desc: 'UF, UTM, dólar, euro, TPM, IPC, cobre y oro, al día y con su serie histórica.',
+			},
+			{
+				icon: 'ion-ios-refresh-outline',
+				title: 'Cotizaciones',
+				desc: 'Tipo de cambio compra y venta para USD, EUR, BRL, ARS y UYU.',
+			},
+			{
+				icon: 'ion-ios-partlysunny-outline',
+				title: 'Clima y sismos',
+				desc: 'Temperatura, pronóstico a 7 días y calidad del aire por ciudad, más la actividad sísmica del país.',
+			},
+			{
+				icon: 'ion-ios-briefcase-outline',
+				title: 'Mercado público',
+				desc: 'Órdenes de compra y licitaciones del Estado, con sus organismos y proveedores.',
+			},
+			{
+				icon: 'ion-ios-car',
+				title: 'Vehículos',
+				desc: 'Tasación fiscal e historial de revisiones técnicas, consultables por patente.',
+			},
+			{
+				icon: 'ion-ios-calendar-outline',
+				title: 'Calendario',
+				desc: 'Feriados legales con su ley y efemérides de varios países, resueltas para cualquier fecha.',
+			},
+			{
+				icon: 'ion-ios-book-outline',
+				title: 'Oferta académica',
+				desc: 'Programas de universidades e institutos con precios, modalidad y fechas de inicio.',
+			},
+			{
+				icon: 'ion-ios-locked-outline',
+				title: 'Cuentas y cuotas',
+				desc: 'Login con Google o GitHub, API keys propias y límites según el nivel de uso.',
+			},
+		],
+		stats: [
+			{ value: '15', label: 'Servicios de datos' },
+			{ value: '100M+', label: 'Registros consultables' },
+			{ value: '24/7', label: 'Actualización automática' },
+			{ value: 'Gratis', label: 'Para empezar a usarla' },
+		],
+		screenshots: [
+			{
+				src: '/img/labs/api-restart/home.png',
+				label: 'Inicio',
+				caption: 'Indicadores en vivo, la propuesta de valor y un ejemplo de llamada listo para copiar.',
+			},
+			{
+				src: '/img/labs/api-restart/docs.png',
+				label: 'Documentación',
+				caption: 'Guía de inicio y catálogo de endpoints, para partir en minutos.',
+			},
+			{
+				src: '/img/labs/api-restart/indicadores.png',
+				label: 'Indicadores',
+				caption: 'UF, UTM, dólar y euro con su serie histórica y la fuente oficial de cada valor.',
+			},
+			{
+				src: '/img/labs/api-restart/calendario.png',
+				label: 'Calendario',
+				caption: 'Feriados y efemérides por mes, listos para alimentar cualquier calendario o portada.',
+			},
+			{
+				src: '/img/labs/api-restart/educacion.png',
+				label: 'Educación',
+				caption: 'Programas por institución con precio, modalidad y fecha de inicio, buscables y filtrables.',
+			},
+			{
+				src: '/img/labs/api-restart/mercado-publico.png',
+				label: 'Mercado público',
+				caption: 'Órdenes de compra y licitaciones del Estado, con montos, organismos y proveedores.',
+			},
+		],
+		/*
+		 * Stack a la vista solo como señal de capacidad. A propósito no se listan
+		 * los detalles de arquitectura interna: acá el mensaje es lo que se puede
+		 * construir con esto, no cómo está hecho por dentro.
+		 */
+		tech: [
+			{ name: 'NestJS', category: 'Backend' },
+			{ name: 'Node.js', category: 'Backend' },
+			{ name: 'PostgreSQL', category: 'Database' },
+			{ name: 'Nuxt 3', category: 'Frontend' },
+			{ name: 'Tailwind', category: 'Frontend' },
+			{ name: 'JSON:API', category: 'Formato' },
+			{ name: 'OpenAPI', category: 'Docs' },
+			{ name: 'OAuth 2.0', category: 'Auth' },
+			{ name: 'Docker', category: 'Infra' },
+		],
+		/*
+		 * Productos externos que consumen la API. indicadoresdeldia.cl NO va acá:
+		 * hoy es un 302 a api.restart.cl/indicadores, así que es la misma plataforma
+		 * y no un producto aparte que la use.
+		 */
+		clients: [
+			{
+				name: 'MiPortada.cl',
+				url: 'https://miportada.cl',
+				image: '/img/labs/miportada/home.png',
+				desc: 'Portal de noticias de Chile y el mundo. Su sección «Hoy se conmemora» sale del calendario y las efemérides de esta API.',
+			},
+		],
+		cta: 'Ver la documentación',
 	},
 	{
 		slug: 'learningpath',

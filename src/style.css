@@ -775,3 +775,27 @@ html.reveal-ready [data-reveal].is-revealed {
 		animation: none !important;
 	}
 }
+
+/* ================================================================
+   PALABRAS PARTIDAS · las crea useProjectMotion en tiempo de ejecución
+   ================================================================ */
+
+/* Sin JS estos spans no existen, así que no hay estado oculto que pueda
+   quedarse pegado: el título se ve tal cual. */
+.pm-word {
+	display: inline-block;
+}
+
+/* La máscara recorta la palabra mientras sube. El padding compensa los
+   descendentes (g, y, p): sin él, overflow hidden los corta. */
+.pm-word-mask {
+	overflow: hidden;
+	padding-bottom: 0.14em;
+	margin-bottom: -0.14em;
+	vertical-align: bottom;
+}
+
+.pm-word-inner {
+	display: inline-block;
+	will-change: transform;
+}

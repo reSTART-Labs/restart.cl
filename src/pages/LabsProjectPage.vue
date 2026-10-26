@@ -1,10 +1,13 @@
 <template>
 	<template v-if="project">
-		<div :style="brandVars" class="lab-project">
+		<div ref="rootRef" :style="brandVars" class="lab-project">
 			<!-- Hero -->
 			<section class="lab-hero">
 				<div class="container mx-auto px-6 md:px-12 py-28 md:py-32">
-					<div class="lab-hero-grid reveal-stagger">
+					<!-- Sin reveal-stagger a propósito: en esta página la entrada del hero la
+					     maneja useProjectMotion. Con las dos, el CSS animaba las columnas y
+					     GSAP su contenido, y el movimiento se duplicaba. -->
+					<div class="lab-hero-grid">
 						<div class="lab-hero-left">
 							<!-- <RouterLink to="/labs" class="lab-hero-breadcrumb">
 								<i class="fa fa-arrow-left text-[10px]"></i>
@@ -210,6 +213,41 @@
 				</div>
 			</section>
 
+			<!-- Hecho con este proyecto: sitios que lo consumen -->
+			<section v-if="project.clients?.length" class="lab-clients">
+				<div class="container mx-auto px-6 md:px-12">
+					<div class="lab-features-head">
+						<p class="lab-eyebrow">Hecho con esto</p>
+						<h2 class="lab-section-title">
+							Productos que ya lo <em>usan</em>
+						</h2>
+					</div>
+
+					<div class="lab-clients-grid">
+						<a
+							v-for="client in project.clients"
+							:key="client.url"
+							:href="client.url"
+							target="_blank"
+							rel="noopener"
+							class="lab-client-card"
+						>
+							<div v-if="client.image" class="lab-client-shot">
+								<img :src="client.image" :alt="client.name" loading="lazy">
+							</div>
+							<div class="lab-client-body">
+								<h3>{{ client.name }}</h3>
+								<p v-if="client.desc">{{ client.desc }}</p>
+								<span class="lab-client-link">
+									{{ client.url.replace(/^https?:\/\//, '') }}
+									<i class="fa fa-arrow-right text-[10px]"></i>
+								</span>
+							</div>
+						</a>
+					</div>
+				</div>
+			</section>
+
 			<!-- Related projects -->
 			<section v-if="relatedProjects.length" class="lab-related">
 				<div class="container mx-auto px-6 md:px-12">
@@ -293,8 +331,14 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { labsProjects } from '@/data/labsProjects.js'
+import { useProjectMotion } from '@/composables/useProjectMotion.js'
 
 const route = useRoute()
+const rootRef = ref(null)
+
+/* GSAP entra por import() dinámico acá adentro: su chunk no toca el bundle principal
+   ni se descarga en el resto del sitio. */
+useProjectMotion(rootRef)
 const project = computed(() => labsProjects.find(p => p.slug === route.params.slug))
 
 const relatedProjects = computed(() => {
@@ -882,6 +926,96 @@ function relatedOverlayStyle(related) {
 /* ========================================================================
    RELATED PROJECTS
    ======================================================================== */
+/* ── Hecho con esto: productos que consumen el proyecto ── */
+.lab-clients {
+	padding: 96px 0;
+	background: var(--color-surface-muted);
+}
+
+/* Columnas con techo y centradas: con una sola tarjeta, un `1fr` la estiraba a
+   todo el ancho y la captura quedaba como una franja. Así mantiene su medida
+   sea que haya uno o varios clientes. */
+.lab-clients-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(340px, 520px));
+	justify-content: center;
+	gap: 24px;
+}
+
+.lab-client-card {
+	display: flex;
+	flex-direction: column;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 20px;
+	overflow: hidden;
+	text-decoration: none;
+	transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.lab-client-card:hover {
+	transform: translateY(-3px);
+	border-color: var(--brand);
+}
+
+/* Alto fijo y recorte por arriba: las capturas son muy verticales y sin esto la
+   tarjeta quedaba dominada por la imagen. */
+.lab-client-shot {
+	height: 200px;
+	overflow: hidden;
+	background: var(--brand-dark);
+}
+
+.lab-client-shot img {
+	width: 100%;
+	height: auto;
+	display: block;
+	transition: transform 0.6s ease;
+}
+
+.lab-client-card:hover .lab-client-shot img {
+	transform: scale(1.03);
+}
+
+.lab-client-body {
+	padding: 24px 26px 26px;
+}
+
+.lab-client-body h3 {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 400;
+	color: var(--color-text);
+}
+
+.lab-client-body p {
+	margin: 10px 0 0;
+	font-size: 15px;
+	line-height: 1.6;
+	color: var(--color-text-light);
+}
+
+.lab-client-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 18px;
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	color: var(--brand);
+}
+
+@media (max-width: 767px) {
+	.lab-clients-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.lab-client-shot {
+		height: 160px;
+	}
+}
+
 .lab-related {
 	padding: 96px 0;
 	background: var(--color-bg);
