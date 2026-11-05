@@ -166,8 +166,8 @@
 		]
 
 		/*
-		 * Temas de la firma. En cada uno el avatar contrasta con el fondo: tile negro
-		 * sobre claro y tile blanco (negativo) sobre oscuro.
+		 * Temas de la firma. En cada uno el avatar se funde con el fondo: tile blanco
+		 * (negativo) sobre claro y tile negro sobre oscuro.
 		 */
 		const THEMES = {
 			light: {
@@ -179,7 +179,7 @@
 				primary: '#104B55',
 				accent: '#1A8E9E',
 				border: '#E5ECEB',
-				avatar: AVATAR,
+				avatar: AVATAR_NEGATIVE,
 			},
 			dark: {
 				label: 'dark mode',
@@ -190,7 +190,7 @@
 				primary: '#6FE0ED',
 				accent: '#6FE0ED',
 				border: '#2A3838',
-				avatar: AVATAR_NEGATIVE,
+				avatar: AVATAR,
 			},
 		}
 		const FONT = 'Lato, Arial, Helvetica, sans-serif'
