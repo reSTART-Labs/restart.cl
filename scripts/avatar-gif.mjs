@@ -16,6 +16,7 @@
  * crudo a ffmpeg, que arma el GIF con una paleta de grises. Solo requiere ffmpeg.
  *
  * Uso: node scripts/avatar-gif.mjs   → public/brand/avatar/avatar-{512,160,80}.gif
+ *                                      y avatar-negative-{512,160,80}.gif (negro sobre blanco)
  */
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
@@ -226,10 +227,15 @@ function encode(frames, size, file) {
 }
 
 const frames = render()
+// El negativo es la misma animación con cada pixel invertido.
+const negative = frames.map((f) => Buffer.from(Uint8Array.from(f, (b) => 255 - b)))
+
 fs.mkdirSync(OUT_DIR, { recursive: true })
-for (const size of [512, 160, 80]) {
-	const file = path.join(OUT_DIR, `avatar-${size}.gif`)
-	encode(frames, size, file)
-	console.log(`${path.relative(ROOT, file)}  ${(fs.statSync(file).size / 1024).toFixed(0)} KB`)
+for (const [prefix, set] of [['avatar', frames], ['avatar-negative', negative]]) {
+	for (const size of [512, 160, 80]) {
+		const file = path.join(OUT_DIR, `${prefix}-${size}.gif`)
+		encode(set, size, file)
+		console.log(`${path.relative(ROOT, file)}  ${(fs.statSync(file).size / 1024).toFixed(0)} KB`)
+	}
 }
 console.log(`${frames.length} cuadros, ${(frames.length / FPS).toFixed(1)} s`)
