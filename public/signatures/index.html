@@ -172,8 +172,6 @@
 		const tel = (phone) => 'tel:' + phone.replace(/[^\d+]/g, '')
 		const link = (href, label, extra = '') =>
 			`<a href="${esc(href)}" style="color:${C.light};text-decoration:none;${extra}">${esc(label)}</a>`
-		const label = (letter) =>
-			`<span style="color:${C.accent};font-weight:700;">${letter}</span>&nbsp;&nbsp;`
 
 		function fullSignature(p) {
 			return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:${FONT};color:${C.text};">
@@ -195,10 +193,10 @@
 	</tr>
 	<tr>
 		<td style="font-family:${FONT};font-size:13px;line-height:21px;color:${C.light};">
-			${label('T')}${link(tel(p.phone), p.phone)}<br>
-			${label('E')}${link('mailto:' + p.email, p.email)}<br>
-			${label('W')}${link(SITE, 'restart.cl', `color:${C.primary};font-weight:700;`)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(LOCATION)}${p.vcard ? `<br>
-			${label('+')}${link(SITE + p.vcard, 'Add to contacts', `color:${C.primary};font-weight:700;`)}` : ''}
+			${link(tel(p.phone), p.phone)}<br>
+			${link('mailto:' + p.email, p.email)}<br>
+			${link(SITE, 'restart.cl', `color:${C.primary};font-weight:700;`)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(LOCATION)}${p.vcard ? `<br>
+			${link(SITE + p.vcard, 'Add to contacts', `color:${C.primary};font-weight:700;`)}` : ''}
 		</td>
 	</tr>
 	<tr>
