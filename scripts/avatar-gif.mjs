@@ -153,23 +153,27 @@ const scenes = {
 		return a >= 0 && a <= HEAD && Math.abs(b) <= W * 2.1 * (1 - a / HEAD) ? 1 : 0
 	},
 
-	// Triángulo de "play" que late, con dos contornos que salen de él, crecen y se
-	// desvanecen por completo antes de tocar el borde del cuadro.
+	// Triángulo de "play" chico que late como un corazón (dos pulsos y una pausa),
+	// y en cada latido suelta un contorno que crece y se desvanece por completo
+	// antes de tocar el borde del cuadro.
 	play(u, v, t) {
-		const cu = u + 0.08
-		const s = 0.62 * (1 + 0.06 * Math.sin(t * 6))
+		const BASE = 0.42
+		const cu = u + BASE / 4 // centra la caja del triángulo, no su centroide
+		const beat = frac(t * 0.9)
+		const bump = (c) => Math.exp(-(((beat - c) / 0.055) ** 2))
+		const s = BASE * (1 + 0.3 * (bump(0.08) + 0.65 * bump(0.26)))
 		if (triangle(cu, v, s) < 0) return 1
-		// Circunradio con el que el triángulo (punta a la derecha, corrido 0,08 a la
-		// izquierda) todavía cabe entero en el cuadro, con margen.
+		// Circunradio con el que el triángulo todavía cabe entero en el cuadro, con margen.
 		const MAX = 0.98
 		let out = 0
 		for (let k = 0; k < 2; k++) {
-			const p = frac(t * 0.7 + k / 2)
-			const d = triangle(cu, v, mix(s, MAX, p))
-			if (d < 0 && d > -0.035) out = Math.max(out, (1 - p) * (1 - p))
+			const p = frac(t * 0.9 - 0.08 + k / 2)
+			const d = triangle(cu, v, mix(BASE * 1.2, MAX, p))
+			if (d < 0 && d > -0.06) out = Math.max(out, (1 - p) * (1 - p))
 		}
 		return out
 	},
+
 }
 
 function render() {

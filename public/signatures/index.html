@@ -112,7 +112,8 @@
 			<p>
 				Pick a signature and click <strong>Copy signature</strong>, then paste it into your
 				email client's signature settings. Use <strong>Full</strong> for new emails and
-				<strong>Compact</strong> for replies and forwards.
+				<strong>Compact</strong> for replies and forwards. Pick <strong>light mode</strong> if
+				your email client uses a light theme, or <strong>dark mode</strong> if it uses a dark one.
 			</p>
 		</header>
 
@@ -132,7 +133,9 @@
 	<script>
 		/*
 		 * Firmas de correo de re/START. Para agregar o editar una persona, cambia este
-		 * arreglo: cada entrada genera una firma Full y una Compact. `vcard` (opcional)
+		 * arreglo: cada entrada genera una firma Full y una Compact, cada una en modo
+		 * claro y oscuro (la oscura lleva su propio fondo, así se lee en cualquier
+		 * cliente). `vcard` (opcional)
 		 * apunta a su contacto en public/contact y agrega "Add to contacts" a la Full.
 		 * Las firmas usan tablas y estilos en línea (lo único que respetan Gmail,
 		 * Outlook y Apple Mail) y el logo con URL absoluta, para que se vea fuera del sitio.
@@ -142,6 +145,7 @@
 		// se vea nítido en pantallas retina. Outlook de escritorio muestra solo el
 		// primer cuadro, que es la "/" limpia.
 		const AVATAR = SITE + '/brand/avatar/avatar-160.gif'
+		const AVATAR_NEGATIVE = SITE + '/brand/avatar/avatar-negative-160.gif'
 		const TAGLINE = 'Design and technology for founders building something new.'
 		const LOCATION = 'Valparaíso, Chile'
 
@@ -161,28 +165,62 @@
 			},
 		]
 
-		const C = {
-			text: '#141413',
-			light: '#4A5E5B',
-			muted: '#6F908C',
-			primary: '#104B55',
-			accent: '#1A8E9E',
+		/*
+		 * Temas de la firma. En cada uno el avatar contrasta con el fondo: tile negro
+		 * sobre claro y tile blanco (negativo) sobre oscuro.
+		 */
+		const THEMES = {
+			light: {
+				label: 'light mode',
+				bg: null,
+				text: '#141413',
+				light: '#4A5E5B',
+				muted: '#6F908C',
+				primary: '#104B55',
+				accent: '#1A8E9E',
+				border: '#E5ECEB',
+				avatar: AVATAR,
+			},
+			dark: {
+				label: 'dark mode',
+				bg: '#0A0D0D',
+				text: '#F4F5F5',
+				light: '#B4C4C2',
+				muted: '#6F908C',
+				primary: '#6FE0ED',
+				accent: '#6FE0ED',
+				border: '#2A3838',
+				avatar: AVATAR_NEGATIVE,
+			},
 		}
 		const FONT = 'Lato, Arial, Helvetica, sans-serif'
 
 		const esc = (s) => String(s)
 			.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 		const tel = (phone) => 'tel:' + phone.replace(/[^\d+]/g, '')
-		const link = (href, label, extra = '') =>
+		const link = (C, href, label, extra = '') =>
 			`<a href="${esc(href)}" style="color:${C.light};text-decoration:none;${extra}">${esc(label)}</a>`
 
-		function fullSignature(p) {
-			return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:${FONT};color:${C.text};">
+		// La versión oscura va dentro de un bloque con su propio fondo, para que no
+		// dependa del fondo del cliente de correo.
+		function frame(C, inner, pad) {
+			if (!C.bg) return inner
+			return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" bgcolor="${C.bg}" style="border-collapse:separate;background:${C.bg};border-radius:12px;">
+	<tr>
+		<td style="padding:${pad};">
+${inner}
+		</td>
+	</tr>
+</table>`
+		}
+
+		function fullSignature(p, C) {
+			return frame(C, `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:${FONT};color:${C.text};">
 	<tr>
 		<td valign="top" style="vertical-align:top;padding:2px 18px 0 0;">
-			<a href="${SITE}" style="text-decoration:none;"><img src="${AVATAR}" width="80" height="80" alt="re/START" style="display:block;width:80px;height:80px;border:0;border-radius:10px;"></a>
+			<a href="${SITE}" style="text-decoration:none;"><img src="${C.avatar}" width="80" height="80" alt="re/START" style="display:block;width:80px;height:80px;border:0;border-radius:10px;"></a>
 		</td>
-		<td valign="top" style="vertical-align:top;border-left:1px solid #E5ECEB;padding:0 0 0 18px;">
+		<td valign="top" style="vertical-align:top;border-left:1px solid ${C.border};padding:0 0 0 18px;">
 			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;">
 				<tr>
 					<td style="font-family:${FONT};font-size:15px;line-height:20px;font-weight:700;color:${C.text};">${esc(p.name)}</td>
@@ -197,8 +235,8 @@
 				</tr>
 				<tr>
 					<td style="font-family:${FONT};font-size:13px;line-height:20px;color:${C.light};">
-						${link(tel(p.phone), p.phone)}&nbsp;&nbsp;·&nbsp;&nbsp;${link('mailto:' + p.email, p.email)}<br>
-						${link(SITE, 'restart.cl', `color:${C.primary};font-weight:700;`)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(LOCATION)}${p.vcard ? `&nbsp;&nbsp;·&nbsp;&nbsp;${link(SITE + p.vcard, 'Add to contacts', `color:${C.primary};font-weight:700;`)}` : ''}
+						${link(C, tel(p.phone), p.phone)}&nbsp;&nbsp;·&nbsp;&nbsp;${link(C, 'mailto:' + p.email, p.email)}<br>
+						${link(C, SITE, 'restart.cl', `color:${C.primary};font-weight:700;`)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(LOCATION)}${p.vcard ? `&nbsp;&nbsp;·&nbsp;&nbsp;${link(C, SITE + p.vcard, 'Add to contacts', `color:${C.primary};font-weight:700;`)}` : ''}
 					</td>
 				</tr>
 				<tr>
@@ -207,18 +245,18 @@
 			</table>
 		</td>
 	</tr>
-</table>`
+</table>`, '18px 22px')
 		}
 
-		function compactSignature(p) {
-			return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:${FONT};color:${C.text};">
+		function compactSignature(p, C) {
+			return frame(C, `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:${FONT};color:${C.text};">
 	<tr>
 		<td style="font-family:${FONT};font-size:13px;line-height:19px;color:${C.light};">
 			<strong style="color:${C.text};">${esc(p.name)}</strong>&nbsp;&nbsp;·&nbsp;&nbsp;${esc(p.role)}, <a href="${SITE}" style="color:${C.primary};font-weight:700;text-decoration:none;">re/START</a><br>
-			${link(tel(p.phone), p.phone)}&nbsp;&nbsp;·&nbsp;&nbsp;${link('mailto:' + p.email, p.email)}
+			${link(C, tel(p.phone), p.phone)}&nbsp;&nbsp;·&nbsp;&nbsp;${link(C, 'mailto:' + p.email, p.email)}
 		</td>
 	</tr>
-</table>`
+</table>`, '12px 16px')
 		}
 
 		const variants = [
@@ -275,13 +313,13 @@
 			section.className = 'person'
 			section.innerHTML = `<h2>${esc(person.name)}</h2>`
 
-			for (const v of variants) {
-				const html = v.render(person)
+			for (const v of variants) for (const theme of Object.values(THEMES)) {
+				const html = v.render(person, theme)
 				const card = document.createElement('div')
 				card.className = 'variant'
 				card.innerHTML = `
 					<div class="variant-head">
-						<div class="variant-name">${v.name} <span>· ${v.hint}</span></div>
+						<div class="variant-name">${v.name} <span>· ${v.hint} · ${theme.label}</span></div>
 						<div class="actions">
 							<button type="button" data-copy="rich">Copy signature</button>
 							<button type="button" class="ghost" data-copy="html">Copy HTML</button>
