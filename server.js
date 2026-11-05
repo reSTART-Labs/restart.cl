@@ -45,6 +45,12 @@ async function start() {
 		res.redirect(301, REDIRECCIONES[req.path])
 	})
 
+	// Firmas de correo (public/signatures). express.static va con index: false, así
+	// que la carpeta se abre por su index.html explícito.
+	app.get(['/signatures', '/signatures/'], (_req, res) => {
+		res.redirect(302, '/signatures/index.html')
+	})
+
 	registerApi(app)
 
 	app.use('*all', async (req, res) => {

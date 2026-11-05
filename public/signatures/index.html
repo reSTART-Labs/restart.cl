@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex">
+	<title>Email Signatures | re/START</title>
+	<link rel="icon" href="/favicon.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #FAF9F5;
+			--surface: #FFFFFF;
+			--text: #141413;
+			--text-light: #4A5E5B;
+			--text-muted: #6F908C;
+			--border: #E5ECEB;
+			--primary: #104B55;
+			--accent: #1A8E9E;
+		}
+
+		*, *::before, *::after { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			background: var(--bg);
+			color: var(--text);
+			font-family: Lato, Arial, Helvetica, sans-serif;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		.page {
+			max-width: 880px;
+			margin: 0 auto;
+			padding: 48px 16px 80px;
+		}
+
+		.page-head img { display: block; width: 120px; height: auto; }
+		.page-head h1 { margin: 28px 0 8px; font-size: 28px; font-weight: 400; }
+		.page-head p { margin: 0; max-width: 620px; color: var(--text-light); line-height: 1.6; }
+
+		.person { margin-top: 48px; }
+		.person h2 {
+			margin: 0 0 16px;
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+		}
+
+		.variant {
+			margin-bottom: 20px;
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			background: var(--surface);
+			overflow: hidden;
+		}
+
+		.variant-head {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			padding: 12px 16px;
+			border-bottom: 1px solid var(--border);
+		}
+
+		.variant-name { font-size: 14px; font-weight: 700; }
+		.variant-name span { font-weight: 400; color: var(--text-muted); }
+
+		.actions { display: flex; gap: 8px; }
+
+		button {
+			padding: 8px 14px;
+			border: 1px solid var(--primary);
+			border-radius: 999px;
+			background: var(--primary);
+			color: #fff;
+			font: 700 12px/1 Lato, Arial, sans-serif;
+			letter-spacing: 0.04em;
+			cursor: pointer;
+		}
+
+		button.ghost { background: transparent; color: var(--primary); }
+		button.is-done { border-color: var(--accent); background: var(--accent); color: #fff; }
+
+		.preview { padding: 28px 24px; overflow-x: auto; }
+
+		.howto {
+			margin-top: 56px;
+			padding: 24px;
+			border-radius: 12px;
+			background: var(--surface);
+			border: 1px solid var(--border);
+		}
+
+		.howto h2 { margin: 0 0 12px; font-size: 18px; font-weight: 700; }
+		.howto ol { margin: 0; padding-left: 20px; color: var(--text-light); line-height: 1.7; }
+		.howto li + li { margin-top: 6px; }
+		.howto strong { color: var(--text); }
+	</style>
+</head>
+<body>
+	<main class="page">
+		<header class="page-head">
+			<img src="/logo.png" alt="re/START">
+			<h1>Email signatures</h1>
+			<p>
+				Pick a signature and click <strong>Copy signature</strong>, then paste it into your
+				email client's signature settings. Use <strong>Full</strong> for new emails and
+				<strong>Compact</strong> for replies and forwards.
+			</p>
+		</header>
+
+		<div id="signatures"></div>
+
+		<section class="howto">
+			<h2>How to install</h2>
+			<ol>
+				<li><strong>Gmail:</strong> Settings (gear) → See all settings → General → Signature → Create new → paste → Save changes at the bottom.</li>
+				<li><strong>Outlook (web and new Outlook):</strong> Settings → Account → Signatures → New signature → paste → Save. Choose it under "Select default signatures".</li>
+				<li><strong>Apple Mail:</strong> Mail → Settings → Signatures → + → uncheck "Always match my default message font" → paste → close the window.</li>
+				<li><strong>Clients that ask for HTML</strong> (Thunderbird, Spark, HubSpot, etc.): use <strong>Copy HTML</strong> and paste the code in the HTML/source field.</li>
+			</ol>
+		</section>
+	</main>
+
+	<script>
+		/*
+		 * Firmas de correo de re/START. Para agregar o editar una persona, cambia este
+		 * arreglo: cada entrada genera una firma Full y una Compact.
+		 * Las firmas usan tablas y estilos en línea (lo único que respetan Gmail,
+		 * Outlook y Apple Mail) y el logo con URL absoluta, para que se vea fuera del sitio.
+		 */
+		const SITE = 'https://restart.cl'
+		const LOGO = SITE + '/logo.png'
+		const TAGLINE = 'Design and technology for founders building something new.'
+		const LOCATION = 'Valparaíso, Chile'
+
+		const people = [
+			{
+				name: 'Ricardo Gática',
+				role: 'Founder & Director',
+				email: 'ricardo@restart.cl',
+				phone: '+56 9 8414 2604',
+			},
+			{
+				name: 're/START Team',
+				role: 'Digital agency',
+				email: 'help@restart.cl',
+				phone: '+56 9 8414 2604',
+			},
+		]
+
+		const C = {
+			text: '#141413',
+			light: '#4A5E5B',
+			muted: '#6F908C',
+			primary: '#104B55',
+			accent: '#1A8E9E',
+		}
+		const FONT = 'Lato, Arial, Helvetica, sans-serif'
+
+		const esc = (s) => String(s)
+			.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+		const tel = (phone) => 'tel:' + phone.replace(/[^\d+]/g, '')
+		const link = (href, label, extra = '') =>
+			`<a href="${esc(href)}" style="color:${C.light};text-decoration:none;${extra}">${esc(label)}</a>`
+		const label = (letter) =>
+			`<span style="color:${C.accent};font-weight:700;">${letter}</span>&nbsp;&nbsp;`
+
+		function fullSignature(p) {
+			return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:${FONT};color:${C.text};">
+	<tr>
+		<td style="padding:0 0 14px 0;">
+			<a href="${SITE}" style="text-decoration:none;"><img src="${LOGO}" width="112" height="28" alt="re/START" style="display:block;width:112px;height:28px;border:0;"></a>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-family:${FONT};font-size:15px;line-height:20px;font-weight:700;color:${C.text};">${esc(p.name)}</td>
+	</tr>
+	<tr>
+		<td style="font-family:${FONT};font-size:13px;line-height:18px;color:${C.light};padding:0 0 12px 0;">${esc(p.role)}</td>
+	</tr>
+	<tr>
+		<td style="padding:0 0 12px 0;">
+			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tr><td width="40" height="2" bgcolor="${C.accent}" style="width:40px;height:2px;font-size:0;line-height:0;background:${C.accent};">&nbsp;</td></tr></table>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-family:${FONT};font-size:13px;line-height:21px;color:${C.light};">
+			${label('M')}${link(tel(p.phone), p.phone)}<br>
+			${label('E')}${link('mailto:' + p.email, p.email)}<br>
+			${label('W')}${link(SITE, 'restart.cl', `color:${C.primary};font-weight:700;`)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(LOCATION)}
+		</td>
+	</tr>
+	<tr>
+		<td style="font-family:Georgia, 'Times New Roman', serif;font-size:12px;line-height:17px;font-style:italic;color:${C.muted};padding:12px 0 0 0;">${esc(TAGLINE)}</td>
+	</tr>
+</table>`
+		}
+
+		function compactSignature(p) {
+			return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:${FONT};color:${C.text};">
+	<tr>
+		<td style="font-family:${FONT};font-size:13px;line-height:19px;color:${C.light};">
+			<strong style="color:${C.text};">${esc(p.name)}</strong>&nbsp;&nbsp;·&nbsp;&nbsp;${esc(p.role)}, <a href="${SITE}" style="color:${C.primary};font-weight:700;text-decoration:none;">re/START</a><br>
+			${link(tel(p.phone), p.phone)}&nbsp;&nbsp;·&nbsp;&nbsp;${link('mailto:' + p.email, p.email)}
+		</td>
+	</tr>
+</table>`
+		}
+
+		const variants = [
+			{ key: 'full', name: 'Full', hint: 'new emails', render: fullSignature },
+			{ key: 'compact', name: 'Compact', hint: 'replies & forwards', render: compactSignature },
+		]
+
+		// Copia como texto enriquecido; si el navegador no deja escribir HTML en el
+		// portapapeles, selecciona la vista previa y usa execCommand como respaldo.
+		async function copyRich(html, node) {
+			try {
+				await navigator.clipboard.write([new ClipboardItem({
+					'text/html': new Blob([html], { type: 'text/html' }),
+					'text/plain': new Blob([node.innerText], { type: 'text/plain' }),
+				})])
+			} catch {
+				const range = document.createRange()
+				range.selectNode(node)
+				const sel = window.getSelection()
+				sel.removeAllRanges()
+				sel.addRange(range)
+				document.execCommand('copy')
+				sel.removeAllRanges()
+			}
+		}
+
+		async function copyText(text) {
+			try {
+				await navigator.clipboard.writeText(text)
+			} catch {
+				const area = document.createElement('textarea')
+				area.value = text
+				document.body.appendChild(area)
+				area.select()
+				document.execCommand('copy')
+				area.remove()
+			}
+		}
+
+		function flash(button, text) {
+			const original = button.textContent
+			button.textContent = text
+			button.classList.add('is-done')
+			setTimeout(() => {
+				button.textContent = original
+				button.classList.remove('is-done')
+			}, 1600)
+		}
+
+		const root = document.getElementById('signatures')
+
+		for (const person of people) {
+			const section = document.createElement('section')
+			section.className = 'person'
+			section.innerHTML = `<h2>${esc(person.name)}</h2>`
+
+			for (const v of variants) {
+				const html = v.render(person)
+				const card = document.createElement('div')
+				card.className = 'variant'
+				card.innerHTML = `
+					<div class="variant-head">
+						<div class="variant-name">${v.name} <span>· ${v.hint}</span></div>
+						<div class="actions">
+							<button type="button" data-copy="rich">Copy signature</button>
+							<button type="button" class="ghost" data-copy="html">Copy HTML</button>
+						</div>
+					</div>
+					<div class="preview">${html}</div>`
+
+				const preview = card.querySelector('.preview')
+				card.querySelector('[data-copy="rich"]').addEventListener('click', async (e) => {
+					const button = e.currentTarget
+					await copyRich(html, preview.firstElementChild)
+					flash(button, 'Copied!')
+				})
+				card.querySelector('[data-copy="html"]').addEventListener('click', async (e) => {
+					const button = e.currentTarget
+					await copyText(html)
+					flash(button, 'HTML copied!')
+				})
+
+				section.appendChild(card)
+			}
+
+			root.appendChild(section)
+		}
+	</script>
+</body>
+</html>
