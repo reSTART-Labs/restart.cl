@@ -1,14 +1,15 @@
 /*
  * Genera el avatar animado de re/START (GIF en loop) a partir del favicon.
  *
- * Secuencia: la "/" del favicon y luego esferas que giran, cada una cubierta por
- * un patrón que se repite, construido desde la marca:
+ * Secuencia: la "/" del favicon y luego esferas cubiertas por un patrón que se
+ * repite, construido desde la marca y siempre en movimiento infinito:
  *   1. la "/" del favicon,
- *   2. esfera con dos "/" enteras (la del favicon) que ondulan como serpiente mientras
- *      gira; nace desde el centro de la "/" y la del frente calza con el logo,
- *   3. esfera de cuadrados redondeados (la forma del favicon) que laten en ola,
- *   4. esfera de flechas circulares de "restart" que giran (el "re"),
- *   5. esfera de triángulos de "play" que laten como corazón (el "START"),
+ *   2. esfera que gira con diez "/" enteras (la del favicon) que ondulan como
+ *      serpiente; la del frente calza con el logo y las demás aparecen con la red,
+ *   3. esfera de cuadrados redondeados (la forma del favicon) que nacen en el
+ *      centro y fluyen hacia el borde sin fin, latiendo en ola,
+ *   4. esfera de flechas de "restart" que salen del centro en remolino (el "re"),
+ *   5. esfera de triángulos de "play" que avanzan hacia afuera (el "START"),
  *   y vuelta a la "/". Blanco y negro, como el favicon.
  *
  * Entre esferas hay un barrido diagonal en el ángulo de la "/". El primer cuadro
@@ -73,9 +74,19 @@ function roundBox(u, v, b, r) {
 	return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - r
 }
 
-/* Triángulo equilátero con la punta a la derecha y circunradio s: máx. de las 3 caras. */
-const TRI = [180, 60, -60].map((d) => [Math.cos((d * Math.PI) / 180), Math.sin((d * Math.PI) / 180)])
-const triangle = (u, v, s) => Math.max(...TRI.map(([x, y]) => u * x + v * y)) - s / 2
+/*
+ * Distancia con signo a un triángulo equilátero con la punta hacia +y, centrado en
+ * su centroide, de semilado `half` y esquinas redondeadas con radio `round`.
+ */
+function roundTriangle(x, y, half, round) {
+	const k = Math.sqrt(3)
+	const r = half - round * k
+	let px = Math.abs(x) - r
+	let py = -y + r / k
+	if (px + k * py > 0) [px, py] = [(px - k * py) / 2, (-k * px - py) / 2]
+	px -= clamp(px, -2 * r, 0)
+	return -Math.hypot(px, py) * Math.sign(py) - round
+}
 
 /* La "/" del favicon sobre negro, a resolución de la grilla. */
 function loadLogo() {
@@ -117,37 +128,15 @@ function sphere(u, v, spin, tiltX, tiltZ, rad = SPHERE_R) {
 	return [Math.atan2(x1, z2) + spin, Math.asin(clamp(y2, -1, 1))]
 }
 
-/*
- * Cubre una esfera con un patrón por celdas. Hay `rows` filas de latitud; cada fila
- * tiene menos celdas hacia los polos (como los paneles de una pelota) para que las
- * formas mantengan su proporción, y las filas impares van corridas media celda.
- * `cell(x, y, col, row)` recibe coordenadas locales -1..1 con la celda cuadrada.
- */
-function patternSphere(u, v, { spin, tiltX, tiltZ, rad, cols, rows }, cell) {
-	const s = sphere(u, v, spin, tiltX, tiltZ, rad)
-	if (!s) return 0
-	const [lon, lat] = s
-	const gv = (lat / Math.PI + 0.5) * rows
-	const row = Math.min(rows - 1, Math.floor(gv))
-	const latC = ((row + 0.5) / rows - 0.5) * Math.PI
-	const n = Math.max(1, Math.round(cols * Math.cos(latC)))
-	const gu = (lon / TAU) * n + (row % 2) * 0.5
-	const col = ((Math.floor(gu) % n) + n) % n
-	const x = (frac(gu) - 0.5) * Math.cos(lat) * (TAU / n) / (Math.PI / rows)
-	const y = frac(gv) - 0.5
-	return cell(x * 2, y * 2, col, row)
-}
-
 /* Cada escena devuelve 0..1 (negro..blanco) para un punto, con t en segundos. */
 const scenes = {
 	logo: (u, v, t, i, logo) => logo[i] / 255,
 
-	// Esfera con dos "/" enteras del favicon, una adelante y otra atrás (así al
-	// empezar solo se ve la del frente, sin trozos de la otra por el borde). La
+	// Esfera con diez "/" enteras del favicon, juntas alrededor del ecuador. La
 	// esfera calza con el logo: la "/" del frente se proyecta igual que la del
 	// favicon, así el paso desde la "/" sola es continuo. Una red tenue de meridianos
-	// y paralelos (con su contorno) aparece desde el centro para mostrar la esfera;
-	// luego gira y cada "/" ondula a lo largo como una serpiente.
+	// y paralelos (con su contorno) aparece desde el centro y trae con ella al resto
+	// de las "/"; luego gira y cada "/" ondula a lo largo como una serpiente.
 	slashes(u, v, t, i, logo) {
 		const r = Math.hypot(u, v)
 		if (r >= SPHERE_R) return 0
@@ -155,19 +144,24 @@ const scenes = {
 		const s = sphere(u, v, spin, 0, 0)
 		const [lon, lat] = s
 		const snake = 0.16 * smooth(clamp((t - 0.45) / 0.5)) * Math.sin(lat * 3.2 - t * 5.5)
+		// La red y las "/" vecinas aparecen con un círculo nítido que crece desde el centro.
+		const reveal = SPHERE_R * smooth(clamp(t / 0.5))
+		const COUNT = 10
+		const gap = TAU / COUNT
+		const near = Math.round(lon / gap)
 		let out = 0
-		for (let k = 0; k < 2; k++) {
-			const dl = ((((lon - k * Math.PI) % TAU) + TAU + Math.PI) % TAU) - Math.PI
+		// La "/" va inclinada, así que un punto puede caer en la vecina de al lado.
+		for (let m = near - 1; m <= near + 1; m++) {
+			const k = ((m % COUNT) + COUNT) % COUNT
+			if (k !== 0 && r > reveal) continue
+			const dl = lon - m * gap
 			if (Math.abs(dl) > Math.PI / 2) continue
 			// Misma proyección ortográfica que la pantalla: sin serpiente, la "/" del frente
 			// cae exactamente sobre la del logo.
 			const x = SPHERE_R * Math.sin(dl - snake) * Math.cos(lat)
 			out = Math.max(out, sampleLogo(logo, x, SPHERE_R * Math.sin(lat)))
 		}
-		if (out > 0.5) return out
-		// Red de la esfera, revelada por un círculo nítido que crece desde el centro.
-		const reveal = SPHERE_R * smooth(clamp(t / 0.5))
-		if (r > reveal) return out
+		if (out > 0.5 || r > reveal) return out
 		const STEP = Math.PI / 6
 		const LINE = 0.014
 		const meridian = Math.abs(frac(lon / STEP + 0.5) - 0.5) * STEP * Math.cos(lat)
@@ -177,33 +171,64 @@ const scenes = {
 		return Math.max(out, grid, rim)
 	},
 
-	// Esfera de cuadrados redondeados que crecen y se achican en una ola diagonal.
+	// Cuadrados redondeados que nacen en el centro y fluyen hacia el borde sin fin,
+	// latiendo en una ola que recorre los anillos.
 	tiles(u, v, t) {
-		return patternSphere(u, v, { spin: -t * 0.8, tiltX: -0.3, tiltZ: 0.3, cols: 16, rows: 8 }, (x, y, col, row) => {
-			const pulse = 0.5 + 0.5 * Math.sin(t * 4.2 - (col * 0.6 + row * 0.9))
-			const h = mix(0.3, 0.78, pulse)
+		return flowSphere(u, v, { count: 14, outward: t * 0.9 }, (x, y, col, ring) => {
+			const pulse = 0.5 + 0.5 * Math.sin(t * 4.2 - ring * 0.9 - col * 0.45)
+			const h = mix(0.35, 0.72, pulse)
 			return roundBox(x, y, h, h * 0.32) < 0 ? 1 : 0
 		})
 	},
 
-	// Flecha circular de "restart": un arco grueso que gira acelerando y frenando,
-	// cuyo largo respira, con una punta triangular recta en la tangente del arco.
-	// En la esfera se repite, cada flecha con su propio desfase.
+	// Flechas de "restart" que salen del centro en remolino: avanzan hacia afuera y
+	// a la vez dan la vuelta, como una espiral sin fin. Cada flecha queda fija.
 	restart(u, v, t) {
-		return patternSphere(u, v, { spin: t * 0.7, tiltX: -0.4, tiltZ: -0.2, cols: 8, rows: 4 },
-			(x, y, col, row) => arrow(x * 1.05, y * 1.05, t + (col + row) * 0.35, 0.17))
+		return flowSphere(u, v, { count: 10, outward: t * 0.55, around: t * 0.35, tiltX: 0.45, tiltZ: 2.4 },
+			(x, y) => arrow(x * 1.05, y * 1.05, 0.8, 0.17))
 	},
 
-	// Triángulos de "play" que laten como un corazón (dos pulsos y una pausa), con
-	// el latido avanzando fila por fila.
+	// Triángulos de "play" con las puntas redondeadas, apuntando hacia afuera y
+	// avanzando en esa dirección sin fin.
 	play(u, v, t) {
-		return patternSphere(u, v, { spin: -t * 0.9, tiltX: -0.3, tiltZ: 0.2, cols: 12, rows: 6 }, (x, y, col, row) => {
-			const beat = frac(t * 0.9 - row * 0.08)
-			const bump = (c) => Math.exp(-(((beat - c) / 0.055) ** 2))
-			const s = 0.95 * (1 + 0.28 * (bump(0.08) + 0.65 * bump(0.26)))
-			return triangle(x + s / 4, y, s) < 0 ? 1 : 0
-		})
+		// En la celda, +y apunta hacia afuera de la esfera: el triángulo mira hacia allá.
+		return flowSphere(u, v, { count: 10, outward: t * 1.1, tiltX: 0.5, tiltZ: -0.5 },
+			(x, y) => (roundTriangle(x, y, 0.78, 0.14) < 0 ? 1 : 0))
 	},
+}
+
+/*
+ * Flujo infinito sobre la esfera, sin girarla: el patrón nace en un polo (inclinado
+ * hacia arriba a la izquierda, para que se note la curvatura) y viaja cruzando la
+ * esfera hasta perderse por el borde. Usa coordenadas conformes (como un Mercator
+ * con ese polo), así cada forma conserva su proporción mientras crece al alejarse
+ * del polo, y el patrón se repite igual en cada anillo: el movimiento se ve
+ * continuo, sin principio ni fin. `outward` y `around` desplazan el patrón hacia
+ * afuera y alrededor, en celdas. `cell(x, y, col, ring)` recibe coordenadas
+ * locales -1..1 con +y apuntando hacia afuera.
+ */
+function flowSphere(u, v, { count, outward = 0, around = 0, tiltX = 0.55, tiltZ = 0.6, rad = SPHERE_R }, cell) {
+	const x0 = u / rad
+	const y0 = v / rad
+	const d = x0 * x0 + y0 * y0
+	if (d >= 1) return 0
+	const z0 = Math.sqrt(1 - d)
+	// Gira la esfera para llevar el polo del flujo fuera del centro de la pantalla.
+	const cz = Math.cos(tiltZ), sz = Math.sin(tiltZ)
+	const x1 = x0 * cz - y0 * sz
+	const y1 = x0 * sz + y0 * cz
+	const cx = Math.cos(tiltX), sx = Math.sin(tiltX)
+	const y2 = y1 * cx - z0 * sx
+	const z2 = y1 * sx + z0 * cx
+	const theta = Math.acos(clamp(z2, -1, 1)) // 0 en el polo del flujo
+	// Junto al polo las formas se vuelven más chicas que un pixel: ahí queda negro.
+	if (theta < 0.09) return 0
+	const size = TAU / count
+	const gs = Math.log(Math.tan(theta / 2)) / size - outward
+	const ring = Math.floor(gs)
+	const gp = (Math.atan2(y2, x1) / TAU) * count + (ring % 2) * 0.5 - around
+	const col = ((Math.floor(gp) % count) + count) % count
+	return cell((frac(gp) - 0.5) * 2, (frac(gs) - 0.5) * 2, col, ring)
 }
 
 /* Una flecha circular de "restart" en coordenadas -1..1, con semigrosor W. */
