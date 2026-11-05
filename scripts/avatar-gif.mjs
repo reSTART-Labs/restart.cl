@@ -1,10 +1,16 @@
 /*
  * Genera el avatar animado de re/START (GIF en loop) a partir del favicon.
  *
- * Secuencia: la "/" del favicon → anillos concéntricos → esfera con franjas en
- * espiral → diana pulsante → esfera con franjas onduladas → esfera de puntos →
- * vuelta a la "/". Todo en blanco y negro, como el favicon. Cada escena entra con
- * un círculo que se abre desde el centro.
+ * Secuencia, toda construida desde la marca:
+ *   1. la "/" del favicon,
+ *   2. la "/" se multiplica en un campo de diagonales que fluyen,
+ *   3. grilla de cuadrados redondeados (la forma del favicon) que laten en ola,
+ *   4. flecha circular de "restart" que gira (el "re"),
+ *   5. triángulo de "play" con ecos que se expanden (el "START"),
+ *   y vuelta a la "/". Blanco y negro, como el favicon.
+ *
+ * Cada escena sale con un barrido diagonal en el ángulo de la "/". El primer
+ * cuadro es la "/" limpia, así sirve también donde el avatar queda estático.
  *
  * Cada cuadro se dibuja en una grilla 2× (antialias por promedio) y se pasa
  * crudo a ffmpeg, que arma el GIF con una paleta de grises. Solo requiere ffmpeg.
@@ -24,22 +30,42 @@ const SIZE = 512
 const SS = 2
 const GRID = SIZE * SS
 const FPS = 30
-const R = 0.8 // radio de las esferas y anillos (en unidades de -1..1)
 
-/* Línea de tiempo: [escena, cuadros]. Las transiciones están dentro de cada escena. */
+/* Línea de tiempo: [escena, cuadros]. Cada escena termina con el barrido a la siguiente. */
 const TIMELINE = [
-	['logo', 36],
-	['rings', 48],
-	['spiral', 66],
-	['target', 54],
-	['wavy', 66],
-	['dots', 60],
+	['logo', 40],
+	['slashes', 72],
+	['tiles', 66],
+	['restart', 66],
+	['play', 60],
 ]
-const TRANSITION = 12
+const TRANSITION = 14
 
 const TAU = Math.PI * 2
 const frac = (x) => x - Math.floor(x)
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x))
 const smooth = (t) => t * t * (3 - 2 * t)
+const mix = (a, b, t) => a + (b - a) * t
+
+/*
+ * Ejes de la "/" del favicon (en coordenadas -1..1, y hacia abajo): ALONG corre a lo
+ * largo del trazo y ACROSS es perpendicular. Todo lo diagonal usa estos ejes.
+ */
+const ALONG = [0.426, -0.904]
+const ACROSS = [0.904, 0.426]
+const across = (u, v) => u * ACROSS[0] + v * ACROSS[1]
+const along = (u, v) => u * ALONG[0] + v * ALONG[1]
+
+/* Distancia con signo a un cuadrado redondeado de semilado b y radio r (centrado). */
+function roundBox(u, v, b, r) {
+	const qx = Math.abs(u) - b + r
+	const qy = Math.abs(v) - b + r
+	return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - r
+}
+
+/* Triángulo equilátero con la punta a la derecha y circunradio s: máx. de las 3 caras. */
+const TRI = [180, 60, -60].map((d) => [Math.cos((d * Math.PI) / 180), Math.sin((d * Math.PI) / 180)])
+const triangle = (u, v, s) => Math.max(...TRI.map(([x, y]) => u * x + v * y)) - s / 2
 
 /* La "/" del favicon sobre negro, a resolución de la grilla. */
 function loadLogo() {
@@ -54,112 +80,122 @@ function loadLogo() {
 	return res.stdout
 }
 
-/*
- * Proyecta (u, v) sobre una esfera inclinada que gira. Devuelve [lon, lat] o null
- * si el punto cae fuera. La inclinación en Z sigue el ángulo de la "/".
- */
-function sphere(u, v, spin, tiltX = -0.45, tiltZ = -0.35) {
-	const x0 = u / R
-	const y0 = v / R
-	const d = x0 * x0 + y0 * y0
-	if (d >= 1) return null
-	const z0 = Math.sqrt(1 - d)
-	const cz = Math.cos(tiltZ), sz = Math.sin(tiltZ)
-	const x1 = x0 * cz - y0 * sz
-	const y1 = x0 * sz + y0 * cz
-	const cx = Math.cos(tiltX), sx = Math.sin(tiltX)
-	const y2 = y1 * cx - z0 * sx
-	const z2 = y1 * sx + z0 * cx
-	return [Math.atan2(x1, z2) + spin, Math.asin(Math.max(-1, Math.min(1, y2)))]
-}
-
-/* Cada escena devuelve 1 (blanco) o 0 (negro) para un punto, con t en segundos. */
+/* Cada escena devuelve 0..1 (negro..blanco) para un punto, con t en segundos. */
 const scenes = {
 	logo: (u, v, t, i, logo) => logo[i] / 255,
 
-	rings(u, v, t) {
+	// La "/" se repite: el periodo baja de "una sola diagonal" a un campo de
+	// diagonales que se desplazan, y el grosor ondula a lo largo del trazo.
+	slashes(u, v, t) {
+		if (roundBox(u, v, 0.82, 0.22) > 0) return 0
+		const grow = smooth(clamp(t / 0.6))
+		const period = mix(4, 0.34, grow)
+		const d = across(u, v) - Math.max(0, t - 0.5) * 0.22
+		const wave = smooth(clamp((t - 0.7) / 0.6)) * 0.55 * Math.sin(along(u, v) * 4.5 + t * 5)
+		const half = 0.065 * (1 + wave)
+		return Math.abs(d - period * Math.round(d / period)) < half ? 1 : 0
+	},
+
+	// Grilla 5×5 de cuadrados redondeados que crecen y se achican en una ola
+	// que avanza en diagonal, cada uno girando un poco al latir.
+	tiles(u, v, t) {
+		const N = 5
+		const cell = 1.7 / N
+		const gx = (u + 0.85) / cell
+		const gy = (v + 0.85) / cell
+		const i = Math.floor(gx)
+		const j = Math.floor(gy)
+		if (i < 0 || j < 0 || i >= N || j >= N) return 0
+		const lx = (frac(gx) - 0.5) * cell
+		const ly = (frac(gy) - 0.5) * cell
+		const pulse = 0.5 + 0.5 * Math.sin(t * 4.2 - (i * ACROSS[0] - j * ALONG[1] * 0.5) * 1.3)
+		const h = cell * mix(0.12, 0.44, pulse)
+		const a = (1 - pulse) * 0.6
+		const rx = lx * Math.cos(a) - ly * Math.sin(a)
+		const ry = lx * Math.sin(a) + ly * Math.cos(a)
+		return roundBox(rx, ry, h, h * 0.32) < 0 ? 1 : 0
+	},
+
+	// Flecha circular de "restart": un arco grueso con punta, que gira acelerando
+	// y frenando, y cuyo largo respira.
+	restart(u, v, t) {
 		const r = Math.hypot(u, v)
-		if (r > R) return 0
-		return frac(r * 9 - t * 1.6) < 0.2 ? 1 : 0
+		const R0 = 0.54
+		const W = 0.1
+		const spin = t * 2.4 + Math.sin(t * 2.4) * 0.6
+		const len = TAU * (0.74 + 0.06 * Math.sin(t * 3))
+		const head = 0.62
+		const th = (((Math.atan2(v, u) - spin) % TAU) + TAU) % TAU
+		if (th <= len) return Math.abs(r - R0) < W ? 1 : 0
+		if (th <= len + head) {
+			const k = 1 - (th - len) / head
+			return Math.abs(r - R0) < W * 2.1 * k ? 1 : 0
+		}
+		return 0
 	},
 
-	spiral(u, v, t) {
-		const s = sphere(u, v, t * 1.4)
-		if (!s) return 0
-		const f = (s[1] / Math.PI) * 9 + (s[0] / TAU) * 2
-		return frac(f) < 0.5 ? 1 : 0
-	},
-
-	target(u, v, t) {
-		const r = Math.hypot(u, v)
-		if (r > R) return 0
-		return frac(r / (R * 0.5) + t * 0.9) < 0.5 ? 1 : 0
-	},
-
-	wavy(u, v, t) {
-		const s = sphere(u, v, -t * 1.2, -0.3, 0.3)
-		if (!s) return 0
-		const f = (s[1] / Math.PI) * 8 + 0.35 * Math.sin(s[0] * 3)
-		return frac(f) < 0.45 ? 1 : 0
-	},
-
-	dots(u, v, t) {
-		const s = sphere(u, v, t * 1.1, -0.12, 0)
-		if (!s) return 0
-		const gu = (s[0] / TAU) * 18
-		const gv = (s[1] / Math.PI) * 10
-		// Las columnas se encogen hacia los polos; compensa para que los puntos sean redondos.
-		const du = (frac(gu) - 0.5) * Math.cos(s[1])
-		const dv = frac(gv) - 0.5
-		return du * du + dv * dv < 0.09 ? 1 : 0
+	// Triángulo de "play" que late, con dos contornos que salen de él y crecen.
+	play(u, v, t) {
+		const cu = u + 0.08
+		const s = 0.62 * (1 + 0.06 * Math.sin(t * 6))
+		if (triangle(cu, v, s) < 0) return 1
+		for (let k = 0; k < 2; k++) {
+			// Crece hasta el borde del cuadro mientras el trazo se adelgaza hasta desaparecer.
+			const p = frac(t * 0.7 + k / 2)
+			const se = s + p * 0.62
+			const d = triangle(cu, v, se)
+			if (d < 0 && d > -0.05 * (1 - p)) return 1
+		}
+		return 0
 	},
 }
 
 function render() {
 	const logo = loadLogo()
-	const total = TIMELINE.reduce((n, [, f]) => n + f, 0)
 	const frames = []
 	const hi = new Float32Array(GRID * GRID)
 
-	let start = 0
 	for (let s = 0; s < TIMELINE.length; s++) {
 		const [name, count] = TIMELINE[s]
-		const prev = TIMELINE[(s - 1 + TIMELINE.length) % TIMELINE.length][0]
-		const prevStart = s === 0 ? total - TIMELINE.at(-1)[1] : start - TIMELINE[s - 1][1]
+		const next = TIMELINE[(s + 1) % TIMELINE.length][0]
 
 		for (let f = 0; f < count; f++) {
-			const frame = start + f
 			const t = f / FPS
-			// Durante la transición, la escena nueva entra en un círculo que crece
-			// desde el centro, con un aro negro en el borde que separa ambas.
-			const k = f < TRANSITION ? smooth(f / TRANSITION) : 1
-			const edge = k * 1.5
-			const tPrev = (frame - prevStart + (s === 0 ? total : 0)) / FPS
+			// En los últimos cuadros, la escena siguiente entra con un barrido diagonal
+			// paralelo a la "/", separado por una franja negra. La siguiente arranca
+			// con t negativo para que su reloj siga sin salto al empezar.
+			const out = f - (count - TRANSITION)
+			const k = out > 0 ? smooth(out / TRANSITION) : 0
+			const edge = mix(-1.5, 1.5, k)
+			const tNext = (f - count) / FPS
 
 			for (let y = 0, i = 0; y < GRID; y++) {
-				const v = (y + 0.5) / GRID * 2 - 1
+				const v = ((y + 0.5) / GRID) * 2 - 1
 				for (let x = 0; x < GRID; x++, i++) {
-					const u = (x + 0.5) / GRID * 2 - 1
-					const r = Math.hypot(u, v)
-					if (k >= 1 || r < edge - 0.04) hi[i] = scenes[name](u, v, t, i, logo)
-					else if (r < edge) hi[i] = 0
-					else hi[i] = scenes[prev](u, v, tPrev, i, logo)
+					const u = ((x + 0.5) / GRID) * 2 - 1
+					if (k <= 0) {
+						hi[i] = scenes[name](u, v, t, i, logo)
+						continue
+					}
+					const w = across(u, v)
+					if (w < edge - 0.06) hi[i] = scenes[next](u, v, tNext, i, logo)
+					else if (w < edge) hi[i] = 0
+					else hi[i] = scenes[name](u, v, t, i, logo)
 				}
 			}
 
-			const out = Buffer.alloc(SIZE * SIZE)
+			const outFrame = Buffer.alloc(SIZE * SIZE)
 			for (let y = 0; y < SIZE; y++) {
 				for (let x = 0; x < SIZE; x++) {
 					let sum = 0
 					for (let dy = 0; dy < SS; dy++) {
 						for (let dx = 0; dx < SS; dx++) sum += hi[(y * SS + dy) * GRID + x * SS + dx]
 					}
-					out[y * SIZE + x] = Math.round((sum / (SS * SS)) * 255)
+					outFrame[y * SIZE + x] = Math.round((sum / (SS * SS)) * 255)
 				}
 			}
-			frames.push(out)
+			frames.push(outFrame)
 		}
-		start += count
 	}
 	return frames
 }
