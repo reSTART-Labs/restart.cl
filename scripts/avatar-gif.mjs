@@ -31,9 +31,13 @@ const SS = 2
 const GRID = SIZE * SS
 const FPS = 30
 
-/* Línea de tiempo: [escena, cuadros]. Cada escena termina con el barrido a la siguiente. */
+/*
+ * Línea de tiempo: [escena, cuadros, barrido]. Cada escena termina con el barrido
+ * a la siguiente, salvo la "/" → diagonales: ahí la escena nueva parte de la misma
+ * "/", así que pasa sin corte (un barrido la partiría en dos por un instante).
+ */
 const TIMELINE = [
-	['logo', 40],
+	['logo', 40, false],
 	['slashes', 72],
 	['tiles', 66],
 	['restart', 66],
@@ -166,7 +170,7 @@ function render() {
 	const hi = new Float32Array(GRID * GRID)
 
 	for (let s = 0; s < TIMELINE.length; s++) {
-		const [name, count] = TIMELINE[s]
+		const [name, count, wipe = true] = TIMELINE[s]
 		const next = TIMELINE[(s + 1) % TIMELINE.length][0]
 
 		for (let f = 0; f < count; f++) {
@@ -175,7 +179,7 @@ function render() {
 			// paralelo a la "/", separado por una franja negra. La siguiente arranca
 			// con t negativo para que su reloj siga sin salto al empezar.
 			const out = f - (count - TRANSITION)
-			const k = out > 0 ? smooth(out / TRANSITION) : 0
+			const k = wipe && out > 0 ? smooth(out / TRANSITION) : 0
 			const edge = mix(-1.5, 1.5, k)
 			const tNext = (f - count) / FPS
 
