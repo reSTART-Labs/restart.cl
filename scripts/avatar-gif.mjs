@@ -13,7 +13,8 @@
  * cuadro es la "/" limpia, así sirve también donde el avatar queda estático.
  *
  * Cada cuadro se dibuja en una grilla 2× (antialias por promedio) y se pasa
- * crudo a ffmpeg, que arma el GIF con una paleta de grises. Solo requiere ffmpeg.
+ * crudo a ffmpeg, que arma el GIF con una paleta de 64 grises (los degradados la
+ * necesitan para no verse en escalones). Solo requiere ffmpeg.
  *
  * Uso: node scripts/avatar-gif.mjs   → public/brand/avatar/avatar-{512,160,80}.gif
  *                                      y avatar-negative-{512,160,80}.gif (negro sobre blanco)
@@ -98,7 +99,9 @@ const scenes = {
 	logo: (u, v, t, i, logo) => logo[i] / 255,
 
 	// La "/" del favicon se repite: el periodo baja de "una sola /" a una fila de
-	// copias que se desplazan en diagonal y ondulan a lo largo del trazo.
+	// copias que se desplazan en diagonal y ondulan a lo largo del trazo. Un
+	// degradado hacia el borde (que entra antes que las copias) hace que cada "/"
+	// empiece y termine difuminada, sin cortarse contra el cuadro.
 	slashes(u, v, t, i, logo) {
 		const grow = smooth(clamp(t / 0.6))
 		const period = mix(4, 0.34, grow)
@@ -108,7 +111,8 @@ const scenes = {
 		const d = across(u, v) - shift + wave
 		const m = Math.round(d / period)
 		const back = m * period + shift - wave
-		return sampleLogo(logo, u - back * ACROSS[0], v - back * ACROSS[1])
+		const fade = mix(1, smooth(clamp(-roundBox(u, v, 0.94, 0.3) / 0.4)), smooth(clamp(t / 0.25)))
+		return sampleLogo(logo, u - back * ACROSS[0], v - back * ACROSS[1]) * fade
 	},
 
 	// Grilla 5×5 de cuadrados redondeados que crecen y se achican en una ola
@@ -131,37 +135,40 @@ const scenes = {
 		return roundBox(rx, ry, h, h * 0.32) < 0 ? 1 : 0
 	},
 
-	// Flecha circular de "restart": un arco grueso con punta, que gira acelerando
-	// y frenando, y cuyo largo respira.
+	// Flecha circular de "restart": un arco grueso que gira acelerando y frenando,
+	// cuyo largo respira, con una punta triangular recta en la tangente del arco.
 	restart(u, v, t) {
 		const r = Math.hypot(u, v)
 		const R0 = 0.54
 		const W = 0.1
 		const spin = t * 2.4 + Math.sin(t * 2.4) * 0.6
 		const len = TAU * (0.74 + 0.06 * Math.sin(t * 3))
-		const head = 0.62
 		const th = (((Math.atan2(v, u) - spin) % TAU) + TAU) % TAU
-		if (th <= len) return Math.abs(r - R0) < W ? 1 : 0
-		if (th <= len + head) {
-			const k = 1 - (th - len) / head
-			return Math.abs(r - R0) < W * 2.1 * k ? 1 : 0
-		}
-		return 0
+		if (th <= len && Math.abs(r - R0) < W) return 1
+		const end = spin + len
+		const nx = Math.cos(end), ny = Math.sin(end)
+		const a = (u - R0 * nx) * -ny + (v - R0 * ny) * nx // a lo largo de la tangente
+		const b = (u - R0 * nx) * nx + (v - R0 * ny) * ny // hacia afuera del círculo
+		const HEAD = 0.3
+		return a >= 0 && a <= HEAD && Math.abs(b) <= W * 2.1 * (1 - a / HEAD) ? 1 : 0
 	},
 
-	// Triángulo de "play" que late, con dos contornos que salen de él y crecen.
+	// Triángulo de "play" que late, con dos contornos que salen de él, crecen y se
+	// desvanecen por completo antes de tocar el borde del cuadro.
 	play(u, v, t) {
 		const cu = u + 0.08
 		const s = 0.62 * (1 + 0.06 * Math.sin(t * 6))
 		if (triangle(cu, v, s) < 0) return 1
+		// Circunradio con el que el triángulo (punta a la derecha, corrido 0,08 a la
+		// izquierda) todavía cabe entero en el cuadro, con margen.
+		const MAX = 0.98
+		let out = 0
 		for (let k = 0; k < 2; k++) {
-			// Crece hasta el borde del cuadro mientras el trazo se adelgaza hasta desaparecer.
 			const p = frac(t * 0.7 + k / 2)
-			const se = s + p * 0.62
-			const d = triangle(cu, v, se)
-			if (d < 0 && d > -0.05 * (1 - p)) return 1
+			const d = triangle(cu, v, mix(s, MAX, p))
+			if (d < 0 && d > -0.035) out = Math.max(out, (1 - p) * (1 - p))
 		}
-		return 0
+		return out
 	},
 }
 
@@ -220,7 +227,7 @@ function encode(frames, size, file) {
 	const res = spawnSync('ffmpeg', [
 		'-v', 'error', '-y',
 		'-f', 'rawvideo', '-pix_fmt', 'gray', '-s', `${SIZE}x${SIZE}`, '-r', String(FPS), '-i', '-',
-		'-filter_complex', `${scale}split[a][b];[a]palettegen=max_colors=16:reserve_transparent=0[p];[b][p]paletteuse=dither=none`,
+		'-filter_complex', `${scale}split[a][b];[a]palettegen=max_colors=64:reserve_transparent=0[p];[b][p]paletteuse=dither=none`,
 		'-loop', '0', file,
 	], { input: Buffer.concat(frames), maxBuffer: 1 << 30 })
 	if (res.status !== 0) throw new Error(res.stderr.toString())
