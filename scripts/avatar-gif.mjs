@@ -4,7 +4,8 @@
  * Secuencia: la "/" del favicon y luego esferas que giran, cada una cubierta por
  * un patrón que se repite, construido desde la marca:
  *   1. la "/" del favicon,
- *   2. esfera de "/" (la del favicon), que nace desde el centro de la "/",
+ *   2. esfera con dos "/" enteras (la del favicon) que ondulan como serpiente mientras
+ *      gira; nace desde el centro de la "/" y la del frente calza con el logo,
  *   3. esfera de cuadrados redondeados (la forma del favicon) que laten en ola,
  *   4. esfera de flechas circulares de "restart" que giran (el "re"),
  *   5. esfera de triángulos de "play" que laten como corazón (el "START"),
@@ -141,14 +142,39 @@ function patternSphere(u, v, { spin, tiltX, tiltZ, rad, cols, rows }, cell) {
 const scenes = {
 	logo: (u, v, t, i, logo) => logo[i] / 255,
 
-	// Esfera cubierta de la "/" del favicon. Nace desde el centro con un pequeño
-	// rebote y va tapando la "/" sola, que queda entera dentro de la esfera.
+	// Esfera con dos "/" enteras del favicon, una adelante y otra atrás (así al
+	// empezar solo se ve la del frente, sin trozos de la otra por el borde). La
+	// esfera calza con el logo: la "/" del frente se proyecta igual que la del
+	// favicon, así el paso desde la "/" sola es continuo. Una red tenue de meridianos
+	// y paralelos (con su contorno) aparece desde el centro para mostrar la esfera;
+	// luego gira y cada "/" ondula a lo largo como una serpiente.
 	slashes(u, v, t, i, logo) {
-		const rad = SPHERE_R * easeOutBack(clamp(t / 0.55))
-		if (rad <= 0 || Math.hypot(u, v) >= rad) return logo[i] / 255
-		// La "/" se lee ensanchada en horizontal para que el trazo no se pierda a 80 px.
-		return patternSphere(u, v, { spin: t * 0.9, tiltX: -0.35, tiltZ: -0.25, rad, cols: 10, rows: 5 },
-			(x, y) => sampleLogo(logo, x * 0.62, y * 0.98))
+		const r = Math.hypot(u, v)
+		if (r >= SPHERE_R) return 0
+		const spin = 1.8 * Math.max(0, t - 0.35)
+		const s = sphere(u, v, spin, 0, 0)
+		const [lon, lat] = s
+		const snake = 0.16 * smooth(clamp((t - 0.45) / 0.5)) * Math.sin(lat * 3.2 - t * 5.5)
+		let out = 0
+		for (let k = 0; k < 2; k++) {
+			const dl = ((((lon - k * Math.PI) % TAU) + TAU + Math.PI) % TAU) - Math.PI
+			if (Math.abs(dl) > Math.PI / 2) continue
+			// Misma proyección ortográfica que la pantalla: sin serpiente, la "/" del frente
+			// cae exactamente sobre la del logo.
+			const x = SPHERE_R * Math.sin(dl - snake) * Math.cos(lat)
+			out = Math.max(out, sampleLogo(logo, x, SPHERE_R * Math.sin(lat)))
+		}
+		if (out > 0.5) return out
+		// Red de la esfera, revelada por un círculo nítido que crece desde el centro.
+		const reveal = SPHERE_R * smooth(clamp(t / 0.5))
+		if (r > reveal) return out
+		const STEP = Math.PI / 6
+		const LINE = 0.014
+		const meridian = Math.abs(frac(lon / STEP + 0.5) - 0.5) * STEP * Math.cos(lat)
+		const parallel = Math.abs(frac(lat / STEP + 0.5) - 0.5) * STEP
+		const grid = meridian < LINE || parallel < LINE ? 0.3 : 0
+		const rim = r > reveal - 0.016 ? 0.55 : 0
+		return Math.max(out, grid, rim)
 	},
 
 	// Esfera de cuadrados redondeados que crecen y se achican en una ola diagonal.
