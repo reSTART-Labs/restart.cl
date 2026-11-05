@@ -132,7 +132,8 @@
 	<script>
 		/*
 		 * Firmas de correo de re/START. Para agregar o editar una persona, cambia este
-		 * arreglo: cada entrada genera una firma Full y una Compact.
+		 * arreglo: cada entrada genera una firma Full y una Compact. `vcard` (opcional)
+		 * apunta a su contacto en public/contact y agrega "Add to contacts" a la Full.
 		 * Las firmas usan tablas y estilos en línea (lo único que respetan Gmail,
 		 * Outlook y Apple Mail) y el logo con URL absoluta, para que se vea fuera del sitio.
 		 */
@@ -143,10 +144,11 @@
 
 		const people = [
 			{
-				name: 'Ricardo Gática',
+				name: 'Ricardo Gatica M.',
 				role: 'Founder & Director',
 				email: 'ricardo@restart.cl',
-				phone: '+56 9 8414 2604',
+				phone: '+56 9 7377 4687',
+				vcard: '/contact/ricardo-gatica.vcf',
 			},
 			{
 				name: 're/START Team',
@@ -195,7 +197,8 @@
 		<td style="font-family:${FONT};font-size:13px;line-height:21px;color:${C.light};">
 			${label('M')}${link(tel(p.phone), p.phone)}<br>
 			${label('E')}${link('mailto:' + p.email, p.email)}<br>
-			${label('W')}${link(SITE, 'restart.cl', `color:${C.primary};font-weight:700;`)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(LOCATION)}
+			${label('W')}${link(SITE, 'restart.cl', `color:${C.primary};font-weight:700;`)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(LOCATION)}${p.vcard ? `<br>
+			${label('+')}${link(SITE + p.vcard, 'Add to contacts', `color:${C.primary};font-weight:700;`)}` : ''}
 		</td>
 	</tr>
 	<tr>
