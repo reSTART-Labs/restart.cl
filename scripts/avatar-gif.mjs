@@ -3,7 +3,7 @@
  *
  * Secuencia, toda construida desde la marca:
  *   1. la "/" del favicon,
- *   2. la "/" se multiplica en un campo de diagonales que fluyen,
+ *   2. la "/" se multiplica en copias de sí misma que se desplazan y ondulan,
  *   3. grilla de cuadrados redondeados (la forma del favicon) que laten en ola,
  *   4. flecha circular de "restart" que gira (el "re"),
  *   5. triángulo de "play" con ecos que se expanden (el "START"),
@@ -80,20 +80,30 @@ function loadLogo() {
 	return res.stdout
 }
 
+/* Lee la "/" del favicon en un punto (u, v) cualquiera; fuera del cuadro es negro. */
+function sampleLogo(logo, u, v) {
+	const x = Math.floor(((u + 1) / 2) * GRID)
+	const y = Math.floor(((v + 1) / 2) * GRID)
+	if (x < 0 || y < 0 || x >= GRID || y >= GRID) return 0
+	return logo[y * GRID + x] / 255
+}
+
 /* Cada escena devuelve 0..1 (negro..blanco) para un punto, con t en segundos. */
 const scenes = {
 	logo: (u, v, t, i, logo) => logo[i] / 255,
 
-	// La "/" se repite: el periodo baja de "una sola diagonal" a un campo de
-	// diagonales que se desplazan, y el grosor ondula a lo largo del trazo.
-	slashes(u, v, t) {
-		if (roundBox(u, v, 0.82, 0.22) > 0) return 0
+	// La "/" del favicon se repite: el periodo baja de "una sola /" a una fila de
+	// copias que se desplazan en diagonal y ondulan a lo largo del trazo.
+	slashes(u, v, t, i, logo) {
 		const grow = smooth(clamp(t / 0.6))
 		const period = mix(4, 0.34, grow)
-		const d = across(u, v) - Math.max(0, t - 0.5) * 0.22
-		const wave = smooth(clamp((t - 0.7) / 0.6)) * 0.55 * Math.sin(along(u, v) * 4.5 + t * 5)
-		const half = 0.065 * (1 + wave)
-		return Math.abs(d - period * Math.round(d / period)) < half ? 1 : 0
+		const shift = Math.max(0, t - 0.5) * 0.22
+		const wave = smooth(clamp((t - 0.7) / 0.6)) * 0.05 * Math.sin(along(u, v) * 4.5 + t * 5)
+		// Lleva el punto a la copia más cercana y lee ahí la "/" original.
+		const d = across(u, v) - shift + wave
+		const m = Math.round(d / period)
+		const back = m * period + shift - wave
+		return sampleLogo(logo, u - back * ACROSS[0], v - back * ACROSS[1])
 	},
 
 	// Grilla 5×5 de cuadrados redondeados que crecen y se achican en una ola
