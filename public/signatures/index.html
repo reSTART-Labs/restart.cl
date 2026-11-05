@@ -138,7 +138,10 @@
 		 * Outlook y Apple Mail) y el logo con URL absoluta, para que se vea fuera del sitio.
 		 */
 		const SITE = 'https://restart.cl'
-		const LOGO = SITE + '/logo.png'
+		// Avatar animado (scripts/avatar-gif.mjs): el de 160 px se muestra a 80 para que
+		// se vea nítido en pantallas retina. Outlook de escritorio muestra solo el
+		// primer cuadro, que es la "/" limpia.
+		const AVATAR = SITE + '/brand/avatar/avatar-160.gif'
 		const TAGLINE = 'Design and technology for founders building something new.'
 		const LOCATION = 'Valparaíso, Chile'
 
@@ -176,31 +179,33 @@
 		function fullSignature(p) {
 			return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:${FONT};color:${C.text};">
 	<tr>
-		<td style="padding:0 0 14px 0;">
-			<a href="${SITE}" style="text-decoration:none;"><img src="${LOGO}" width="112" height="28" alt="re/START" style="display:block;width:112px;height:28px;border:0;"></a>
+		<td valign="top" style="vertical-align:top;padding:2px 18px 0 0;">
+			<a href="${SITE}" style="text-decoration:none;"><img src="${AVATAR}" width="80" height="80" alt="re/START" style="display:block;width:80px;height:80px;border:0;border-radius:10px;"></a>
 		</td>
-	</tr>
-	<tr>
-		<td style="font-family:${FONT};font-size:15px;line-height:20px;font-weight:700;color:${C.text};">${esc(p.name)}</td>
-	</tr>
-	<tr>
-		<td style="font-family:${FONT};font-size:13px;line-height:18px;color:${C.light};padding:0 0 12px 0;">${esc(p.role)}</td>
-	</tr>
-	<tr>
-		<td style="padding:0 0 12px 0;">
-			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tr><td width="40" height="2" bgcolor="${C.accent}" style="width:40px;height:2px;font-size:0;line-height:0;background:${C.accent};">&nbsp;</td></tr></table>
+		<td valign="top" style="vertical-align:top;border-left:1px solid #E5ECEB;padding:0 0 0 18px;">
+			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;">
+				<tr>
+					<td style="font-family:${FONT};font-size:15px;line-height:20px;font-weight:700;color:${C.text};">${esc(p.name)}</td>
+				</tr>
+				<tr>
+					<td style="font-family:${FONT};font-size:13px;line-height:18px;color:${C.light};padding:0 0 10px 0;">${esc(p.role)}, <a href="${SITE}" style="color:${C.primary};font-weight:700;text-decoration:none;">re/START</a></td>
+				</tr>
+				<tr>
+					<td style="padding:0 0 10px 0;">
+						<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tr><td width="32" height="2" bgcolor="${C.accent}" style="width:32px;height:2px;font-size:0;line-height:0;background:${C.accent};">&nbsp;</td></tr></table>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-family:${FONT};font-size:13px;line-height:20px;color:${C.light};">
+						${link(tel(p.phone), p.phone)}&nbsp;&nbsp;·&nbsp;&nbsp;${link('mailto:' + p.email, p.email)}<br>
+						${link(SITE, 'restart.cl', `color:${C.primary};font-weight:700;`)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(LOCATION)}${p.vcard ? `&nbsp;&nbsp;·&nbsp;&nbsp;${link(SITE + p.vcard, 'Add to contacts', `color:${C.primary};font-weight:700;`)}` : ''}
+					</td>
+				</tr>
+				<tr>
+					<td style="font-family:Georgia, 'Times New Roman', serif;font-size:12px;line-height:17px;font-style:italic;color:${C.muted};padding:10px 0 0 0;">${esc(TAGLINE)}</td>
+				</tr>
+			</table>
 		</td>
-	</tr>
-	<tr>
-		<td style="font-family:${FONT};font-size:13px;line-height:21px;color:${C.light};">
-			${link(tel(p.phone), p.phone)}<br>
-			${link('mailto:' + p.email, p.email)}<br>
-			${link(SITE, 'restart.cl', `color:${C.primary};font-weight:700;`)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(LOCATION)}${p.vcard ? `<br>
-			${link(SITE + p.vcard, 'Add to contacts', `color:${C.primary};font-weight:700;`)}` : ''}
-		</td>
-	</tr>
-	<tr>
-		<td style="font-family:Georgia, 'Times New Roman', serif;font-size:12px;line-height:17px;font-style:italic;color:${C.muted};padding:12px 0 0 0;">${esc(TAGLINE)}</td>
 	</tr>
 </table>`
 		}
