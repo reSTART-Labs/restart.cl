@@ -1,7 +1,10 @@
 <template>
 	<template v-if="project">
-		<div ref="rootRef" :style="brandVars" class="lab-project">
-			<!-- Hero -->
+		<!-- :key por slug: al pasar de un proyecto a otro (mismo componente de ruta) todo
+		     el árbol se monta de nuevo, así useProjectMotion parte de un DOM limpio y el
+		     dispositivo del hero relanza su auto-scroll con la captura nueva. -->
+		<div :key="project.slug" ref="rootRef" :style="brandVars" class="lab-project">
+			<!-- Hero (siempre sobre brandDark, ignora el tema) -->
 			<section class="lab-hero">
 				<div class="container mx-auto px-6 md:px-12 py-28 md:py-32">
 					<!-- Sin reveal-stagger a propósito: en esta página la entrada del hero la
@@ -9,10 +12,7 @@
 					     GSAP su contenido, y el movimiento se duplicaba. -->
 					<div class="lab-hero-grid">
 						<div class="lab-hero-left">
-							<!-- <RouterLink to="/labs" class="lab-hero-breadcrumb">
-								<i class="fa fa-arrow-left text-[10px]"></i>
-								re/START Labs
-							</RouterLink> -->
+							<p class="lab-hero-eyebrow">{{ eyebrow }}</p>
 
 							<h1 class="lab-hero-title">
 								<img
@@ -39,7 +39,11 @@
 									{{ project.cta || `Visita ${project.name}` }}
 									<i class="fa fa-external-link text-[11px]"></i>
 								</a>
-								<a href="#capturas" class="btn btn-ghost-dark">
+								<a
+									v-if="project.screenshots?.length"
+									href="#capturas"
+									class="btn btn-ghost-dark"
+								>
 									Ver capturas
 									<i class="fa fa-arrow-down text-[11px]"></i>
 								</a>
@@ -58,11 +62,12 @@
 
 						<div class="lab-hero-right">
 							<div class="lab-hero-shot">
-								<img
-									:src="project.heroImage"
-									:alt="project.name"
-									loading="eager"
-								>
+								<DeviceShowcase
+									:showcase="project.showcase"
+									:fallback="project.heroImage"
+									:url="project.url"
+									:name="project.name"
+								/>
 							</div>
 						</div>
 					</div>
@@ -127,7 +132,7 @@
 				</div>
 			</section>
 
-			<!-- Screenshots -->
+			<!-- Screenshots (siempre sobre brandDark) -->
 			<section
 				v-if="project.screenshots?.length"
 				id="capturas"
@@ -135,13 +140,13 @@
 			>
 				<div class="container mx-auto px-6 md:px-12">
 					<div class="lab-shots-head">
-						<p class="lab-eyebrow lab-eyebrow-brand">Capturas</p>
+						<p class="lab-eyebrow lab-eyebrow-on-dark">Capturas</p>
 						<h2 class="lab-section-title-inverse">
 							Un vistazo a la <em>experiencia</em>
 						</h2>
 					</div>
 
-					<div class="lab-shots-tabs">
+					<div v-if="project.screenshots.length > 1" class="lab-shots-tabs">
 						<button
 							v-for="(shot, i) in project.screenshots"
 							:key="shot.src"
@@ -155,21 +160,29 @@
 
 					<div class="lab-shots-display">
 						<div class="lab-shots-frame">
-							<img
-								:src="project.screenshots[activeShot].src"
-								:alt="project.screenshots[activeShot].label"
-								loading="lazy"
-							>
+							<DeviceShowcase
+								:key="currentShot.src"
+								:showcase="{ web: currentShot.src }"
+								:url="project.url"
+								:name="`${project.name} · ${currentShot.label}`"
+								static
+							/>
 						</div>
 						<p
-							v-if="project.screenshots[activeShot].caption"
+							v-if="currentShot.caption"
 							class="lab-shots-caption"
 						>
-							{{ project.screenshots[activeShot].caption }}
+							{{ currentShot.caption }}
 						</p>
 					</div>
 				</div>
 			</section>
+
+			<!-- Testimonios: solo reales; sin datos no se renderiza -->
+			<ProjectTestimonials
+				v-if="project.testimonials?.length"
+				:testimonials="project.testimonials"
+			/>
 
 			<!-- Tech -->
 			<section v-if="project.tech?.length" class="lab-tech">
@@ -192,8 +205,8 @@
 				<div class="container mx-auto px-6 md:px-12">
 					<div class="lab-highlights-grid">
 						<div>
-							<p class="lab-eyebrow lab-eyebrow-brand">Destacados t&eacute;cnicos</p>
-							<h2 class="lab-section-title-inverse">
+							<p class="lab-eyebrow lab-eyebrow-brand">Destacados</p>
+							<h2 class="lab-section-title">
 								Decisiones que marcan la <em>diferencia</em>
 							</h2>
 						</div>
@@ -217,7 +230,7 @@
 			<section v-if="project.clients?.length" class="lab-clients">
 				<div class="container mx-auto px-6 md:px-12">
 					<div class="lab-features-head">
-						<p class="lab-eyebrow">Hecho con esto</p>
+						<p class="lab-eyebrow lab-eyebrow-brand">Hecho con esto</p>
 						<h2 class="lab-section-title">
 							Productos que ya lo <em>usan</em>
 						</h2>
@@ -248,24 +261,41 @@
 				</div>
 			</section>
 
+			<!-- Créditos -->
+			<section v-if="project.credits?.length" class="lab-credits">
+				<div class="container mx-auto px-6 md:px-12">
+					<p class="lab-eyebrow lab-eyebrow-brand">Cr&eacute;ditos</p>
+					<ul class="lab-credits-list">
+						<li v-for="credit in project.credits" :key="credit.role + credit.name">
+							<span class="lab-credit-role">{{ credit.role }}:</span>
+							<a
+								v-if="credit.url"
+								:href="credit.url"
+								target="_blank"
+								rel="noopener"
+								class="lab-credit-link"
+							>{{ credit.name }}</a>
+							<span v-else class="lab-credit-name">{{ credit.name }}</span>
+						</li>
+					</ul>
+				</div>
+			</section>
+
 			<!-- Related projects -->
 			<section v-if="relatedProjects.length" class="lab-related">
 				<div class="container mx-auto px-6 md:px-12">
 					<div class="lab-features-head">
-						<p class="lab-eyebrow">Otros proyectos del lab</p>
+						<p class="lab-eyebrow lab-eyebrow-brand">Otros proyectos</p>
 						<h2 class="lab-section-title">
 							Explora lo que <em>construimos</em>
 						</h2>
 					</div>
 
-					<div
-						:key="`related-${project.slug}`"
-						class="lab-related-grid"
-					>
+					<div class="lab-related-grid">
 						<RouterLink
 							v-for="related in relatedProjects"
 							:key="related.slug"
-							:to="`/labs/${related.slug}`"
+							:to="projectPath(related)"
 							class="lab-related-card"
 						>
 							<img
@@ -275,8 +305,9 @@
 							>
 							<div class="lab-related-overlay" :style="relatedOverlayStyle(related)"></div>
 							<div class="lab-related-body">
-								<p class="lab-related-cat" :style="`color: ${related.brandColor}`">
-									{{ related.category || 'Producto' }}
+								<p class="lab-related-cat" :style="{ color: accentOnDark(related.brandColor, related.brandDark) }">
+									{{ related.type === 'labs' ? 'Labs' : related.client }}
+									· {{ related.category || 'Producto' }}
 								</p>
 								<h3>{{ related.name }}</h3>
 								<p class="lab-related-tagline">{{ related.tagline }}</p>
@@ -286,7 +317,7 @@
 				</div>
 			</section>
 
-			<!-- CTA -->
+			<!-- CTA (siempre sobre brandDark) -->
 			<section class="page-cta is-dark">
 				<div class="container mx-auto px-6 md:px-12">
 					<i :class="[ctaIcon, 'lab-cta-icon']"></i>
@@ -307,8 +338,8 @@
 							{{ project.cta || `Visita ${project.name}` }}
 							<i class="fa fa-arrow-right text-[11px]"></i>
 						</a>
-						<RouterLink to="/labs" class="btn btn-ghost-dark">
-							Ver todas las soluciones
+						<RouterLink :to="backLink.to" class="btn btn-ghost-dark">
+							{{ backLink.label }}
 						</RouterLink>
 					</div>
 				</div>
@@ -320,8 +351,8 @@
 		<div class="container mx-auto">
 			<h3 class="text-2xl font-light uppercase tracking-wide text-text">Proyecto no encontrado</h3>
 			<p class="text-text-light mt-4">El proyecto que buscas no existe.</p>
-			<RouterLink to="/labs" class="btn btn-primary mt-8 inline-flex">
-				Volver a Labs
+			<RouterLink to="/portafolio" class="btn btn-primary mt-8 inline-flex">
+				Ver el portafolio
 			</RouterLink>
 		</div>
 	</section>
@@ -330,25 +361,48 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { labsProjects } from '@/data/labsProjects.js'
+import { getProject, projects, projectPath } from '@/data/projects.js'
+import { accentOnDark, textOn } from '@/utils/color.js'
 import { useProjectMotion } from '@/composables/useProjectMotion.js'
+import DeviceShowcase from '@/components/DeviceShowcase.vue'
+import ProjectTestimonials from '@/components/ProjectTestimonials.vue'
 
 const route = useRoute()
 const rootRef = ref(null)
 
-/* GSAP entra por import() dinámico acá adentro: su chunk no toca el bundle principal
-   ni se descarga en el resto del sitio. */
-useProjectMotion(rootRef)
-const project = computed(() => labsProjects.find(p => p.slug === route.params.slug))
+const project = computed(() => getProject(route.params.slug))
 
+/* GSAP entra por import() dinámico acá adentro: su chunk no toca el bundle principal
+   ni se descarga en el resto del sitio. Se rehace al cambiar de slug. */
+useProjectMotion(rootRef, () => route.params.slug)
+
+const eyebrow = computed(() => (project.value?.type === 'labs' ? 'Labs' : project.value?.client))
+
+/* Mismo type primero, luego el otro; sin el actual; máx. 3. */
 const relatedProjects = computed(() => {
-	if (!project.value) return []
-	return labsProjects.filter(p => p.slug !== project.value.slug)
+	const actual = project.value
+	if (!actual) return []
+	const otros = projects.filter((p) => p.slug !== actual.slug)
+	return [
+		...otros.filter((p) => p.type === actual.type),
+		...otros.filter((p) => p.type !== actual.type),
+	].slice(0, 3)
 })
 
 const activeShot = ref(0)
 watch(() => route.params.slug, () => { activeShot.value = 0 })
 
+const currentShot = computed(() => {
+	const shots = project.value?.screenshots || []
+	return shots[activeShot.value] || shots[0] || {}
+})
+
+/*
+ * Paleta del proyecto. --brand-ink (acento para texto/bordes en secciones que siguen
+ * el tema) se define en el CSS porque cambia con html[data-theme]; acá van los valores
+ * que dependen solo del proyecto. --brand-on-dark es la marca aclarada lo justo para
+ * leerse como texto sobre --brand-dark (ver utils/color.js).
+ */
 const brandVars = computed(() => {
 	if (!project.value) return ''
 	const brand = project.value.brandColor || '#41BECF'
@@ -356,8 +410,15 @@ const brandVars = computed(() => {
 	return {
 		'--brand': brand,
 		'--brand-dark': dark,
+		'--brand-accent': project.value.brandAccent || brand,
+		'--brand-on-dark': accentOnDark(brand, dark),
+		'--brand-contrast': textOn(brand, dark),
 	}
 })
+
+const backLink = computed(() => (project.value?.type === 'labs'
+	? { to: '/labs', label: 'Ver todo Labs' }
+	: { to: '/portafolio', label: 'Ver todo el portafolio' }))
 
 const ctaIcon = computed(() => {
 	return project.value?.ctaIcon || 'ion-ios-bolt-outline'
@@ -371,15 +432,43 @@ function relatedOverlayStyle(related) {
 
 <style scoped>
 /* ========================================================================
-   HERO
+   PALETA
+   --brand / --brand-dark / --brand-accent / --brand-on-dark llegan inline.
+   --brand-ink: acento para texto y bordes en las secciones que siguen el tema.
+   En tema claro se oscurece hacia brandDark (un lima sobre blanco no se lee);
+   en tema oscuro usa la marca aclarada para fondo oscuro.
+   ======================================================================== */
+.lab-project {
+	--brand-ink: color-mix(in oklab, var(--brand) 55%, var(--brand-dark));
+}
+
+html[data-theme="dark"] .lab-project {
+	--brand-ink: var(--brand-on-dark);
+}
+
+/* ========================================================================
+   HERO (siempre sobre brandDark)
    ======================================================================== */
 .lab-hero {
 	position: relative;
 	overflow: hidden;
 	background:
 		radial-gradient(ellipse 60% 60% at 20% 10%, color-mix(in oklab, var(--brand) 18%, transparent), transparent 55%),
-		radial-gradient(ellipse 50% 50% at 85% 90%, rgba(111, 224, 237, 0.14), transparent 55%),
-		var(--color-primary-900);
+		radial-gradient(ellipse 50% 50% at 85% 90%, color-mix(in oklab, var(--brand-accent) 16%, transparent), transparent 55%),
+		var(--brand-dark);
+}
+
+.lab-hero-eyebrow {
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: var(--brand-on-dark);
+	margin: 0 0 18px;
+}
+
+.lab-hero-left {
+	min-width: 0;
 }
 
 .lab-hero-grid {
@@ -431,7 +520,7 @@ function relatedOverlayStyle(related) {
 	font-family: var(--font-serif);
 	font-style: italic;
 	font-size: 22px;
-	color: var(--brand);
+	color: var(--brand-on-dark);
 	margin-top: 10px;
 	font-weight: 300;
 	line-height: 1.3;
@@ -476,26 +565,13 @@ function relatedOverlayStyle(related) {
 
 .lab-hero-shot {
 	position: relative;
-	border-radius: 20px;
-	overflow: hidden;
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
 }
 
-.lab-hero-shot::before {
-	content: "";
-	position: absolute;
-	inset: -16px;
-	background: radial-gradient(circle at center, color-mix(in oklab, var(--brand) 18%, transparent), transparent 60%);
-	z-index: -1;
-	filter: blur(40px);
-	pointer-events: none;
-}
-
-.lab-hero-shot img {
-	display: block;
-	width: 100%;
-	height: auto;
+@media (max-width: 1024px) {
+	.lab-hero-shot {
+		max-width: 640px;
+		margin: 0 auto;
+	}
 }
 
 /* Brand-colored primary button for labs */
@@ -512,7 +588,7 @@ function relatedOverlayStyle(related) {
 	border-radius: 999px;
 	border: 1px solid var(--brand);
 	background: var(--brand);
-	color: var(--brand-dark);
+	color: var(--brand-contrast);
 	text-decoration: none;
 	cursor: pointer;
 	transition: all 0.2s ease;
@@ -553,7 +629,7 @@ function relatedOverlayStyle(related) {
 	font-family: var(--font-display);
 	font-size: clamp(30px, 2.8vw, 40px);
 	font-weight: 300;
-	color: var(--brand);
+	color: var(--brand-ink);
 	letter-spacing: -0.025em;
 	line-height: 1;
 }
@@ -597,7 +673,7 @@ function relatedOverlayStyle(related) {
 }
 
 .lab-ps-col.solution h3 {
-	color: var(--brand);
+	color: var(--brand-ink);
 }
 
 .lab-ps-col p {
@@ -623,7 +699,11 @@ function relatedOverlayStyle(related) {
 }
 
 .lab-eyebrow-brand {
-	color: var(--brand);
+	color: var(--brand-ink);
+}
+
+.lab-eyebrow-on-dark {
+	color: var(--brand-on-dark);
 }
 
 .lab-section-title {
@@ -640,7 +720,7 @@ function relatedOverlayStyle(related) {
 	font-family: var(--font-serif);
 	font-style: italic;
 	font-weight: 400;
-	color: var(--brand);
+	color: var(--brand-ink);
 }
 
 .lab-section-title-inverse {
@@ -657,7 +737,7 @@ function relatedOverlayStyle(related) {
 	font-family: var(--font-serif);
 	font-style: italic;
 	font-weight: 400;
-	color: var(--brand);
+	color: var(--brand-on-dark);
 }
 
 /* ========================================================================
@@ -690,7 +770,7 @@ function relatedOverlayStyle(related) {
 .lf-card:hover {
 	box-shadow: 0 12px 28px rgba(13, 17, 23, 0.08);
 	transform: translateY(-3px);
-	border-color: color-mix(in oklab, var(--brand) 30%, var(--color-border));
+	border-color: color-mix(in oklab, var(--brand-ink) 40%, var(--color-border));
 }
 
 .lf-icon {
@@ -700,8 +780,8 @@ function relatedOverlayStyle(related) {
 	width: 44px;
 	height: 44px;
 	border-radius: 14px;
-	background: color-mix(in oklab, var(--brand) 12%, transparent);
-	color: var(--brand);
+	background: color-mix(in oklab, var(--brand) 14%, transparent);
+	color: var(--brand-ink);
 	font-size: 18px;
 	margin-bottom: 18px;
 }
@@ -727,7 +807,7 @@ function relatedOverlayStyle(related) {
    ======================================================================== */
 .lab-shots {
 	padding: 96px 0;
-	background: var(--color-primary-800);
+	background: color-mix(in oklab, var(--brand-dark), black 18%);
 	color: #FFFFFF;
 }
 
@@ -766,7 +846,7 @@ function relatedOverlayStyle(related) {
 
 .lab-shots-tab.is-active {
 	background: var(--brand);
-	color: var(--brand-dark);
+	color: var(--brand-contrast);
 	border-color: var(--brand);
 }
 
@@ -776,28 +856,9 @@ function relatedOverlayStyle(related) {
 	position: relative;
 }
 
-.lab-shots-display::before {
-	content: "";
-	position: absolute;
-	inset: -16px;
-	background: radial-gradient(circle at center, color-mix(in oklab, var(--brand) 16%, transparent), transparent 60%);
-	filter: blur(40px);
-	z-index: 0;
-}
-
 .lab-shots-frame {
 	position: relative;
-	border-radius: 20px;
-	overflow: hidden;
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
 	z-index: 1;
-}
-
-.lab-shots-frame img {
-	width: 100%;
-	height: auto;
-	display: block;
 }
 
 .lab-shots-caption {
@@ -835,7 +896,7 @@ function relatedOverlayStyle(related) {
 	font-family: var(--font-serif);
 	font-style: italic;
 	font-weight: 400;
-	color: var(--brand);
+	color: var(--brand-ink);
 }
 
 .lab-tech-chips {
@@ -869,8 +930,8 @@ function relatedOverlayStyle(related) {
    ======================================================================== */
 .lab-highlights {
 	padding: 96px 0;
-	background: var(--brand-dark);
-	color: #FFFFFF;
+	background: var(--color-surface);
+	border-top: 1px solid var(--color-border-soft);
 }
 
 .lab-highlights-grid {
@@ -891,8 +952,8 @@ function relatedOverlayStyle(related) {
 .lab-highlight-item {
 	padding: 18px 20px;
 	border-radius: 14px;
-	background: color-mix(in oklab, var(--brand) 5%, transparent);
-	border: 1px solid color-mix(in oklab, var(--brand) 15%, transparent);
+	background: color-mix(in oklab, var(--brand) 6%, transparent);
+	border: 1px solid color-mix(in oklab, var(--brand-ink) 22%, var(--color-border));
 	display: flex;
 	gap: 14px;
 	align-items: center;
@@ -900,7 +961,7 @@ function relatedOverlayStyle(related) {
 }
 
 .lab-highlight-item:hover {
-	border-color: color-mix(in oklab, var(--brand) 40%, transparent);
+	border-color: color-mix(in oklab, var(--brand-ink) 55%, transparent);
 }
 
 .lab-highlight-check {
@@ -909,7 +970,7 @@ function relatedOverlayStyle(related) {
 	height: 28px;
 	border-radius: 999px;
 	background: color-mix(in oklab, var(--brand) 22%, transparent);
-	color: var(--brand);
+	color: var(--brand-ink);
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -918,7 +979,7 @@ function relatedOverlayStyle(related) {
 
 .lab-highlight-item p {
 	font-size: 14px;
-	color: rgba(255, 255, 255, 0.85);
+	color: var(--color-text);
 	line-height: 1.5;
 	margin: 0;
 }
@@ -955,7 +1016,7 @@ function relatedOverlayStyle(related) {
 
 .lab-client-card:hover {
 	transform: translateY(-3px);
-	border-color: var(--brand);
+	border-color: var(--brand-ink);
 }
 
 /* Alto fijo y recorte por arriba: las capturas son muy verticales y sin esto la
@@ -1003,7 +1064,52 @@ function relatedOverlayStyle(related) {
 	font-size: 13px;
 	font-weight: 700;
 	letter-spacing: 0.04em;
-	color: var(--brand);
+	color: var(--brand-ink);
+}
+
+/* ========================================================================
+   CRÉDITOS
+   ======================================================================== */
+.lab-credits {
+	padding: 64px 0;
+	text-align: center;
+	background: var(--color-bg);
+	border-top: 1px solid var(--color-border-soft);
+}
+
+.lab-credits .lab-eyebrow {
+	margin-bottom: 14px;
+}
+
+.lab-credits-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 10px 36px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-family: var(--font-serif);
+	font-size: 17px;
+	font-weight: 300;
+	color: var(--color-text);
+}
+
+.lab-credit-role {
+	color: var(--color-text-muted);
+	margin-right: 6px;
+}
+
+.lab-credit-link {
+	color: var(--color-text);
+	text-decoration: underline;
+	text-decoration-color: var(--brand-ink);
+	text-underline-offset: 4px;
+	transition: color 0.2s ease;
+}
+
+.lab-credit-link:hover {
+	color: var(--brand-ink);
 }
 
 @media (max-width: 767px) {
@@ -1102,13 +1208,13 @@ function relatedOverlayStyle(related) {
 }
 
 .page-cta.is-dark {
-	background: var(--color-primary-800);
+	background: var(--brand-dark);
 	color: #FFFFFF;
 }
 
 .lab-cta-icon {
 	font-size: 40px;
-	color: var(--brand);
+	color: var(--brand-on-dark);
 	display: block;
 	margin-bottom: 20px;
 }
@@ -1128,7 +1234,7 @@ function relatedOverlayStyle(related) {
 	font-family: var(--font-serif);
 	font-style: italic;
 	font-weight: 400;
-	color: var(--brand);
+	color: var(--brand-on-dark);
 }
 
 .cta-lede {
@@ -1156,10 +1262,6 @@ function relatedOverlayStyle(related) {
 	.lab-hero-grid {
 		grid-template-columns: 1fr;
 		gap: 40px;
-	}
-
-	.lab-hero-right {
-		order: -1;
 	}
 
 	.lab-stats-grid {

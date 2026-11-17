@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted } from 'vue'
+import { nextTick, onMounted, onUnmounted, watch } from 'vue'
 
 /*
  * Animación de entrada para las páginas de proyecto de Labs.
@@ -108,12 +108,26 @@ function animarConteo(gsap, elemento) {
 	})
 }
 
-export function useProjectMotion(raizRef) {
+/**
+ * @param {import('vue').Ref<HTMLElement|null>} raizRef
+ * @param {() => unknown} [fuente]  Si cambia (p.ej. el slug), se revierte todo y se
+ *   vuelve a animar sobre el DOM nuevo. Vue reutiliza el componente de ruta al pasar
+ *   de /labs/a a /labs/b, así que onMounted no vuelve a correr por sí solo.
+ */
+export function useProjectMotion(raizRef, fuente) {
 	let contexto = null
+	let vigente = 0
 
-	onMounted(async () => {
+	function detener() {
+		vigente++
+		contexto?.revert()
+		contexto = null
+	}
+
+	async function iniciar() {
 		if (!isBrowser || prefiereMenosMovimiento()) return
 
+		const turno = ++vigente
 		const raiz = raizRef?.value
 		if (!raiz) return
 
@@ -127,6 +141,9 @@ export function useProjectMotion(raizRef) {
 			// Sin GSAP la página se ve igual, solo sin animación. No hay nada que revertir.
 			return
 		}
+
+		// Se cambió de proyecto (o se desmontó) mientras cargaba GSAP.
+		if (turno !== vigente || raiz !== raizRef.value || !raiz.isConnected) return
 
 		gsap.registerPlugin(ScrollTrigger)
 
@@ -263,10 +280,20 @@ export function useProjectMotion(raizRef) {
 				})
 			}
 		}, raiz)
-	})
+		/* Sin ScrollTrigger.refresh() acá: cada trigger nuevo se mide al crearse, y un
+		   refresh global justo después de navegar restaura el scroll cacheado de la
+		   página anterior, pisando el scroll al tope del router. */
+	}
 
-	onUnmounted(() => {
-		contexto?.revert()
-		contexto = null
-	})
+	onMounted(iniciar)
+
+	if (fuente) {
+		watch(fuente, async () => {
+			detener()
+			await nextTick()
+			iniciar()
+		})
+	}
+
+	onUnmounted(detener)
 }

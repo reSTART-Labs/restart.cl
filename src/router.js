@@ -49,7 +49,7 @@ const routes = [
 	{
 		path: '/labs/:slug',
 		name: 'labs-project',
-		component: () => import('./pages/LabsProjectPage.vue'),
+		component: () => import('./pages/ProjectPage.vue'),
 		beforeEnter: (to) => canonicalPath(to.path) ?? true,
 	},
 	{
