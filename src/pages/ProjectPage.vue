@@ -612,11 +612,14 @@ html[data-theme="dark"] .lab-project {
 }
 
 .lab-stats-grid {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	/* Flex (no grid) para que 2 o 3 cifras queden centradas en vez de pegadas a la izquierda */
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
 .lab-stat {
+	flex: 0 1 25%;
 	text-align: center;
 	padding: 0 24px;
 	border-right: 1px solid var(--color-border);
@@ -755,9 +758,16 @@ html[data-theme="dark"] .lab-project {
 }
 
 .lab-features-grid {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	/* Flex para centrar la última fila cuando no se completa */
+	--cols: 4;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 	gap: 16px;
+}
+
+.lab-features-grid > .lf-card {
+	flex: 0 0 calc((100% - (var(--cols) - 1) * 16px) / var(--cols));
 }
 
 .lf-card {
@@ -1269,11 +1279,11 @@ html[data-theme="dark"] .lab-project {
 	}
 
 	.lab-stats-grid {
-		grid-template-columns: 1fr 1fr;
 		gap: 32px 0;
 	}
 
 	.lab-stat {
+		flex-basis: 50%;
 		border-right: none;
 	}
 
@@ -1283,7 +1293,7 @@ html[data-theme="dark"] .lab-project {
 	}
 
 	.lab-features-grid {
-		grid-template-columns: 1fr 1fr;
+		--cols: 2;
 	}
 
 	.lab-highlights-grid {
@@ -1298,7 +1308,7 @@ html[data-theme="dark"] .lab-project {
 
 @media (max-width: 640px) {
 	.lab-features-grid {
-		grid-template-columns: 1fr;
+		--cols: 1;
 	}
 }
 
