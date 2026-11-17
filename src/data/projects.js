@@ -447,7 +447,7 @@ export const projects = [
 				desc: 'Órdenes de compra y licitaciones del Estado, con sus organismos y proveedores.',
 			},
 			{
-				icon: 'ion-ios-car',
+				icon: 'ion-android-car',
 				title: 'Vehículos',
 				desc: 'Tasación fiscal e historial de revisiones técnicas, consultables por patente.',
 			},
@@ -656,7 +656,7 @@ export const projects = [
 				desc: 'El cuidador va a tu casa para alimentar, pasear y acompañar a tu mascota en su entorno conocido.',
 			},
 			{
-				icon: 'ion-ios-ribbon-outline',
+				icon: 'ion-ribbon-b',
 				title: 'Entrenamiento',
 				desc: 'Formación y corrección de comportamiento con petsitters especializados en adiestramiento positivo.',
 			},

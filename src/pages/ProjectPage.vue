@@ -765,12 +765,15 @@ html[data-theme="dark"] .lab-project {
 	background: var(--color-surface);
 	border: 1px solid var(--color-border);
 	border-radius: 20px;
-	transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+	/* El lift del hover va en `translate` y no en `transform`: GSAP anima `transform`
+	   en la entrada, y una transición CSS sobre esa misma propiedad deja las tarjetas
+	   detenidas a mitad de camino (desalineadas). */
+	transition: box-shadow 0.3s ease, translate 0.3s ease, border-color 0.3s ease;
 }
 
 .lf-card:hover {
 	box-shadow: 0 12px 28px rgba(13, 17, 23, 0.08);
-	transform: translateY(-3px);
+	translate: 0 -3px;
 	border-color: color-mix(in oklab, var(--brand-ink) 40%, var(--color-border));
 }
 
@@ -1012,11 +1015,11 @@ html[data-theme="dark"] .lab-project {
 	border-radius: 20px;
 	overflow: hidden;
 	text-decoration: none;
-	transition: transform 0.3s ease, border-color 0.3s ease;
+	transition: translate 0.3s ease, border-color 0.3s ease;
 }
 
 .lab-client-card:hover {
-	transform: translateY(-3px);
+	translate: 0 -3px;
 	border-color: var(--brand-ink);
 }
 
