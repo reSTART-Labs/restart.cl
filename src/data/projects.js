@@ -622,9 +622,10 @@ export const projects = [
 		year: 2025,
 		category: 'Marketplace',
 		platforms: ['Web'],
-		brandColor: '#47AE89',
-		brandDark: '#11303B',
-		brandAccent: '#228398',
+		// Paleta tomada de petsit.cl (theme-color #6C3BEF + rosa de acento); fondo violeta profundo.
+		brandColor: '#6B47E8',
+		brandDark: '#150C38',
+		brandAccent: '#DD2590',
 		heroImage: '/img/projects/petsit/site-1.jpg',
 		problem: 'Dejar a tu mascota con alguien de confianza mientras viajas o trabajas es una decisión cargada de dudas: quién, dónde, por cuánto y con qué garantías. Las alternativas informales dependen de contactos y WhatsApp, sin verificación ni respaldo.',
 		solution: 'Un marketplace donde los tutores exploran perfiles verificados de cuidadores cercanos, reservan con pago seguro y mantienen comunicación directa durante todo el servicio. Para los petsitters, una vitrina profesional para construir su emprendimiento en torno al cuidado animal.',
