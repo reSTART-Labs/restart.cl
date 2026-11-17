@@ -664,7 +664,7 @@ export const projects = [
 				caption: 'Lo que encuentra un petsitter en la plataforma: visibilidad, conexión directa con tutores y gestión simple.',
 			},
 			{
-				src: '/img/projects/petsit/site-1.jpg',
+				src: '/img/projects/petsit/home.jpg',
 				label: 'Inicio',
 				caption: 'Hero del marketplace con los seis servicios, flujo de reserva en tres pasos y cobertura por zonas.',
 			},
@@ -744,9 +744,9 @@ export const projects = [
 				caption: 'Sitio web y tienda online: lo que incluye cada canal para empezar a vender.',
 			},
 			{
-				src: '/img/projects/minicatalogo/site-1.jpg',
+				src: '/img/projects/minicatalogo/home.jpg',
 				label: 'Inicio',
-				caption: 'Página de inicio de Minicatalogo.',
+				caption: 'Página de inicio completa: sitio web, tienda online y venta B2B para negocios, con sus planes y beneficios.',
 			},
 		],
 		cta: 'Crea tu catálogo',
