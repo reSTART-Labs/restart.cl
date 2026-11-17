@@ -24,7 +24,7 @@ test('slugs únicos', () => {
 test('inventario', () => {
 	assert.deepEqual(
 		projects.map((p) => p.slug).sort(),
-		['bogy', 'api-restart', 'petsit', 'minicatalogo', 'mercado', 'grupo-zenit', 'hs-paneles'].sort(),
+		['bogy', 'api-restart', 'petsit', 'minicatalogo', 'mercado', 'miportada', 'grupo-zenit', 'hs-paneles'].sort(),
 	)
 })
 

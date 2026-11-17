@@ -268,6 +268,77 @@ export const projects = [
 		cta: 'Prueba Merc@do',
 	},
 	{
+		slug: 'miportada',
+		type: 'labs',
+		name: 'MiPortada',
+		client: 'Producto propio',
+		tags: ['Noticias', 'Medios', 'IA', 'Next.js'],
+		tagline: 'Las noticias de Chile y el mundo en una sola portada',
+		shortDescription: 'Reúne los titulares de los principales medios chilenos e internacionales y los profundiza con contexto y con lo que publicó cada medio sobre el mismo hecho.',
+		description: 'MiPortada junta en un solo lugar lo que publican los medios de Chile y el mundo, ordenado por sección y actualizado durante todo el día. Cuando un hecho lo amerita, lo profundiza: suma el contexto que falta y enlaza las coberturas de los demás medios para que veas la historia completa.',
+		url: 'https://miportada.cl',
+		status: 'live',
+		year: 2026,
+		category: 'Medios',
+		platforms: ['Web'],
+		// Paleta del sitio (miportada.cl): verde petróleo sobre papel y su versión clara para fondos oscuros.
+		brandColor: '#0B4F4A',
+		brandDark: '#101215',
+		brandAccent: '#6CC4B8',
+		heroImage: '/img/projects/miportada/site-1.jpg',
+		problem: 'Para enterarse bien de lo que pasa hay que saltar entre varios medios, cada uno con su portada, sus secciones y su versión del mismo hecho. Los titulares se repiten, el contexto queda repartido y casi nunca hay tiempo de comparar quién dijo qué.',
+		solution: 'Una portada que se arma sola con los titulares de medios chilenos e internacionales, por sección y siempre enlazando al medio original. Encima, notas propias que profundizan: explican el contexto, citan las coberturas de cada medio y suman cada día una efeméride investigada.',
+		features: [
+			{
+				icon: 'ion-ios-paper-outline',
+				title: 'Todo en una portada',
+				desc: 'Titulares de medios chilenos e internacionales, ordenados por sección y actualizados durante el día.',
+			},
+			{
+				icon: 'ion-ios-search-strong',
+				title: 'Para saber más',
+				desc: 'Las notas suman el contexto que falta y enlazan lo que publicó cada medio sobre el mismo hecho.',
+			},
+			{
+				icon: 'ion-link',
+				title: 'Siempre al medio original',
+				desc: 'Cada titular lleva a la nota del medio que la reporteó; MiPortada ordena, no reemplaza.',
+			},
+			{
+				icon: 'ion-ios-calendar-outline',
+				title: 'Efemérides del día',
+				desc: 'Cada mañana, una nota propia sobre lo que se conmemora ese día, investigada y con sus fuentes.',
+			},
+			{
+				icon: 'ion-ios-email-outline',
+				title: 'De boletines a notas',
+				desc: 'Los boletines de noticias se convierten en notas publicadas, cada una con sus referencias.',
+			},
+			{
+				icon: 'ion-ios-lightbulb-outline',
+				title: 'Resume con tu IA',
+				desc: 'Un clic para resumir cualquier nota con ChatGPT, Claude, Grok o Perplexity.',
+			},
+		],
+		showcase: {
+			web: '/img/projects/miportada/web.jpg',
+			mobile: '/img/projects/miportada/mobile.jpg',
+		},
+		screenshots: [
+			{
+				src: '/img/projects/miportada/site-1.jpg',
+				label: 'Portada',
+				caption: 'La portada de MiPortada con los titulares destacados y las secciones del día.',
+			},
+			{
+				src: '/img/projects/miportada/site-2.jpg',
+				label: 'Para saber más',
+				caption: 'Una nota profundizada: contexto adicional y las coberturas de cada medio sobre el mismo hecho.',
+			},
+		],
+		cta: 'Visita MiPortada',
+	},
+	{
 		slug: 'bogy',
 		type: 'labs',
 		client: 'Producto propio',
