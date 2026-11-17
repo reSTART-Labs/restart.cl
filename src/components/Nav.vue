@@ -1,5 +1,8 @@
 <template>
-	<header class="fixed top-0 left-0 right-0 z-50 px-4 pt-4 flex justify-center">
+	<header
+		class="fixed top-0 left-0 right-0 z-50 px-4 pt-4 flex justify-center"
+		:class="{ 'nav-enter': navEnter }"
+	>
 		<nav
 			class="nav-pill w-full max-w-5xl flex items-center justify-between px-5 md:px-6 h-14 rounded-full transition-all duration-300 border"
 			:class="scrolled
@@ -17,11 +20,11 @@
 
 			<!-- Desktop links -->
 			<ul class="hidden lg:flex items-center gap-6 list-none m-0 p-0">
-				<li>
+				<li class="flex items-center">
 					<RouterLink
 						to="/nosotros"
-						class="text-[13px] font-medium no-underline transition-colors duration-200"
-						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
+						class="inline-flex items-center text-[13px] leading-none no-underline transition-colors duration-200"
+						:class="deskClass(active.nosotros)"
 					>
 						Nosotros
 					</RouterLink>
@@ -29,8 +32,8 @@
 				<li class="relative flex items-center" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
 					<RouterLink
 						to="/servicios"
-						class="text-[13px] font-medium transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer no-underline"
-						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
+						class="text-[13px] leading-none transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer no-underline"
+						:class="deskClass(active.servicios)"
 					>
 						Servicios
 						<i class="fa fa-angle-down text-[10px] transition-transform duration-200" :class="servicesOpen ? 'rotate-180' : ''"></i>
@@ -52,7 +55,8 @@
 									<li v-for="service in services" :key="service.slug">
 										<RouterLink
 											:to="`/servicios/${service.slug}`"
-											class="group flex items-start gap-4 p-3 rounded-xl text-text-soft hover:bg-features-bg no-underline transition-colors"
+											class="group flex items-start gap-4 p-3 rounded-xl text-text-soft no-underline transition-colors"
+											:class="isCurrent(`/servicios/${service.slug}`) ? 'bg-primary-pastel' : 'hover:bg-features-bg'"
 											@click="servicesOpen = false"
 										>
 											<span
@@ -85,11 +89,74 @@
 						</div>
 					</transition>
 				</li>
-				<li>
+				<li class="relative flex items-center" @mouseenter="solutionsOpen = true" @mouseleave="solutionsOpen = false">
+					<span
+						role="button"
+						tabindex="0"
+						class="text-[13px] leading-none transition-colors duration-200 inline-flex items-center gap-1.5 cursor-pointer select-none"
+						:class="deskClass(active.soluciones)"
+						@click="solutionsOpen = !solutionsOpen"
+						@keydown.enter.prevent="solutionsOpen = !solutionsOpen"
+						@keydown.space.prevent="solutionsOpen = !solutionsOpen"
+					>
+						Soluciones
+						<i class="fa fa-angle-down text-[10px] transition-transform duration-200" :class="solutionsOpen ? 'rotate-180' : ''"></i>
+					</span>
+					<transition
+						enter-active-class="transition duration-200 ease-out"
+						enter-from-class="opacity-0 -translate-y-2"
+						enter-to-class="opacity-100 translate-y-0"
+						leave-active-class="transition duration-150 ease-in"
+						leave-from-class="opacity-100 translate-y-0"
+						leave-to-class="opacity-0 -translate-y-2"
+					>
+						<div v-show="solutionsOpen" class="absolute top-full left-1/2 -translate-x-1/2 pt-4">
+							<div class="bg-surface rounded-2xl shadow-2xl p-3 min-w-[240px] border border-border">
+								<p class="text-[10px] font-bold uppercase tracking-[0.18em] text-text-muted px-3 pt-2 pb-3">
+									Soluciones por industria
+								</p>
+								<ul class="list-none m-0 p-0 grid grid-cols-1 gap-1">
+									<li v-for="solution in solutions" :key="solution.slug">
+										<RouterLink
+											:to="`/soluciones/${solution.slug}`"
+											class="group flex items-center gap-3 p-3 rounded-xl text-text-soft no-underline transition-colors"
+											:class="isCurrent(`/soluciones/${solution.slug}`) ? 'bg-primary-pastel' : 'hover:bg-features-bg'"
+											@click="solutionsOpen = false"
+										>
+											<span class="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center bg-primary-pastel text-primary transition-transform duration-200 group-hover:scale-110">
+												<i :class="[solution.icon, 'text-base']"></i>
+											</span>
+											<span class="text-sm font-semibold text-text">{{ solution.title }}</span>
+										</RouterLink>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</transition>
+				</li>
+				<li class="flex items-center">
+					<RouterLink
+						to="/startup"
+						class="inline-flex items-center text-[13px] leading-none no-underline transition-colors duration-200"
+						:class="deskClass(active.startup)"
+					>
+						Startup
+					</RouterLink>
+				</li>
+				<li class="flex items-center">
+					<RouterLink
+						to="/portafolio"
+						class="inline-flex items-center text-[13px] leading-none no-underline transition-colors duration-200"
+						:class="deskClass(active.portfolio)"
+					>
+						Portafolio
+					</RouterLink>
+				</li>
+				<li class="flex items-center">
 					<RouterLink
 						to="/labs"
-						class="text-[13px] font-medium no-underline transition-colors duration-200"
-						:class="scrolled ? 'text-text-soft hover:text-primary' : 'text-white/80 hover:text-white'"
+						class="inline-flex items-center text-[13px] leading-none no-underline transition-colors duration-200"
+						:class="deskClass(active.labs)"
 					>
 						Labs
 					</RouterLink>
@@ -179,7 +246,8 @@
 						<li class="border-b border-white/8">
 							<RouterLink
 								to="/"
-								class="flex items-center justify-between py-5 text-xl font-light text-white/90 hover:text-primary no-underline transition-colors"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.home)"
 								@click="mobileOpen = false"
 							>
 								Inicio
@@ -189,7 +257,8 @@
 						<li class="border-b border-white/8">
 							<RouterLink
 								to="/nosotros"
-								class="flex items-center justify-between py-5 text-xl font-light text-white/90 hover:text-primary no-underline transition-colors"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.nosotros)"
 								@click="mobileOpen = false"
 							>
 								Nosotros
@@ -198,7 +267,8 @@
 						</li>
 						<li class="border-b border-white/8">
 							<button
-								class="flex items-center justify-between w-full py-5 text-xl font-light text-white/90 hover:text-primary transition-colors cursor-pointer"
+								class="flex items-center justify-between w-full py-5 text-xl font-light transition-colors cursor-pointer"
+								:class="mobileClass(active.servicios)"
 								@click="mobileServicesOpen = !mobileServicesOpen"
 							>
 								Servicios
@@ -219,7 +289,8 @@
 									<li v-for="service in services" :key="service.slug">
 										<RouterLink
 											:to="`/servicios/${service.slug}`"
-											class="flex items-center gap-3 py-3 pl-4 text-base text-white/50 hover:text-primary no-underline transition-colors"
+											class="flex items-center gap-3 py-3 pl-4 text-base no-underline transition-colors"
+											:class="isCurrent(`/servicios/${service.slug}`) ? 'text-primary' : 'text-white/50 hover:text-primary'"
 											@click="mobileOpen = false"
 										>
 											<i :class="[service.icon, 'text-primary/60 w-5 text-center text-sm']"></i>
@@ -229,10 +300,68 @@
 								</ul>
 							</transition>
 						</li>
+						<li class="border-b border-white/8">
+							<button
+								class="flex items-center justify-between w-full py-5 text-xl font-light transition-colors cursor-pointer"
+								:class="mobileClass(active.soluciones)"
+								@click="mobileSolutionsOpen = !mobileSolutionsOpen"
+							>
+								Soluciones
+								<i
+									class="fa fa-angle-down text-sm text-white/40 transition-transform duration-200"
+									:class="mobileSolutionsOpen ? 'rotate-180' : ''"
+								></i>
+							</button>
+							<transition
+								enter-active-class="transition-all duration-200 ease-out"
+								enter-from-class="max-h-0 opacity-0"
+								enter-to-class="max-h-[300px] opacity-100"
+								leave-active-class="transition-all duration-150 ease-in"
+								leave-from-class="max-h-[300px] opacity-100"
+								leave-to-class="max-h-0 opacity-0"
+							>
+								<ul v-show="mobileSolutionsOpen" class="list-none m-0 p-0 overflow-hidden pb-3">
+									<li v-for="solution in solutions" :key="solution.slug">
+										<RouterLink
+											:to="`/soluciones/${solution.slug}`"
+											class="flex items-center gap-3 py-3 pl-4 text-base no-underline transition-colors"
+											:class="isCurrent(`/soluciones/${solution.slug}`) ? 'text-primary' : 'text-white/50 hover:text-primary'"
+											@click="mobileOpen = false"
+										>
+											<i :class="[solution.icon, 'text-primary/60 w-5 text-center text-sm']"></i>
+											{{ solution.title }}
+										</RouterLink>
+									</li>
+								</ul>
+							</transition>
+						</li>
+						<li class="border-b border-white/8">
+							<RouterLink
+								to="/startup"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.startup)"
+								@click="mobileOpen = false"
+							>
+								Startup
+								<i class="fa fa-arrow-right text-xs text-white/20"></i>
+							</RouterLink>
+						</li>
+						<li>
+							<RouterLink
+								to="/portafolio"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.portfolio)"
+								@click="mobileOpen = false"
+							>
+								Portafolio
+								<i class="fa fa-arrow-right text-xs text-white/20"></i>
+							</RouterLink>
+						</li>
 						<li>
 							<RouterLink
 								to="/labs"
-								class="flex items-center justify-between py-5 text-xl font-light text-white/90 hover:text-primary no-underline transition-colors"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.labs)"
 								@click="mobileOpen = false"
 							>
 								Labs
@@ -256,17 +385,64 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { services } from '@/data/services.js'
 import { useTheme } from '@/composables/useTheme'
+import { useLoader } from '@/composables/useLoader'
 
 const { theme, toggle } = useTheme()
+const route = useRoute()
+
+/*
+ * El nav entra desde abajo encadenado a la apertura de la cortina, y solo en carga
+ * dura: en navegación SPA persiste montado y no se re-anima (igual que la referencia).
+ * La clase se engancha una vez y se queda, para no cortar la animación cuando la
+ * cortina termina. Sin JS nunca se añade y el nav simplemente se ve.
+ */
+const { curtainOpen, isHardLoad } = useLoader()
+const navEnter = ref(false)
+
+watch(curtainOpen, (open) => {
+	if (open && isHardLoad.value) navEnter.value = true
+}, { immediate: true })
+
+const solutions = [
+	{ slug: 'mineria', title: 'Minería', icon: 'ion-ios-cog-outline' },
+	{ slug: 'industria', title: 'Industria', icon: 'ion-ios-gear-outline' },
+	{ slug: 'pymes', title: 'Pymes', icon: 'ion-ios-briefcase-outline' },
+]
 
 const scrolled = ref(false)
 const mobileOpen = ref(false)
 const servicesOpen = ref(false)
+const solutionsOpen = ref(false)
 const mobileServicesOpen = ref(false)
+const mobileSolutionsOpen = ref(false)
 const isMounted = ref(false)
+
+// --- Marcado de ruta activa: resalta la página o su sección padre ---
+const matches = (base) => route.path === base || route.path.startsWith(base + '/')
+
+const active = computed(() => ({
+	home: route.path === '/',
+	nosotros: matches('/nosotros'),
+	servicios: matches('/servicios') || matches('/inteligencia-artificial'),
+	soluciones: matches('/soluciones'),
+	startup: matches('/startup'),
+	portfolio: matches('/portafolio'),
+	labs: matches('/labs'),
+}))
+
+const isCurrent = (path) => route.path === path
+
+// Color/peso de los enlaces de escritorio según scroll + estado activo
+const deskClass = (isActive) => scrolled.value
+	? (isActive ? 'text-primary font-semibold' : 'text-text-soft font-medium hover:text-primary')
+	: (isActive ? 'text-white font-semibold' : 'text-white/80 font-medium hover:text-white')
+
+// Color de los enlaces del menú móvil según estado activo
+const mobileClass = (isActive) => isActive ? 'text-primary' : 'text-white/90 hover:text-primary'
 
 function onScroll() {
 	scrolled.value = window.scrollY > 50

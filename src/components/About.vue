@@ -3,7 +3,7 @@
 		<div class="container mx-auto">
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 				<!-- Content -->
-				<div class="about-text">
+				<div class="about-text" data-reveal>
 					<div class="eyebrow">Sobre nosotros</div>
 					<h2 class="about-title">
 						Tecnolog&iacute;a hecha por y para <em>emprendedores</em>
@@ -153,5 +153,138 @@
 
 .about-image-grid > div {
 	position: relative;
+}
+
+@media (max-width: 1919px) {
+	.about-title {
+		font-size: 45px;
+		line-height: 1.12;
+	}
+	.about-lede {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+	.about-stat-num {
+		font-size: 41px;
+		line-height: 1.12;
+	}
+	.about-link {
+		font-size: 14px;
+		line-height: 1.62;
+	}
+}
+
+@media (max-width: 1439px) {
+	.about-title {
+		font-size: 41px;
+		line-height: 1.14;
+	}
+	.about-lede {
+		font-size: 16px;
+		line-height: 1.60;
+	}
+	.about-stat-num {
+		font-size: 38px;
+		line-height: 1.14;
+	}
+	.about-link {
+		font-size: 14px;
+		line-height: 1.61;
+	}
+}
+
+@media (max-width: 1199px) {
+	.about-title {
+		font-size: 37px;
+		line-height: 1.15;
+	}
+	.about-lede {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+	.about-stat-num {
+		font-size: 34px;
+		line-height: 1.15;
+	}
+	.about-link {
+		font-size: 14px;
+		line-height: 1.60;
+	}
+}
+
+@media (max-width: 1079px) {
+	.about-title {
+		font-size: 34px;
+		line-height: 1.17;
+	}
+	.about-lede {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+	.about-stat-num {
+		font-size: 31px;
+		line-height: 1.17;
+	}
+	.about-link {
+		font-size: 14px;
+		line-height: 1.58;
+	}
+}
+
+@media (max-width: 991px) {
+	.about-title {
+		font-size: 31px;
+		line-height: 1.19;
+	}
+	.about-lede {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+	.about-stat-num {
+		font-size: 28px;
+		line-height: 1.19;
+	}
+	.about-link {
+		font-size: 14px;
+		line-height: 1.57;
+	}
+}
+
+@media (max-width: 768px) {
+	.about-title {
+		font-size: 28px;
+		line-height: 1.21;
+	}
+	.about-lede {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+	.about-stat-num {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+	.about-link {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
+
+@media (max-width: 575px) {
+	.about-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.about-lede {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+	.about-stat-num {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.about-link {
+		font-size: 14px;
+		line-height: 1.55;
+	}
 }
 </style>

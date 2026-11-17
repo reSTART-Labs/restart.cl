@@ -1,7 +1,7 @@
 <template>
 	<section id="features" class="py-24 md:px-6 lg:px-12">
 		<div class="container mx-auto">
-			<div class="section-head text-center mb-16 px-6 md:px-0">
+			<div class="section-head text-center mb-16 px-6 md:px-0" data-reveal>
 				<p class="features-eyebrow">Nuestros servicios</p>
 				<h2 class="features-title">
 					Impulsa el crecimiento de tu <em>negocio</em>
@@ -202,7 +202,7 @@ onUnmounted(() => {
 }
 
 .acordeon-item:hover {
-	box-shadow: 0 24px 60px rgba(4, 23, 30, 0.4);
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
 }
 
 .acordeon-item:hover::before {
@@ -260,7 +260,7 @@ onUnmounted(() => {
 }
 
 .sc-lab .acordeon-tag {
-	color: #C8C0FF;
+	color: #A9EEF5;
 	background: rgba(79, 61, 245, 0.24);
 	border-color: rgba(200, 192, 255, 0.28);
 }
@@ -271,7 +271,7 @@ onUnmounted(() => {
 	line-height: 1.15;
 	letter-spacing: -0.01em;
 	color: #FFFFFF;
-	text-shadow: 0 1px 20px rgba(4, 23, 30, 0.35);
+	text-shadow: 0 1px 20px rgba(0, 0, 0, 0.35);
 	margin: 0;
 }
 
@@ -602,7 +602,7 @@ onUnmounted(() => {
 	padding: 14px 28px;
 	border-radius: 999px;
 	background: var(--color-primary);
-	color: #FFFFFF;
+	color: var(--color-primary-on);
 	margin-top: 32px;
 	text-decoration: none;
 	transition: all 0.2s ease;
@@ -611,5 +611,69 @@ onUnmounted(() => {
 .service-detail-cta:hover {
 	background: var(--color-primary-dark);
 	transform: translateY(-1px);
+}
+
+/* ── Responsive typographic scale ── */
+@media (max-width: 1919px) {
+	.features-title { font-size: 45px; line-height: 1.12; }
+	.service-detail-headline { font-size: 38px; line-height: 1.12; }
+	.acordeon-title { font-size: 21px; line-height: 1.26; }
+	.features-lede { font-size: 16px; line-height: 1.62; }
+	.service-detail-desc { font-size: 16px; line-height: 1.62; }
+	.feature-title { font-size: 14px; line-height: 1.62; }
+}
+
+@media (max-width: 1439px) {
+	.features-title { font-size: 41px; line-height: 1.14; }
+	.service-detail-headline { font-size: 34px; line-height: 1.14; }
+	.acordeon-title { font-size: 20px; line-height: 1.28; }
+	.features-lede { font-size: 16px; line-height: 1.60; }
+	.service-detail-desc { font-size: 16px; line-height: 1.60; }
+	.feature-title { font-size: 14px; line-height: 1.61; }
+}
+
+@media (max-width: 1199px) {
+	.features-title { font-size: 37px; line-height: 1.15; }
+	.service-detail-headline { font-size: 31px; line-height: 1.15; }
+	.acordeon-title { font-size: 18px; line-height: 1.30; }
+	.features-lede { font-size: 15px; line-height: 1.58; }
+	.service-detail-desc { font-size: 15px; line-height: 1.58; }
+	.feature-title { font-size: 14px; line-height: 1.60; }
+}
+
+@media (max-width: 1079px) {
+	.features-title { font-size: 34px; line-height: 1.17; }
+	.service-detail-headline { font-size: 28px; line-height: 1.17; }
+	.acordeon-title { font-size: 18px; line-height: 1.32; }
+	.features-lede { font-size: 15px; line-height: 1.56; }
+	.service-detail-desc { font-size: 15px; line-height: 1.56; }
+	.feature-title { font-size: 14px; line-height: 1.58; }
+}
+
+@media (max-width: 991px) {
+	.features-title { font-size: 31px; line-height: 1.19; }
+	.service-detail-headline { font-size: 26px; line-height: 1.19; }
+	.acordeon-title { font-size: 18px; line-height: 1.33; }
+	.features-lede { font-size: 15px; line-height: 1.54; }
+	.service-detail-desc { font-size: 15px; line-height: 1.54; }
+	.feature-title { font-size: 14px; line-height: 1.57; }
+}
+
+@media (max-width: 768px) {
+	.features-title { font-size: 28px; line-height: 1.21; }
+	.service-detail-headline { font-size: 26px; line-height: 1.21; }
+	.acordeon-title { font-size: 18px; line-height: 1.34; }
+	.features-lede { font-size: 15px; line-height: 1.52; }
+	.service-detail-desc { font-size: 15px; line-height: 1.52; }
+	.feature-title { font-size: 14px; line-height: 1.55; }
+}
+
+@media (max-width: 575px) {
+	.features-title { font-size: 26px; line-height: 1.22; }
+	.service-detail-headline { font-size: 26px; line-height: 1.22; }
+	.acordeon-title { font-size: 18px; line-height: 1.35; }
+	.features-lede { font-size: 15px; line-height: 1.50; }
+	.service-detail-desc { font-size: 15px; line-height: 1.50; }
+	.feature-title { font-size: 14px; line-height: 1.55; }
 }
 </style>

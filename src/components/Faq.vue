@@ -1,7 +1,7 @@
 <template>
 	<section id="faq" class="py-24 px-6 md:px-12 faq-bg">
 		<div class="container mx-auto max-w-3xl">
-			<div class="text-center mb-16">
+			<div class="text-center mb-16" data-reveal>
 				<p class="faq-eyebrow">FAQ</p>
 				<h2 class="faq-title">
 					Preguntas <em>frecuentes</em>
@@ -58,7 +58,7 @@
 
 <style scoped>
 .faq-bg {
-	background: #060A11;
+	background: #000000;
 }
 
 html[data-theme="light"] .faq-bg {
@@ -98,6 +98,90 @@ html[data-theme="light"] .faq-bg {
 	font-style: italic;
 	font-size: 16px;
 	color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 1919px) {
+	.faq-title {
+		font-size: 45px;
+		line-height: 1.12;
+	}
+
+	.faq-foot-text {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+}
+
+@media (max-width: 1439px) {
+	.faq-title {
+		font-size: 41px;
+		line-height: 1.14;
+	}
+
+	.faq-foot-text {
+		font-size: 15px;
+		line-height: 1.61;
+	}
+}
+
+@media (max-width: 1199px) {
+	.faq-title {
+		font-size: 37px;
+		line-height: 1.15;
+	}
+
+	.faq-foot-text {
+		font-size: 15px;
+		line-height: 1.60;
+	}
+}
+
+@media (max-width: 1079px) {
+	.faq-title {
+		font-size: 34px;
+		line-height: 1.17;
+	}
+
+	.faq-foot-text {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+}
+
+@media (max-width: 991px) {
+	.faq-title {
+		font-size: 31px;
+		line-height: 1.19;
+	}
+
+	.faq-foot-text {
+		font-size: 15px;
+		line-height: 1.57;
+	}
+}
+
+@media (max-width: 768px) {
+	.faq-title {
+		font-size: 28px;
+		line-height: 1.21;
+	}
+
+	.faq-foot-text {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
+
+@media (max-width: 575px) {
+	.faq-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+
+	.faq-foot-text {
+		font-size: 14px;
+		line-height: 1.55;
+	}
 }
 </style>
 

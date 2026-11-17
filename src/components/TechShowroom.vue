@@ -1,6 +1,6 @@
 <template>
 	<section class="py-20 bg-features-bg overflow-hidden">
-		<div class="container mx-auto px-6 md:px-12 text-center mb-12">
+		<div class="container mx-auto px-6 md:px-12 text-center mb-12" data-reveal>
 			<p class="tech-eyebrow">Tecnolog&iacute;as</p>
 			<h2 class="tech-title">
 				Stack que <em>utilizamos</em>
@@ -62,5 +62,54 @@ const techs = [
 	font-style: italic;
 	font-weight: 400;
 	color: var(--color-primary);
+}
+
+@media (max-width: 1919px) {
+	.tech-title {
+		font-size: 39px;
+		line-height: 1.12;
+	}
+}
+
+@media (max-width: 1439px) {
+	.tech-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+}
+
+@media (max-width: 1199px) {
+	.tech-title {
+		font-size: 33px;
+		line-height: 1.15;
+	}
+}
+
+@media (max-width: 1079px) {
+	.tech-title {
+		font-size: 30px;
+		line-height: 1.17;
+	}
+}
+
+@media (max-width: 991px) {
+	.tech-title {
+		font-size: 27px;
+		line-height: 1.19;
+	}
+}
+
+@media (max-width: 768px) {
+	.tech-title {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+}
+
+@media (max-width: 575px) {
+	.tech-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
 }
 </style>

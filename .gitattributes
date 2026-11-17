@@ -1,0 +1,2 @@
+# Los vCard usan CRLF por estándar (RFC 6350).
+*.vcf text eol=crlf

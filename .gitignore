@@ -35,3 +35,6 @@ Desktop.ini
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+# Playwright MCP artifacts
+.playwright-mcp/

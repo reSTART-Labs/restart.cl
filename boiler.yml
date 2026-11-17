@@ -1,0 +1,25 @@
+# boiler.yml — manifiesto Boiler v1 (ver RicardoGatica/Boiler/MANIFEST.md)
+boiler: 1
+id: restartcl
+name: Re/START
+group: restart
+group_name: re/START
+empresa: restart
+type: landing
+local:
+  domain: restart.localhost
+  port: 3100
+  run: ./run.sh
+  compose: null
+  compose_project: null
+stack:
+- vue
+- vite
+- express-ssr
+db:
+  engine: none
+backup: null
+tasks: tasks.yml
+prod:
+  provider: pending
+  url: null

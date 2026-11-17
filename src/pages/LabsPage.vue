@@ -1,7 +1,7 @@
 <template>
 	<!-- Hero -->
 	<section class="labs-hero relative overflow-hidden">
-		<div class="relative z-10 container mx-auto px-6 md:px-12 py-36">
+		<div class="relative z-10 container mx-auto px-6 md:px-12 py-36 reveal-stagger">
 			<p class="page-hero-kicker">re/START Labs</p>
 			<h1 class="labs-hero-title">
 				Laboratorio de productos que <em>exploran</em>, validan y ven la luz.
@@ -32,11 +32,10 @@
 	<section class="py-16 md:py-20 px-6 md:px-12 bg-features-bg">
 		<div class="container mx-auto">
 			<div class="masonry">
-				<component
-					:is="project.external ? 'a' : 'RouterLink'"
+				<RouterLink
 					v-for="(project, i) in projects"
 					:key="project.slug"
-					v-bind="cardBindings(project)"
+					:to="projectPath(project)"
 					class="masonry-item group no-underline"
 					:class="cardSizeClass(i)"
 				>
@@ -62,12 +61,6 @@
 								:style="`background: ${project.brandColor}22; color: ${project.brandColor}; border: 1px solid ${project.brandColor}44`"
 							>
 								{{ project.category }}
-							</div>
-							<div
-								v-if="project.external"
-								class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white/80 group-hover:bg-white/20 transition-colors"
-							>
-								<i class="fa fa-external-link text-xs"></i>
 							</div>
 						</div>
 
@@ -106,12 +99,12 @@
 								class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide mt-5 group-hover:gap-3 transition-all"
 								:style="`color: ${project.brandColor}`"
 							>
-								{{ project.external ? 'Visitar sitio' : 'Ver proyecto' }}
+								Ver proyecto
 								<i class="fa fa-arrow-right text-[10px]"></i>
 							</span>
 						</div>
 					</div>
-				</component>
+				</RouterLink>
 			</div>
 		</div>
 	</section>
@@ -138,7 +131,7 @@
 <script setup>
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { labsProjects } from '@/data/labsProjects.js'
+import { labsProjects, projectPath } from '@/data/projects.js'
 
 const projects = labsProjects
 
@@ -149,13 +142,6 @@ const yearRange = computed(() => {
 	const max = Math.max(...years)
 	return min === max ? `${min}` : `${min}–${max}`
 })
-
-function cardBindings(project) {
-	if (project.external) {
-		return { href: project.url, target: '_blank', rel: 'noopener' }
-	}
-	return { to: `/labs/${project.slug}` }
-}
 
 function cardSizeClass(index) {
 	const pattern = ['is-tall', '', '', 'is-tall', '', '']
@@ -168,7 +154,7 @@ function cardSizeClass(index) {
 .labs-hero {
 	background:
 		radial-gradient(ellipse 50% 50% at 15% 10%, rgba(79, 61, 245, 0.22), transparent 55%),
-		radial-gradient(ellipse 50% 50% at 85% 90%, rgba(50, 191, 212, 0.2), transparent 55%),
+		radial-gradient(ellipse 50% 50% at 85% 90%, rgba(111, 224, 237, 0.2), transparent 55%),
 		radial-gradient(ellipse 60% 60% at 50% 50%, rgba(245, 159, 36, 0.06), transparent 60%),
 		var(--color-primary-900);
 }
@@ -388,5 +374,139 @@ function cardSizeClass(index) {
 	margin-top: 36px;
 	flex-wrap: wrap;
 	justify-content: center;
+}
+
+/* ── Escala tipográfica responsiva ── */
+@media (max-width: 1919px) {
+	.labs-hero-title {
+		font-size: 66px;
+		line-height: 1.06;
+	}
+	.cta-title {
+		font-size: 39px;
+		line-height: 1.12;
+	}
+	.labs-hero-lede {
+		font-size: 17px;
+		line-height: 1.62;
+	}
+	.cta-lede {
+		font-size: 16px;
+		line-height: 1.62;
+	}
+}
+
+@media (max-width: 1439px) {
+	.labs-hero-title {
+		font-size: 59px;
+		line-height: 1.07;
+	}
+	.cta-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+	.labs-hero-lede {
+		font-size: 17px;
+		line-height: 1.60;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.61;
+	}
+}
+
+@media (max-width: 1199px) {
+	.labs-hero-title {
+		font-size: 52px;
+		line-height: 1.08;
+	}
+	.cta-title {
+		font-size: 33px;
+		line-height: 1.15;
+	}
+	.labs-hero-lede {
+		font-size: 16px;
+		line-height: 1.58;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.60;
+	}
+}
+
+@media (max-width: 1079px) {
+	.labs-hero-title {
+		font-size: 46px;
+		line-height: 1.10;
+	}
+	.cta-title {
+		font-size: 30px;
+		line-height: 1.17;
+	}
+	.labs-hero-lede {
+		font-size: 15px;
+		line-height: 1.56;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.58;
+	}
+}
+
+@media (max-width: 991px) {
+	.labs-hero-title {
+		font-size: 41px;
+		line-height: 1.12;
+	}
+	.cta-title {
+		font-size: 27px;
+		line-height: 1.19;
+	}
+	.labs-hero-lede {
+		font-size: 15px;
+		line-height: 1.54;
+	}
+	.cta-lede {
+		font-size: 15px;
+		line-height: 1.57;
+	}
+}
+
+@media (max-width: 768px) {
+	.labs-hero-title {
+		font-size: 36px;
+		line-height: 1.14;
+	}
+	.cta-title {
+		font-size: 26px;
+		line-height: 1.21;
+	}
+	.labs-hero-lede {
+		font-size: 15px;
+		line-height: 1.52;
+	}
+	.cta-lede {
+		font-size: 14px;
+		line-height: 1.55;
+	}
+}
+
+@media (max-width: 575px) {
+	.labs-hero-title {
+		font-size: 32px;
+		line-height: 1.16;
+	}
+	.cta-title {
+		font-size: 26px;
+		line-height: 1.22;
+	}
+	.labs-hero-lede {
+		font-size: 15px;
+		line-height: 1.50;
+	}
+	.cta-lede {
+		font-size: 14px;
+		line-height: 1.55;
+	}
 }
 </style>

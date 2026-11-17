@@ -3,6 +3,7 @@ import {
 	createMemoryHistory,
 	createWebHistory,
 } from 'vue-router'
+import { canonicalPath } from './data/projects.js'
 
 const routes = [
 	{
@@ -21,6 +22,11 @@ const routes = [
 		component: () => import('./pages/ServicesPage.vue'),
 	},
 	{
+		path: '/startup',
+		name: 'startup',
+		component: () => import('./pages/StartupPage.vue'),
+	},
+	{
 		path: '/servicios/:slug',
 		name: 'service',
 		component: () => import('./pages/ServicePage.vue'),
@@ -31,6 +37,11 @@ const routes = [
 		component: () => import('./pages/AiSolutionPage.vue'),
 	},
 	{
+		path: '/soluciones/:slug',
+		name: 'solution',
+		component: () => import('./pages/SolutionPage.vue'),
+	},
+	{
 		path: '/labs',
 		name: 'labs',
 		component: () => import('./pages/LabsPage.vue'),
@@ -38,7 +49,19 @@ const routes = [
 	{
 		path: '/labs/:slug',
 		name: 'labs-project',
-		component: () => import('./pages/LabsProjectPage.vue'),
+		component: () => import('./pages/ProjectPage.vue'),
+		beforeEnter: (to) => canonicalPath(to.path) ?? true,
+	},
+	{
+		path: '/portafolio',
+		name: 'portfolio',
+		component: () => import('./pages/PortfolioPage.vue'),
+	},
+	{
+		path: '/portafolio/:slug',
+		name: 'portfolio-project',
+		component: () => import('./pages/ProjectPage.vue'),
+		beforeEnter: (to) => canonicalPath(to.path) ?? true,
 	},
 ]
 
