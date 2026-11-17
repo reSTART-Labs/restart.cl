@@ -542,6 +542,9 @@ export const projects = [
 		],
 		cta: 'Ver la documentación',
 	},
+	// LearningPath oculto mientras learningpath.cl esté caído (solo hay una captura de error).
+	// Para volver a mostrarlo: descomentar y reponer imágenes reales del sitio.
+	/*
 	{
 		slug: 'learningpath',
 		type: 'labs',
@@ -595,6 +598,7 @@ export const projects = [
 		],
 		cta: 'Explora LearningPath',
 	},
+	*/
 	{
 		slug: 'petsit',
 		type: 'labs',

@@ -24,7 +24,7 @@ test('slugs únicos', () => {
 test('inventario', () => {
 	assert.deepEqual(
 		projects.map((p) => p.slug).sort(),
-		['bogy', 'api-restart', 'learningpath', 'petsit', 'minicatalogo', 'mercado', 'grupo-zenit', 'hs-paneles'].sort(),
+		['bogy', 'api-restart', 'petsit', 'minicatalogo', 'mercado', 'grupo-zenit', 'hs-paneles'].sort(),
 	)
 })
 
@@ -78,7 +78,7 @@ test('créditos', () => {
 test('mvpProjects', () => {
 	assert.deepEqual(
 		mvpProjects.map((p) => p.slug).sort(),
-		['bogy', 'learningpath', 'petsit', 'minicatalogo', 'mercado'].sort(),
+		['bogy', 'petsit', 'minicatalogo', 'mercado'].sort(),
 	)
 })
 
