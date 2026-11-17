@@ -145,6 +145,15 @@
 				</li>
 				<li class="flex items-center">
 					<RouterLink
+						to="/portafolio"
+						class="inline-flex items-center text-[13px] leading-none no-underline transition-colors duration-200"
+						:class="deskClass(active.portfolio)"
+					>
+						Portafolio
+					</RouterLink>
+				</li>
+				<li class="flex items-center">
+					<RouterLink
 						to="/labs"
 						class="inline-flex items-center text-[13px] leading-none no-underline transition-colors duration-200"
 						:class="deskClass(active.labs)"
@@ -339,6 +348,17 @@
 						</li>
 						<li>
 							<RouterLink
+								to="/portafolio"
+								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
+								:class="mobileClass(active.portfolio)"
+								@click="mobileOpen = false"
+							>
+								Portafolio
+								<i class="fa fa-arrow-right text-xs text-white/20"></i>
+							</RouterLink>
+						</li>
+						<li>
+							<RouterLink
 								to="/labs"
 								class="flex items-center justify-between py-5 text-xl font-light no-underline transition-colors"
 								:class="mobileClass(active.labs)"
@@ -410,6 +430,7 @@ const active = computed(() => ({
 	servicios: matches('/servicios') || matches('/inteligencia-artificial'),
 	soluciones: matches('/soluciones'),
 	startup: matches('/startup'),
+	portfolio: matches('/portafolio'),
 	labs: matches('/labs'),
 }))
 

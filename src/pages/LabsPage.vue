@@ -32,11 +32,10 @@
 	<section class="py-16 md:py-20 px-6 md:px-12 bg-features-bg">
 		<div class="container mx-auto">
 			<div class="masonry">
-				<component
-					:is="project.external ? 'a' : 'RouterLink'"
+				<RouterLink
 					v-for="(project, i) in projects"
 					:key="project.slug"
-					v-bind="cardBindings(project)"
+					:to="projectPath(project)"
 					class="masonry-item group no-underline"
 					:class="cardSizeClass(i)"
 				>
@@ -62,12 +61,6 @@
 								:style="`background: ${project.brandColor}22; color: ${project.brandColor}; border: 1px solid ${project.brandColor}44`"
 							>
 								{{ project.category }}
-							</div>
-							<div
-								v-if="project.external"
-								class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white/80 group-hover:bg-white/20 transition-colors"
-							>
-								<i class="fa fa-external-link text-xs"></i>
 							</div>
 						</div>
 
@@ -106,12 +99,12 @@
 								class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide mt-5 group-hover:gap-3 transition-all"
 								:style="`color: ${project.brandColor}`"
 							>
-								{{ project.external ? 'Visitar sitio' : 'Ver proyecto' }}
+								Ver proyecto
 								<i class="fa fa-arrow-right text-[10px]"></i>
 							</span>
 						</div>
 					</div>
-				</component>
+				</RouterLink>
 			</div>
 		</div>
 	</section>
@@ -138,7 +131,7 @@
 <script setup>
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { labsProjects } from '@/data/labsProjects.js'
+import { labsProjects, projectPath } from '@/data/projects.js'
 
 const projects = labsProjects
 
@@ -149,13 +142,6 @@ const yearRange = computed(() => {
 	const max = Math.max(...years)
 	return min === max ? `${min}` : `${min}–${max}`
 })
-
-function cardBindings(project) {
-	if (project.external) {
-		return { href: project.url, target: '_blank', rel: 'noopener' }
-	}
-	return { to: `/labs/${project.slug}` }
-}
 
 function cardSizeClass(index) {
 	const pattern = ['is-tall', '', '', 'is-tall', '', '']

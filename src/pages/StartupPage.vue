@@ -175,50 +175,7 @@
 			</div>
 
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-				<a
-					v-for="project in projects"
-					:key="project.slug"
-					:href="project.url"
-					:target="project.url ? '_blank' : undefined"
-					:rel="project.url ? 'noopener' : undefined"
-					class="su-work-card group no-underline"
-				>
-					<div class="relative overflow-hidden rounded-t-2xl">
-						<img
-							:src="project.image"
-							:alt="project.title"
-							class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105"
-							loading="lazy"
-						>
-						<div class="absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-						<div
-							v-if="project.url"
-							class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-						>
-							<i class="fa fa-external-link text-sm text-dark"></i>
-						</div>
-					</div>
-					<div class="p-6">
-						<p class="text-xs font-semibold uppercase tracking-widest text-primary mb-2">
-							{{ project.client }}
-						</p>
-						<h3 class="text-lg font-semibold text-text group-hover:text-primary transition-colors duration-200">
-							{{ project.title }}
-						</h3>
-						<p class="text-sm text-text-light leading-relaxed mt-2">
-							{{ project.description }}
-						</p>
-						<div class="flex flex-wrap gap-2 mt-4">
-							<span
-								v-for="tag in project.tags"
-								:key="tag"
-								class="text-[11px] font-medium text-text-muted bg-surface px-2.5 py-1 rounded-full"
-							>
-								{{ tag }}
-							</span>
-						</div>
-					</div>
-				</a>
+				<ProjectCard v-for="project in mvpProjects" :key="project.slug" :project="project" />
 			</div>
 		</div>
 	</section>
@@ -291,7 +248,8 @@
 <script setup>
 import { ref } from 'vue'
 import ContactForm from '@/components/ContactForm.vue'
-import { projects } from '@/data/portfolio.js'
+import ProjectCard from '@/components/ProjectCard.vue'
+import { mvpProjects } from '@/data/projects.js'
 
 const steps = [
 	{

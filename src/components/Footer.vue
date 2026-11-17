@@ -75,22 +75,12 @@
 					<ul class="list-none m-0 p-0 flex flex-col gap-2.5">
 						<li v-for="lab in labsProjects" :key="lab.slug">
 							<RouterLink
-								v-if="!lab.external"
-								:to="`/labs/${lab.slug}`"
+								:to="projectPath(lab)"
 								class="text-sm no-underline transition-colors"
-								:class="linkClass(isCurrent(`/labs/${lab.slug}`))"
+								:class="linkClass(isCurrent(projectPath(lab)))"
 							>
 								{{ lab.name }}
 							</RouterLink>
-							<a
-								v-else
-								:href="lab.url"
-								target="_blank"
-								rel="noopener"
-								class="text-sm text-footer-text hover:text-primary no-underline transition-colors"
-							>
-								{{ lab.name }}
-							</a>
 						</li>
 						<li>
 							<RouterLink
@@ -121,7 +111,7 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { services } from '@/data/services.js'
-import { labsProjects } from '@/data/labsProjects.js'
+import { labsProjects, projectPath } from '@/data/projects.js'
 
 const route = useRoute()
 const year = new Date().getFullYear()

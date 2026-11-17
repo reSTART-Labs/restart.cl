@@ -28,69 +28,11 @@
 
 			<!-- Grid -->
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-				<article
-					v-for="project in filtered"
-					:key="project.slug"
-					class="portfolio-card group"
-				>
-					<div class="relative overflow-hidden rounded-t-2xl">
-						<img
-							:src="project.image"
-							:alt="project.title"
-							class="w-full h-56 object-cover object-top transition-transform duration-500 group-hover:scale-105"
-							loading="lazy"
-						>
-						<div class="absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-						<div
-							v-if="project.url"
-							class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-						>
-							<i class="fa fa-external-link text-sm text-dark"></i>
-						</div>
-					</div>
+				<ProjectCard v-for="project in filtered" :key="project.slug" :project="project" />
+			</div>
 
-					<div class="p-6">
-						<p class="text-xs font-semibold uppercase tracking-widest text-primary mb-2">
-							{{ project.client }}
-						</p>
-						<h3 class="text-lg font-semibold text-text group-hover:text-primary transition-colors duration-200">
-							<a
-								v-if="project.url"
-								:href="project.url"
-								target="_blank"
-								rel="noopener"
-								class="portfolio-link"
-							>{{ project.title }}</a>
-							<template v-else>{{ project.title }}</template>
-						</h3>
-						<p class="text-sm text-text-light leading-relaxed mt-2">
-							{{ project.description }}
-						</p>
-						<p v-if="project.credits?.length" class="text-xs text-text-muted mt-3">
-							<template v-for="(credit, i) in project.credits" :key="credit.name + credit.role">
-								<span v-if="i > 0"> · </span>
-								{{ credit.role }}:
-								<a
-									v-if="credit.url"
-									:href="credit.url"
-									target="_blank"
-									rel="noopener"
-									class="portfolio-credit-link"
-								>{{ credit.name }}</a>
-								<template v-else>{{ credit.name }}</template>
-							</template>
-						</p>
-						<div class="flex flex-wrap gap-2 mt-4">
-							<span
-								v-for="tag in project.tags"
-								:key="tag"
-								class="text-[11px] font-medium text-text-muted bg-features-bg px-2.5 py-1 rounded-full"
-							>
-								{{ tag }}
-							</span>
-						</div>
-					</div>
-				</article>
+			<div class="text-center mt-14">
+				<RouterLink to="/portafolio" class="btn btn-ghost">Ver todo el portafolio</RouterLink>
 			</div>
 		</div>
 	</section>
@@ -98,13 +40,21 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { projects, categories } from '@/data/portfolio.js'
+import { RouterLink } from 'vue-router'
+import ProjectCard from '@/components/ProjectCard.vue'
+import { projects } from '@/data/projects.js'
+
+const categories = [
+	{ value: 'all', label: 'Todos' },
+	{ value: 'labs', label: 'Propios' },
+	{ value: 'customer', label: 'Clientes' },
+]
 
 const activeCategory = ref('all')
 
 const filtered = computed(() => {
 	if (activeCategory.value === 'all') return projects
-	return projects.filter(p => p.category === activeCategory.value)
+	return projects.filter(p => p.type === activeCategory.value)
 })
 </script>
 
@@ -144,47 +94,6 @@ const filtered = computed(() => {
 	color: var(--color-text-light);
 	margin: 20px auto 0;
 	max-width: 56ch;
-}
-
-.portfolio-card {
-	position: relative;
-	display: block;
-	background: var(--color-surface);
-	border-radius: 16px;
-	border: 1px solid var(--color-border);
-	overflow: hidden;
-	transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
-}
-
-/* Link principal estirado sobre toda la tarjeta (permite links de créditos sin anidar <a>) */
-.portfolio-link {
-	color: inherit;
-	text-decoration: none;
-}
-
-.portfolio-link::after {
-	content: '';
-	position: absolute;
-	inset: 0;
-	z-index: 1;
-}
-
-.portfolio-credit-link {
-	position: relative;
-	z-index: 2;
-	color: inherit;
-	text-decoration: underline;
-	text-underline-offset: 2px;
-}
-
-.portfolio-credit-link:hover {
-	color: var(--color-primary);
-}
-
-.portfolio-card:hover {
-	box-shadow: 0 20px 40px rgba(13, 17, 23, 0.08);
-	transform: translateY(-4px);
-	border-color: var(--color-border-strong);
 }
 
 @media (max-width: 1919px) {
