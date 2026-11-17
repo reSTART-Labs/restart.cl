@@ -763,6 +763,21 @@ export function projectPath(p) {
 	return p.type === 'labs' ? `/labs/${p.slug}` : `/portafolio/${p.slug}`
 }
 
+/**
+ * Path canónico para /labs/:slug o /portafolio/:slug cuando el proyecto existe y
+ * su ruta correcta es la otra; null en cualquier otro caso. Ignora trailing slash.
+ * @param {string} path
+ * @returns {string | null}
+ */
+export function canonicalPath(path) {
+	const m = /^\/(?:labs|portafolio)\/([^/]+)\/?$/.exec(path)
+	if (!m) return null
+	const p = getProject(m[1])
+	if (!p) return null
+	const to = projectPath(p)
+	return to === path.replace(/\/$/, '') ? null : to
+}
+
 export const labsProjects = projects.filter((p) => p.type === 'labs')
 
 export const mvpProjects = projects.filter((p) => p.mvp === true)

@@ -8,6 +8,7 @@ import {
 	PROJECT_TYPES,
 	getProject,
 	projectPath,
+	canonicalPath,
 	mvpProjects,
 	heroDevices,
 	scrollDuration,
@@ -103,4 +104,17 @@ test('mercado', () => {
 	assert.equal(m.brandColor, '#A3FF6A')
 	assert.equal(m.brandDark, '#0F0F0F')
 	assert.equal(m.url, 'https://mercado.restart.cl')
+})
+
+test('canonicalPath redirige al path canónico según type', () => {
+	assert.equal(canonicalPath('/portafolio/bogy'), '/labs/bogy')
+	assert.equal(canonicalPath('/labs/grupo-zenit'), '/portafolio/grupo-zenit')
+	assert.equal(canonicalPath('/portafolio/bogy/'), '/labs/bogy')
+})
+
+test('canonicalPath devuelve null si no hay nada que corregir', () => {
+	assert.equal(canonicalPath('/labs/bogy'), null)
+	assert.equal(canonicalPath('/portafolio/hs-paneles'), null)
+	assert.equal(canonicalPath('/labs/no-existe'), null)
+	assert.equal(canonicalPath('/nosotros'), null)
 })
