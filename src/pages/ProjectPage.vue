@@ -152,6 +152,7 @@
 							:key="shot.src"
 							class="lab-shots-tab"
 							:class="{ 'is-active': activeShot === i }"
+							:aria-pressed="activeShot === i"
 							@click="activeShot = i"
 						>
 							{{ shot.label }}

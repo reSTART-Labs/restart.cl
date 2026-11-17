@@ -2,7 +2,7 @@
 	<RouterLink :to="projectPath(project)" class="portfolio-card group no-underline">
 		<div class="relative overflow-hidden rounded-t-2xl">
 			<img
-				:src="project.showcase.web"
+				:src="project.screenshots[0].src"
 				:alt="project.name"
 				class="w-full h-56 object-cover object-top transition-transform duration-500 group-hover:scale-105"
 				loading="lazy"

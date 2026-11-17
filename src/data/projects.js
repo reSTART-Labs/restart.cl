@@ -353,27 +353,27 @@ export const projects = [
 			{
 				src: '/img/labs/bogy/home.png',
 				label: 'Inicio',
-				caption: 'Hero con propuesta de valor, features principales y CTA de registro.',
+				caption: 'Lo que ofrece Bogy en una mirada y cómo crear una cuenta para empezar a probarlo.',
 			},
 			{
 				src: '/img/labs/bogy/caracteristicas.png',
 				label: 'Características',
-				caption: 'Grid bento con 9 capacidades clave y tabs para gestión, pagos, marketing e integraciones.',
+				caption: 'Las nueve funciones principales, ordenadas por gestión, pagos, marketing e integraciones.',
 			},
 			{
 				src: '/img/labs/bogy/mobile.png',
 				label: 'App mobile',
-				caption: 'Features separadas para alumnos y entrenadores en pantallas nativas.',
+				caption: 'Cómo se ve la app para alumnos y para entrenadores en el teléfono.',
 			},
 			{
 				src: '/img/labs/bogy/precios.png',
 				label: 'Precios',
-				caption: 'Plan gratis, compromisos de transparencia y preguntas frecuentes.',
+				caption: 'Un plan gratuito para partir, condiciones claras y respuestas a las dudas más comunes.',
 			},
 			{
 				src: '/img/labs/bogy/contacto.png',
 				label: 'Contacto',
-				caption: 'Formulario y canales de contacto para capturar leads calificados.',
+				caption: 'Un formulario y otros canales para que un gimnasio o academia pueda escribirnos.',
 			},
 		],
 		tech: [
@@ -613,7 +613,7 @@ export const projects = [
 		brandColor: '#47AE89',
 		brandDark: '#11303B',
 		brandAccent: '#228398',
-		heroImage: '/img/labs/petsit/home.png',
+		heroImage: '/img/projects/petsit/site-1.jpg',
 		problem: 'Dejar a tu mascota con alguien de confianza mientras viajas o trabajas es una decisión cargada de dudas: quién, dónde, por cuánto y con qué garantías. Las alternativas informales dependen de contactos y WhatsApp, sin verificación ni respaldo.',
 		solution: 'Un marketplace donde los tutores exploran perfiles verificados de cuidadores cercanos, reservan con pago seguro y mantienen comunicación directa durante todo el servicio. Para los petsitters, una vitrina profesional para construir su emprendimiento en torno al cuidado animal.',
 		features: [
@@ -664,7 +664,7 @@ export const projects = [
 				caption: 'Lo que encuentra un petsitter en la plataforma: visibilidad, conexión directa con tutores y gestión simple.',
 			},
 			{
-				src: '/img/labs/petsit/home.png',
+				src: '/img/projects/petsit/site-1.jpg',
 				label: 'Inicio',
 				caption: 'Hero del marketplace con los seis servicios, flujo de reserva en tres pasos y cobertura por zonas.',
 			},
@@ -698,7 +698,7 @@ export const projects = [
 		platforms: ['Web'],
 		brandColor: '#3333CC',
 		brandDark: '#001524',
-		heroImage: '/img/labs/minicatalogo/home.png',
+		heroImage: '/img/projects/minicatalogo/site-1.jpg',
 		problem: 'Un emprendedor quiere vender por internet, pero armar un sitio y una tienda le quita el tiempo que necesita para atender su negocio. Las ventas quedan repartidas entre Instagram, Facebook y WhatsApp, sin un lugar que las ordene.',
 		solution: 'Una plataforma donde el emprendedor crea su catálogo, publica su sitio con dominio propio y vende con pagos integrados, mientras centraliza en un solo lugar lo que llega desde sus redes. La parte técnica y el soporte corren por cuenta de Minicatalogo.',
 		features: [
@@ -744,7 +744,7 @@ export const projects = [
 				caption: 'Sitio web y tienda online: lo que incluye cada canal para empezar a vender.',
 			},
 			{
-				src: '/img/labs/minicatalogo/home.png',
+				src: '/img/projects/minicatalogo/site-1.jpg',
 				label: 'Inicio',
 				caption: 'Página de inicio de Minicatalogo.',
 			},

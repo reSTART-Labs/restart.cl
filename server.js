@@ -49,7 +49,7 @@ async function start() {
 	// /labs/:slug y /portafolio/:slug: si el proyecto vive en la otra sección, 301.
 	app.get(['/labs/:slug', '/portafolio/:slug'], (req, res, next) => {
 		const to = canonicalPath(req.path)
-		to ? res.redirect(301, to) : next()
+		to ? res.redirect(301, to + req.originalUrl.slice(req.path.length)) : next()
 	})
 
 	// Firmas de correo (public/signatures). express.static va con index: false, así

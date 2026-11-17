@@ -18,7 +18,7 @@
 				<RouterLink to="/#contact" class="btn btn-primary">
 					Agendar asesor&iacute;a
 				</RouterLink>
-				<RouterLink to="/#portfolio" class="btn btn-ghost-dark">
+				<RouterLink to="/portafolio" class="btn btn-ghost-dark">
 					Ver portafolio <i class="fa fa-arrow-right text-[11px]"></i>
 				</RouterLink>
 			</div>
@@ -79,7 +79,7 @@
 				<RouterLink to="/#contact" class="btn btn-primary">
 					Agendar asesor&iacute;a
 				</RouterLink>
-				<RouterLink to="/#portfolio" class="btn btn-ghost-dark">
+				<RouterLink to="/portafolio" class="btn btn-ghost-dark">
 					Ver portafolio
 				</RouterLink>
 			</div>

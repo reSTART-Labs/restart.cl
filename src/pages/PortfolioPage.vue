@@ -23,6 +23,7 @@
 					:class="activeCategory === cat.value
 						? 'bg-primary text-white'
 						: 'bg-surface text-text-muted hover:text-primary hover:bg-primary-pastel'"
+					:aria-pressed="activeCategory === cat.value"
 					@click="activeCategory = cat.value"
 				>
 					{{ cat.label }}

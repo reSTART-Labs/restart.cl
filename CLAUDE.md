@@ -26,6 +26,7 @@ Multi-page marketing website for Re/START (restart.cl). Vue 3 + Vite + Tailwind 
 yarn install              # Install dependencies
 yarn dev                  # Vite dev server, CLIENT ONLY — NO /api, no SSR (HMR)
 yarn dev:server           # Full app: Express + SSR + /api + Vite middleware (nodemon)
+yarn test                 # Unit tests for src/data/projects.js helpers (node --test)
 yarn build                # Build client + SSR bundles (dist/client, dist/server)
 yarn serve                # Production SSR server (NODE_ENV=production)
 ```
@@ -56,7 +57,9 @@ on the client. `scrollBehavior` honors saved position, hash anchors (smooth), el
 | `/inteligencia-artificial/:slug` | ai-solution | `AiSolutionPage.vue` |
 | `/soluciones/:slug` | solution | `SolutionPage.vue` |
 | `/labs` | labs | `LabsPage.vue` |
-| `/labs/:slug` | labs-project | `LabsProjectPage.vue` |
+| `/labs/:slug` | labs-project | `ProjectPage.vue` |
+| `/portafolio` | portfolio | `PortfolioPage.vue` |
+| `/portafolio/:slug` | portfolio-project | `ProjectPage.vue` |
 
 ### Directory Structure
 ```
@@ -70,10 +73,14 @@ src/
   App.vue                  # Nav + <RouterView /> + Footer
   style.css                # Tailwind import + @theme tokens + base + reusable .btn system
   pages/                   # One component per route (see table above)
+                           # ProjectPage.vue serves /labs/:slug and /portafolio/:slug; PortfolioPage.vue lists all projects
   components/
     Nav.vue                # Pill navbar: theme toggle, Servicios/Soluciones dropdowns, mobile drawer
     Hero.vue               # Home hero with parallax
-    About.vue, Features.vue, Startup.vue, TechShowroom.vue, Solutions.vue, Portfolio.vue
+    About.vue, Features.vue, Startup.vue, TechShowroom.vue, Solutions.vue, Portfolio.vue (home portfolio teaser)
+    ProjectCard.vue        # Portfolio/Labs card (thumbnail = screenshots[0])
+    DeviceShowcase.vue     # Browser/phone frame; hero auto-scroll (WAAPI), static mode for the gallery
+    ProjectTestimonials.vue # Testimonials block on project pages
     Faq.vue                # Home FAQ accordion
     Contact.vue            # Home contact section (ContactForm + Cal.com embed slot)
     ContactForm.vue        # Reusable form → POST /api/contact (honeypot, validation, states)
@@ -85,15 +92,29 @@ src/
     useTracking.js         # GTM dataLayer: delegated click tracking + virtual_page_view
     useCalEmbed.js         # Cal.com inline embed loader
   data/
-    services.js, solutions.js, aiSolutions.js, labsProjects.js, portfolio.js
+    services.js, solutions.js, aiSolutions.js
+    projects.js            # Single source for Labs + customer projects (+ helpers: projectPath, canonicalPath, heroDevices…)
+  utils/
+    color.js               # Brand-palette helpers (readable accent / text on brand fills)
   api/
     index.js               # registerApi(app): mounts express.json + /api/contact router
     contact.js             # Contact handler: sanitize → validate → forward to n8n
     rateLimit.js           # In-memory per-IP rate limiter
+tests/                     # node --test: projects.js helpers, color utils (`yarn test`)
 public/
-  img/                     # hero.jpg, contact.jpg, office.jpg, labs/
+  img/                     # hero.jpg, contact.jpg, office.jpg, labs/, projects/<slug>/ (site-N.jpg, web.jpg, mobile.jpg)
   logo*.png, favicon.png
 ```
+
+## Projects data model (`src/data/projects.js`)
+
+Every project (Labs product or customer work) lives in the single `projects` array:
+`type` (`labs` | `customer`), `mvp` (boolean; listed in `/startup`), `credits`,
+`testimonials`, `screenshots` (gallery; `screenshots[0]` is the card thumbnail) and
+`showcase` (`{ web, mobile }` full-page captures used by `DeviceShowcase` for the hero
+auto-scroll). `/labs/:slug` and `/portafolio/:slug` both resolve to `ProjectPage.vue`;
+`server.js` redirects 301 (query string preserved) to the canonical path for the project's
+`type` (`projectPath` / `canonicalPath`).
 
 ## Contact form & API
 

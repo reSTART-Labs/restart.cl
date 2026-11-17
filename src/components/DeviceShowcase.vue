@@ -4,6 +4,9 @@
 		:class="[`is-${layout}`, { 'is-static': isStatic }]"
 		@mouseenter="pausar"
 		@mouseleave="reanudar"
+		@focusin="pausar"
+		@focusout="reanudar"
+		@touchstart.passive="tocar"
 	>
 		<!-- Navegador: barra con 3 puntos + dominio, pantalla con la captura -->
 		<div v-if="webSrc" class="ds-browser">
@@ -14,7 +17,13 @@
 					{{ domain }}
 				</span>
 			</div>
-			<div ref="webScreen" class="ds-screen">
+			<div
+				ref="webScreen"
+				class="ds-screen"
+				:tabindex="isStatic ? 0 : undefined"
+				:role="isStatic ? 'region' : undefined"
+				:aria-label="isStatic ? alt : undefined"
+			>
 				<img
 					ref="webImg"
 					:src="webSrc"
@@ -109,6 +118,7 @@ let pausado = false
 let observador = null
 let consultaMovimiento = null
 let esperaResize = null
+let esperaToque = null
 
 const animable = () =>
 	montado
@@ -162,8 +172,16 @@ function pausar() {
 }
 
 function reanudar() {
+	clearTimeout(esperaToque)
 	pausado = false
 	Object.values(animaciones).forEach((a) => a?.play())
+}
+
+// Touch: pausa al tocar y retoma a los pocos segundos (o al siguiente toque).
+function tocar() {
+	clearTimeout(esperaToque)
+	pausar()
+	esperaToque = setTimeout(reanudar, 4000)
 }
 
 onMounted(() => {
@@ -198,6 +216,7 @@ onBeforeUnmount(() => {
 	detener('web')
 	detener('mobile')
 	clearTimeout(esperaResize)
+	clearTimeout(esperaToque)
 	observador?.disconnect()
 	consultaMovimiento?.removeEventListener?.('change', reiniciarTodo)
 })
