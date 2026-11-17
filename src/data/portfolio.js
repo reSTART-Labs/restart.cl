@@ -1,13 +1,45 @@
+/**
+ * credits (opcional): [{ role, name, url? }] — se muestran como "role: name"
+ * separados por " · ". Si trae url, el nombre se enlaza (abre en pestaña nueva).
+ */
 export const projects = [
 	{
-		slug: 'indicadores-del-dia',
-		title: 'Indicadores del Día',
+		slug: 'grupo-zenit',
+		title: 'Grupo Zenit',
+		client: 'Grupo Zenit',
+		category: 'web',
+		description: 'Sitio corporativo para una consultora de innovación científico-tecnológica, con secciones de programas, servicios, eventos y versión bilingüe.',
+		image: '/img/portfolio/zenit.jpg',
+		tags: ['WordPress', 'Desarrollo a medida', 'Multilenguaje'],
+		url: 'https://grupozenit.cl',
+		credits: [
+			{ role: 'Diseño', name: 'Tres Marías Estudio' },
+			{ role: 'Desarrollo WordPress', name: 'Re/START' },
+		],
+	},
+	{
+		slug: 'hs-paneles',
+		title: 'HS Paneles',
+		client: 'HS Paneles',
+		category: 'web',
+		description: 'Sitio corporativo para una empresa de cubiertas y revestimientos de acero, con catálogo de productos, proyectos y cotización en línea.',
+		image: '/img/portfolio/hspaneles.jpg',
+		tags: ['WordPress', 'Desarrollo a medida', 'Catálogo'],
+		url: 'https://hspaneles.cl',
+		credits: [
+			{ role: 'Diseño', name: 'Tres Marías Estudio' },
+			{ role: 'Desarrollo WordPress', name: 'Re/START' },
+		],
+	},
+	{
+		slug: 'marketdata',
+		title: 'MarketData',
 		client: 'Producto propio',
 		category: 'web',
-		description: 'Plataforma que entrega en tiempo real los principales indicadores económicos de Chile: UF, dólar, euro, UTM y más.',
-		image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80',
+		description: 'Los datos públicos de Chile en una sola API REST: indicadores económicos, cotizaciones, clima, sismos, mercado público y más, siempre al día.',
+		image: '/img/labs/api-restart/home.png',
 		tags: ['Vue.js', 'Node.js', 'API REST', 'Tailwind'],
-		url: 'https://indicadoresdeldia.cl',
+		url: 'https://api.restart.cl',
 	},
 	{
 		slug: 'learning-path',
