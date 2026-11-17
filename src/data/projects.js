@@ -11,6 +11,7 @@
  * @property {string} src     Ruta pública de la imagen.
  * @property {string} label   Pestaña de la galería ("Sitio", "Inicio", …).
  * @property {string} caption
+ * @property {'web' | 'mobile'} [device]  Marco en la galería: navegador (por defecto) o teléfono.
  *
  * @typedef {Object} ProjectCredit
  * @property {string} role
@@ -337,7 +338,7 @@ export const projects = [
 		],
 		showcase: {
 			web: '/img/projects/bogy/web.jpg',
-			mobile: '/img/projects/bogy/mobile.jpg',
+			mobile: '/img/projects/bogy/app-home.jpg',
 		},
 		screenshots: [
 			{
@@ -361,9 +362,16 @@ export const projects = [
 				caption: 'Las nueve funciones principales, ordenadas por gestión, pagos, marketing e integraciones.',
 			},
 			{
-				src: '/img/labs/bogy/mobile.png',
-				label: 'App mobile',
-				caption: 'Cómo se ve la app para alumnos y para entrenadores en el teléfono.',
+				src: '/img/projects/bogy/app-calendar.jpg',
+				device: 'mobile',
+				label: 'App: reservar',
+				caption: 'En la app, el alumno elige su clase y asegura su cupo en segundos.',
+			},
+			{
+				src: '/img/projects/bogy/app-achievements.jpg',
+				device: 'mobile',
+				label: 'App: logros',
+				caption: 'Cada clase suma: medallas y rachas que motivan a los alumnos a volver.',
 			},
 			{
 				src: '/img/labs/bogy/precios.png',

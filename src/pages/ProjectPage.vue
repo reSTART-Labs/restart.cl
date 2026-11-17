@@ -163,7 +163,7 @@
 						<div class="lab-shots-frame">
 							<DeviceShowcase
 								:key="currentShot.src"
-								:showcase="{ web: currentShot.src }"
+								:showcase="{ [currentShot.device || 'web']: currentShot.src }"
 								:url="project.url"
 								:name="`${project.name} · ${currentShot.label}`"
 								static
